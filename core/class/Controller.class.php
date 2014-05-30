@@ -11,8 +11,8 @@ class Controller {
         if($fun == ''){
             $fun = $_REQUEST['fun'];
         }
-        $file_path = APP_PATH.'/'.$_REQUEST['app'].'/pages/'.$_REQUEST['act'].'/'.$fun.'.html';
-        $cache_file_path = CACHE_PATH.'/pages/'.$_REQUEST['app'].'/'.$_REQUEST['act'].'/'.$fun.'.phtml';
+        $file_path = APP_PATH.'/'.$_REQUEST['app'].'/pages/'.lcfirst($_REQUEST['act']).'/'.$fun.'.html';
+        $cache_file_path = CACHE_PATH.'/pages/'.$_REQUEST['app'].'/'.lcfirst($_REQUEST['act']).'/'.$fun.'.phtml';
         if(!file_exists($cache_file_path || filemtime($file_path)>filemtime($cache_file_path))){
             //生成模板文件不存在或生成模板文件的修改时间比实际模板文件的修改时间早即生成模板文件已过时
             $contentStr = file_get_contents($file_path);
