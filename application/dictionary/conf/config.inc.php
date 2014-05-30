@@ -6,9 +6,19 @@
  * Time: 下午2:59
  */
 return array(
+    "type" => array(
+        0 =>array("name"=>"表目录","value"=>"table"),
+        1 =>array("name"=>"全部","value"=>"all"),
+    ),
     "relate_table"=>array(
+        //模式=>关联表
         "all" => "*",
-        "prevue" => array("cms_c_film","cms_mdb_film","cms_c_video","cms_rank","cms_rank_film","cms_content"),
+    ),
+    "relate_sql"=>array(
+        //模式=>关联表
+        "模式"=>array(
+            "标题"=>"sql语句",
         ),
+    ),
 );
 ?>

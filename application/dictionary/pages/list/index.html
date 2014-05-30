@@ -47,12 +47,10 @@
 conectionMysql($_REQUEST['dbhost'], $_REQUEST['dbuser'], $_REQUEST['dbpwd']);
 global $config;
 //显示模式
-if($config['type']){
    $select =  '<select onchange="selectType(this)">';
     $select .= addSelectType($config['type'],$_REQUEST['t']);
     $select .= '</select>';
     echo $select;
-}
     ?>
     <ul id="tags">
         <li class="selectTag" onclick="selectTag('tagContent0',this)">相关表</li>
@@ -64,9 +62,6 @@ if($config['type']){
             <div class="div_content" id="tagContent0">
                 <?php
             //表结构内容展现
-            if(isset($config['remark'])){
-                $config['remark'] = array();
-            }
             if($_REQUEST['t']!="table"){
                 getTableInfo($config['remark'],$config['relate_table'][$_REQUEST['t']]);
             }else{
@@ -74,6 +69,16 @@ if($config['type']){
             }
             // 关闭连接
             mysql_close($conn);?>
+            </div>
+        </li>
+        <li>
+            <div class="div_content" id="tagContent1" style="display: none;">
+                <?php
+            //具体业务查询展现
+            if($_REQUEST['t'] && $config['relate_sql'][$_REQUEST['t']]){
+                getSqlInfo($config['relate_sql'][$_REQUEST['t']]);
+            }
+            ?>
             </div>
         </li>
     </ul>

@@ -124,44 +124,46 @@ function getTableInfo($remark,$table_list){
 }
 function getSqlInfo($sql_list){
     mysql_query("SET NAMES 'UTF8'");
-    foreach($sql_list as $key => $sql){
-        $result = mysql_db_query($_REQUEST['dbname'],$sql);
-        // 获取查询结果
-        $row=mysql_fetch_row($result);
-        // 定位到第一条记录
-        mysql_data_seek($result, 0);
-        $sum_colume = mysql_num_fields($result);
-        // 获取查询结果
-        echo "<table>";
-        $table_name ="<tr><th colspan='".$sum_colume."'>".$key."</th></tr>";
-        $table_name .="<tr><td colspan='".$sum_colume."'>".$sql."</td></tr>";
-        echo $table_name;
-        // 显示字段名称
-        $colume ="<tr>";
-        for ($i=0; $i<$sum_colume; $i++)
-        {
-            $colume .= '<th class="colume">'.
-                mysql_field_name($result, $i);
-            $colume .= "</th>";
-        }
-        $colume .= "</tr>";
-        echo $colume;
-        // 循环取出记录
-        while ($row=mysql_fetch_row($result))
-        {
-            echo "<tr>";
-            for ($i=0; $i<$sum_colume; $i++ )
+    if(count($sql_list)){
+        foreach($sql_list as $key => $sql){
+            $result = mysql_db_query($_REQUEST['dbname'],$sql);
+            // 获取查询结果
+            $row=mysql_fetch_row($result);
+            // 定位到第一条记录
+            mysql_data_seek($result, 0);
+            $sum_colume = mysql_num_fields($result);
+            // 获取查询结果
+            echo "<table>";
+            $table_name ="<tr><th colspan='".$sum_colume."'>".$key."</th></tr>";
+            $table_name .="<tr><td colspan='".$sum_colume."'>".$sql."</td></tr>";
+            echo $table_name;
+            // 显示字段名称
+            $colume ="<tr>";
+            for ($i=0; $i<$sum_colume; $i++)
             {
-                echo '<td>';
-                echo $row[$i];
-                echo '</td>';
+                $colume .= '<th class="colume">'.
+                    mysql_field_name($result, $i);
+                $colume .= "</th>";
             }
-            echo "</tr>";
-        }
+            $colume .= "</tr>";
+            echo $colume;
+            // 循环取出记录
+            while ($row=mysql_fetch_row($result))
+            {
+                echo "<tr>";
+                for ($i=0; $i<$sum_colume; $i++ )
+                {
+                    echo '<td>';
+                    echo $row[$i];
+                    echo '</td>';
+                }
+                echo "</tr>";
+            }
 
-        echo "</table>";
-        // 释放资源
-        mysql_free_result($result);
+            echo "</table>";
+            // 释放资源
+            mysql_free_result($result);
+        }
     }
 }
 ?>

@@ -11,7 +11,4 @@ class ListController extends Controller {
     public function index(){
         $this->display();
     }
-    public function osinfo(){
-        $this->display();
-    }
 } 
