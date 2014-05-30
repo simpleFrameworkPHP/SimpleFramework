@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            div {padding: 50px 200px 200px 200px;}
+            table.tcenter {margin: auto;}
+            table tr th.colume {background-color: #99ff99;}
+            table tr td {min-width: 80px;background-color: #88afff;}
+            ul{list-style: none;padding: 0px;}
+            ul li{display: inline;padding: 8px;}
+            ul#tags{margin-bottom: 0px;padding: 20px 20px 8px 20px;}
+            ul#tags:hover{cursor:pointer}
+            ul li div.div_content{padding: 10px;}
+            .selectTag{background-color: #999999}
+            .div_hline{display: block;height: 3px;background-color: #999999;padding: 0px;}
+        </style>
+        <script type="text/javascript">
+            function selectType(t){
+                window.location.href += "&t="+ t.value;
+            }
+            function selectTag(showContent,selfObj){
+                // 操作标签
+                var tag = document.getElementById("tags").getElementsByTagName("li");
+                var taglength = tag.length;
+                for(i=0; i<taglength; i++){
+                    tag[i].className = "";
+                }
+                selfObj.className = "selectTag";
+                // 操作内容
+                for(i=0; j=document.getElementById("tagContent"+i); i++){
+                    j.style.display = "none";
+                }
+                document.getElementById(showContent).style.display = "block";
+            }
+        </script>
+    </head>
+    <body><div>
+<?php
+/**
+ * Created by PhpStorm.
+ * User: shaochen.liu
+ * Date: 14-5-21
+ * Time: 下午4:05
+ */
+
+//连接数据库
+conectionMysql($_REQUEST['dbhost'], $_REQUEST['dbuser'], $_REQUEST['dbpwd']);
+global $config;
+//显示模式
+$select =  '<select onchange="selectType(this)">';
+$select .= addSelectType($config['type'],$_REQUEST['t']);
+$select .= '</select>';
+echo $select;
+?>
+<ul id="tags">
+    <li class="selectTag" onclick="selectTag('tagContent0',this)">相关表</li>
+    <?php if($config['relate_sql'][$_REQUEST['t']]){ ?><li onclick="selectTag('tagContent1',this)">业务sql</li><?php }?>
+</ul>
+<div class="div_hline"></div>
+<ul>
+    <li>
+        <div class="div_content" id="tagContent0">
+            <?php
+            //表结构内容展现
+            if($_REQUEST['t']!="table"){
+                getTableInfo($config['remark'],$config['relate_table'][$_REQUEST['t']]);
+            }else{
+                getTable($config['remark']);
+            }
+            // 关闭连接
+            mysql_close($conn);?>
+        </div>
+    </li>
+    <li>
+        <div class="div_content" id="tagContent1" style="display: none;">
+            <?php
+            //具体业务查询展现
+            if($config['relate_sql'][$_REQUEST['t']]){
+                getSqlInfo($config['relate_sql'][$_REQUEST['t']]);
+            }
+            ?>
+        </div>
+    </li>
+</ul>
+    </div>
+    </body>
+</html>

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="zh">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"  />
+    <style>body{text-align: center;background-color:#DDDDDD}
+    p.title{display:block;color:#FFFFFF;background-color:red;border-bottom: #DBDBDB solid;padding: 5px;}
+    div.center{text-align:left;background-color:#FFFFFF;display:block;width:800px;margin:5px auto;height:690px;}
+    div.content{padding:30px;}
+    ul{list-style-type :circle;}ul li{line-height: 25px;}ul .error{color:red;}ul .success{color:green;}
+    </style>
+    <title>Magento系统需求测试</title>
+</head>
+<body><div class="center"><p class="title">Magento系统需求测试</p><div class="content">
+<?php
+//获取windows系统参数
+function sys_windows() {
+    $objLocator = new COM("WbemScripting.SWbemLocator");
+    $wmi = $objLocator->ConnectServer();
+//    $prop = $wmi->get("Win32_PnPEntity");
+//CPU
+$cpuinfo = GetWMI($wmi, "Win32_Processor", array("Name", "L2CacheSize", "NumberOfCores"));
+$res['cpu_count'] = $cpuinfo[0]['NumberOfCores'];
+if (null == $res['cpu_count']) {
+$res['cpu_count'] = 1;
+}
+// SYSINFO
+$sysinfo = GetWMI($wmi, "Win32_OperatingSystem", array('LastBootUpTime', 'TotalVisibleMemorySize', 'FreePhysicalMemory', 'Caption', 'CSDVersion', 'SerialNumber', 'InstallDate'));
+$res['system_version'] = $sysinfo[0]['Caption'] . " " . $sysinfo[0]['CSDVersion'];
+
+//MEMORY
+$res['memory'] = $sysinfo[0]['TotalVisibleMemorySize'];
+$res['剩余内存'] = $sysinfo[0]['FreePhysicalMemory'];
+$res['已使用内存'] = $res['memory'] - $res['剩余内存'];
+$res['使用率'] = round($res['已使用内存'] / $res['memory'] * 100, 2);
+
+// LoadPercentage
+$loadinfo = GetWMI($wmi, "Win32_Processor", array("LoadPercentage"));
+$res['系统平均负载'] = $loadinfo[0]['LoadPercentage'];
+
+return $res;
+}
+
+function GetWMI($wmi, $strClass, $strValue = array()) {
+$arrData = array();
+
+$objWEBM = $wmi->Get($strClass);
+$arrProp = $objWEBM->Properties_;
+$arrWEBMCol = $objWEBM->Instances_();
+foreach ($arrWEBMCol as $objItem) {
+@reset($arrProp);
+$arrInstance = array();
+foreach ($arrProp as $propItem) {
+eval("\$value = \$objItem->" . $propItem->Name . ";");
+if (empty($strValue)) {
+$arrInstance[$propItem->Name] = trim($value);
+} else {
+if (in_array($propItem->Name, $strValue)) {
+$arrInstance[$propItem->Name] = trim($value);
+}
+}
+}
+$arrData[] = $arrInstance;
+}
+return $arrData;
+}
+
+
+//获取硬盘大小
+/**
+* 字节格式化 把字节数格式为B K M G T P E Z Y 描述的大小
+* @param int $size 大小
+* @param int $dec 显示类型
+* @return int
+*/
+function byte_format($size, $dec = 2) {
+$a = array("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB");
+$pos = 0;
+while ($size >= 1024) {
+$size /= 1024;
+$pos++;
+}
+return round($size, $dec) . " " . $a[$pos];
+}
+/**
+* 取得单个磁盘信息
+* @param $letter
+* @return array
+*/
+function get_disk_space($letter) {
+//获取磁盘信息
+$diskct = 0;
+$disk = array();
+/* if(@disk_total_space($key)!=NULL) *为防止影响服务器，不检查软驱
+{
+$diskct=1;
+$disk["A"]=round((@disk_free_space($key)/(1024*1024*1024)),2)."G / ".round((@disk_total_space($key)/(1024*1024*1024)),2).'G';
+} */
+$diskz = 0; //磁盘总容量
+$diskk = 0; //磁盘剩余容量
+$is_disk = $letter . ':';
+if (@disk_total_space($is_disk) != NULL) {
+$diskct++;
+$disk[$letter][0] = byte_format(@disk_free_space($is_disk));
+$disk[$letter][1] = byte_format(@disk_total_space($is_disk));
+$disk[$letter][2] = round(((@disk_free_space($is_disk) / (1024 * 1024 * 1024)) / (@disk_total_space($is_disk) / (1024 * 1024 * 1024))) * 100, 2) . '%';
+//重新赋值,变成整数
+$disk[$letter][1] = @disk_total_space($is_disk);
+$diskk+=byte_format(@disk_free_space($is_disk));
+$diskz+=byte_format(@disk_total_space($is_disk));
+}
+return $disk;
+}
+/**
+* 取得磁盘使用情况
+* @return var
+*/
+function get_spec_disk($type = 'system') {
+$disk = array();
+switch ($type) {
+case 'system':
+//strrev(array_pop(explode(':',strrev(getenv_info('SystemRoot')))));//取得系统盘符
+$disk = get_disk_space(strrev(array_pop(explode(':', strrev(getenv('SystemRoot'))))));
+break;
+case 'all':
+foreach (range('b', 'z') as $letter) {
+$disk = array_merge($disk, get_disk_space($letter));
+}
+break;
+default:
+$disk = get_disk_space($type);
+break;
+}
+return $disk;
+}
+
+
+
+function extension_check($extensions) {
+$fail = '';
+$pass = '';
+$data = array();
+$systeminfo = php_uname();
+if (strstr(strtolower($systeminfo), "win")) {
+//windows
+$data = sys_windows();
+$data['system_info'] = $systeminfo;
+$disk = get_spec_disk("all");
+$data['disk_sum'] = 0;
+foreach ($disk as $value) {
+$data['disk_sum'] += $value[1];
+}
+} else {
+//linux
+//cpu
+$str = shell_exec('more /proc/stat');
+$pattern = "/(cpu[0-9]?)[\s]+([0-9]+)[\s]+([0-9]+)[\s]+([0-9]+)[\s]+([0-9]+)[\s]+([0-9]+)[\s]+([0-9]+)[\s]+([0-9]+)/";
+preg_match_all($pattern, $str, $out);
+$data['cpu_count'] = count($out[1]) - 1;
+
+//memory
+$str = shell_exec('more /proc/meminfo');
+$pattern = "/(.+):\s*([0-9]+)/";
+preg_match_all($pattern, $str, $out);
+$data['memory'] = $out[2][0];
+
+//os
+$data['system_info'] = shell_exec("lsb_release -d");
+$data['system_info'] .= shell_exec("getconf LONG_BIT");
+$data['system_version'] = shell_exec("lsb_release -r");
+
+//disk
+$disk = shell_exec("df");
+while (strstr("  ",$disk)){
+$disk = str_replace("  ", " ", $disk);
+}
+$disk = explode("on", $disk);
+unset($disk[0]);
+$disk = explode(" /", $disk[1]);
+$pattern = "/ \s*([0-9]+)/";
+foreach ($disk as $value){
+preg_match_all($pattern, $value, $diskArray);
+$disk_sum += $diskArray[0][0];
+}
+$data['disk_sum'] = $disk_sum;
+}
+
+if ($data['disk_sum'] < 200000000) {
+$fail .= '<li class="error">你需要硬盘容量<strong> 200G</strong> (或者更高)</li>';
+} else {
+$pass .= '<li class="success">你需要硬盘容量<strong> 200G</strong> (或者更高)</li>';
+}
+
+if ($data['cpu_count'] < 4) {
+$fail .= '<li class="error">你需要的CPU内核是<strong> 4</strong> 个(或者更高)</li>';
+} else {
+$pass .= '<li class="success">你需要的CPU内核是<strong> 4</strong> 个(或者更高)</li>';
+}
+
+$system_version = strtolower($data['system_info']);
+if (strstr($system_version, 64) && strstr($system_version, "cent") && strstr($system_version, "os") && $data['system_version'] >= 6.4) {
+$pass .= '<li class="success">你需要操作系统是<strong> centOS6.4 64位</strong> (或者更高)</li>';
+} else {
+$system_version = explode(":", $system_version);
+//        $fail .= '<li class="error">你需要操作系统是<strong> centOS6.4 64位</strong> (或者更高)当前系统为'.$system_version[1].'</li>';
+$fail .= '<li class="error">你需要操作系统是<strong> centOS6.4 64位</strong> (或者更高)</li>';
+}
+
+if (version_compare(phpversion(), '5.2.0', '<')) {
+$fail .= '<li class="error">你需要<strong> PHP 5.2.0</strong> (或者更高)</li>';
+} else {
+$pass .='<li class="success">你有<strong> PHP 5.2.0</strong> (或者更高)</li>';
+}
+
+if ($data['memory'] < 4000000) {
+$fail .= '<li class="error">你需要内存<strong> 4G</strong> (或者更高)</li>';
+} else {
+$pass .='<li class="success">你有<strong> PHP 5.2.0</strong> (或者更高)</li>';
+}
+
+if (!ini_get('safe_mode')) {
+$pass .='<li>安全模式<strong>关闭</strong></li>';
+$version = array();
+preg_match('/[0-9]\.[0-9]+\.[0-9]+/', shell_exec('mysql -V'), $version);
+if (empty($version[0]) || version_compare($version[0], '4.1.20', '<')) {
+$fail .= '<li class="error">你需要<strong> MySQL 4.1.20</strong> (或者更高)</li>';
+} else {
+$pass .='<li class="success">您有<strong> MySQL 4.1.20</strong> (或者更高)</li>';
+}
+} else {
+$fail .= '<li>安全模式是<strong>打开的</strong></li>';
+}
+
+foreach ($extensions as $extension) {
+if (!extension_loaded($extension)) {
+$fail .= '<li class="error">你没有<strong>' . $extension . '</strong>扩展</li>';
+} else {
+$pass .= '<li class="success">你有<strong>' . $extension . '</strong>扩展</li>';
+}
+}
+
+if ($fail) {
+echo '<p><strong>您的服务器不符合安装Magento的条件.</strong>';
+    echo '<br>不符合下列<a href="http://www.magentochina.org/system-requirements" target="_blank">系统安装条件</a>，请联系主机商调整服务器环境以便运行Magento:';
+    echo '<ul>' . $fail . '</ul></p>';
+echo '下面的条件已经满足:';
+echo '<ul>' . $pass . '</ul>';
+} else {
+echo '<p><strong>恭喜!</strong>您的服务器能的运行Magento.</p>';
+echo '<ul>' . $pass . '</ul>';
+echo '<footer>如果在安装Magento的过程中有任何疑问，可以看我们的<a href="http://www.magentochina.org/download-install" target="_blank">教程</a>或者去<a href="http://www.magentochina.org/bbs/" target="_blank">论坛提问</a>.</footer>';
+}
+}
+
+extension_check(array(
+'curl',
+'dom',
+'gd',
+'hash',
+'iconv',
+'mcrypt',
+'pcre',
+'pdo',
+'pdo_mysql',
+'simplexml',
+'memcache'
+));
+?>
+</div></div></body>
+</html>
