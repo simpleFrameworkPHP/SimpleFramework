@@ -10,4 +10,7 @@ return array(
     'default_app'=>'home',
     'default_act'=>'index',
     'default_fun'=>'index',
+
+    //缓存页面实时更新(建议关闭)
+    'refresh_pages'=> true,
 );

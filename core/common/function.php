@@ -60,3 +60,11 @@ function addDir($path){
         }
     }
 }
+//获取和设置配置项
+function C($key,$value =''){
+    global $config;
+    if($value != ''){
+        $config[$key] = $value;
+    }
+    return $config[$key];
+}
