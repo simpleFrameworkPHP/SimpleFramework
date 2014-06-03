@@ -6,7 +6,7 @@
  * Time: 下午3:34
  */
 return array(
-    'default_app'=>'dictionary',
-    'default_act'=>'list',
-    'default_fun'=>'index',
+    'sf_default_app'=>'dictionary',
+    'sf_default_act'=>'list',
+    'sf_default_fun'=>'index',
 );
