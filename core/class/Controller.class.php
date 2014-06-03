@@ -25,7 +25,7 @@ class Controller {
     }
 
     public function replaceContent($content){
-        $content = preg_replace(array('/\{\$(.+)[.]?(.+)\}/','/\{\:(.+)(.+)\}/'),array('<?php echo \$\1\2;?>','<?php \1\2;?>'),$content);
+        $content = preg_replace(array('/\{\$(\w+)\}/','/\{\:(w+)\(([\$?\w+\,*]*)\)\}/'),array('<?php echo \$\1;?>','<?php \1\2;?>'),$content);
         return $content;
     }
 } 

@@ -21,7 +21,7 @@ function loadDirFile($path = '.'){
 }
 //加载controller
 function runController($application,$controller){
-    loadDirFile(__ROOT__.'/application/'.$application.'/conf');
+//    loadConfigFile(__ROOT__.'/application/'.$application.'/conf');
     loadDirFile(__ROOT__.'/application/'.$application.'/common');
     $controller .= 'Controller';
     //加载请求模块需要的controller文件
@@ -31,8 +31,9 @@ function runController($application,$controller){
 }
 //加载config
 function loadConfig(){
-    $config = include_once CORE_PATH.'/conf/config.inc.php';
-    $config = array_merge($config,include_once __ROOT__.'/conf/config.inc.php');
+    $config = array();
+    $config = loadConfigFile(CORE_PATH.'/conf');
+    $config = loadConfigFile(__ROOT__.'/conf');
     if(!$_REQUEST['app']){
         $_REQUEST['app'] = $config['default_app'];
     }
@@ -42,9 +43,23 @@ function loadConfig(){
     if(!$_REQUEST['fun']){
         $_REQUEST['fun'] = $config['default_fun'];
     }
-    $config = array_merge($config,include_once __ROOT__.'/application/'.$_REQUEST['app'].'/conf/config.inc.php');
+    $config = loadConfigFile(__ROOT__.'/application/'.$_REQUEST['app'].'/conf');
     return $config;
 }
+//加载config文件
+function loadConfigFile($path,$config = array()){
+    $current_dir = opendir($path);    //opendir()返回一个目录句柄,失败返回false
+    while(($file = readdir($current_dir)) !== false) {    //readdir()返回打开目录句柄中的一个条目
+        $sub_dir = $path . DIRECTORY_SEPARATOR . $file;    //构建子目录路径
+        if($file == '.' || $file == '..') {
+            continue;
+        } else {    //如果是文件,直接输出
+            $config = array_merge($config,include_once $path . DIRECTORY_SEPARATOR . $file);
+        }
+    }
+    return $config;
+}
+
 //新建文件夹
 function addDir($path){
     $dir = dirname($path);
