@@ -12,8 +12,22 @@ return array(
     'sf_default_fun'=>'index',
 
     //缓存页面实时更新(建议关闭)
-    'sf_refresh_pages'=> true,
+    'sf_refresh_pages'=> false,
 
     //调试阶段
-    'sf_debug'=> true,
+    'sf_debug'=> false,
+
+    //默认数据库链接
+    'sf_db_connect' => array(
+        0 => array(
+            'dbhost'=>'127.0.0.1',
+            'dbport'=>3306,
+            'dbuser'=>'root',
+            'dbpass'=>'',
+            'dbname'=>'',
+            'dbmode'=>''
+        ),
+    ),
+    //多数据库处理
+    'sf_db_multi' => false,
 );

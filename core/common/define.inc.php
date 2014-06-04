@@ -7,3 +7,4 @@
  */
 defined('APP_PATH') or define('APP_PATH',__ROOT__.'/application');
 defined('CACHE_PATH') or define('CACHE_PATH',__ROOT__.'/cache');
+return array();

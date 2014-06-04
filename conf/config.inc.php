@@ -9,4 +9,8 @@ return array(
     'sf_default_app'=>'dictionary',
     'sf_default_act'=>'list',
     'sf_default_fun'=>'index',
+    'sf_refresh_pages'=>true,
+
+    //调试阶段
+    'sf_debug'=> true,
 );

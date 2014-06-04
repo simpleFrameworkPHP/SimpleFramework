@@ -21,7 +21,6 @@ function loadDirFile($path = '.'){
 }
 //加载controller
 function runController($application,$controller){
-//    loadConfigFile(__ROOT__.'/application/'.$application.'/conf');
     loadDirFile(__ROOT__.'/application/'.$application.'/common');
     $controller .= 'Controller';
     $file_path = __ROOT__.'/application/'.$application.'/controller/'.$controller.'.class.php';
@@ -48,7 +47,7 @@ function errorPage($msg,$info,$error_code = 404,$path=''){
 function loadConfig(){
     $config = array();
     $config = loadConfigFile(CORE_PATH.'/conf');
-    $config = loadConfigFile(__ROOT__.'/conf');
+    $config = loadConfigFile(__ROOT__.'/conf',$config);
     if(!$_REQUEST['app']){
         $_REQUEST['app'] = $config['sf_default_app'];
     }
@@ -58,7 +57,7 @@ function loadConfig(){
     if(!$_REQUEST['fun']){
         $_REQUEST['fun'] = $config['sf_default_fun'];
     }
-    $config = loadConfigFile(__ROOT__.'/application/'.$_REQUEST['app'].'/conf');
+    $config = loadConfigFile(__ROOT__.'/application/'.$_REQUEST['app'].'/conf',$config);
     return $config;
 }
 //加载config文件

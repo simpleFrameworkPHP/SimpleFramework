@@ -6,6 +6,15 @@
  * Time: 下午2:59
  */
 return array(
+    'sf_db_connect'=>array(
+        0 => array(
+            'dbhost'=>'',
+            'dbport'=>3306,
+            'dbuser'=>'',
+            'dbpass'=>'',
+            'dbmode'=>'mysql',
+        ),
+    ),
     "type" => array(
         0 =>array("name"=>"表目录","value"=>"table"),
         1 =>array("name"=>"全部","value"=>"all"),
