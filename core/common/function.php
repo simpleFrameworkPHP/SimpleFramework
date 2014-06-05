@@ -93,6 +93,24 @@ function C($name,$value = ''){
     }
     return $result;
 }
+//创建模型方法（数据库处理）
+function M($path='',$link_ID = 0){
+    if($path != ''){
+        if(strstr($path,'/')){
+            $path = explode('/',$path);
+            $app = $path[0];
+            $model = $path[1].'Model.class.php';
+        } else {
+            $app = $_REQUEST['app'];
+            $model = $path.'Model';
+        }
+        require_once APP_PATH.'/'.$app.'/model/'.$model.'.class.php';
+    } else {
+        $model = 'Model';
+    }
+    $config = C('sf_db_connect');
+    return new $model($config[$link_ID],$link_ID);
+}
 //新建文件夹
 function addDir($path){
     $dir = dirname($path);

@@ -4,7 +4,7 @@
     <style>
         div {padding: 50px 200px 200px 200px;}
         table.tcenter {margin: auto;}
-        table tr th.colume {background-color: #99ff99;}
+        table tr th.column {background-color: #99ff99;}
         table tr td {min-width: 80px;background-color: #88afff;}
         ul{list-style: none;padding: 0px;}
         ul li{display: inline;padding: 8px;}
@@ -43,8 +43,6 @@
  * Time: 下午4:05
  */
 
-//连接数据库
-conectionMysql($_REQUEST['dbhost'], $_REQUEST['dbuser'], $_REQUEST['dbpwd']);
 global $config;
 //显示模式
    $select =  '<select onchange="selectType(this)">';
@@ -63,9 +61,9 @@ global $config;
                 <?php
             //表结构内容展现
             if($_REQUEST['t']!="table"){
-                getTableInfo($config['remark'],$config['relate_table'][$_REQUEST['t']]);
+                getTableInfo($config['remark'],$config['relate_table'][$_REQUEST['t']],'cms');
             }else{
-                getTable($config['remark']);
+                getTable($config['remark'],'cms');
             }
             // 关闭连接
             mysql_close($conn);?>

@@ -23,5 +23,7 @@ SimpleFramework
 <br/>
 <b>2014.6.5</b><br/>
 1. 添加mysql的连接；<br/>
+2. 数据库查询流程跑通；<br/>
+3. 获取数据中的key值；<br/>
 <br/>
 </p>

@@ -10,6 +10,7 @@ class db {
     public $link_ID;
     public $query_str;
     public $result_rows;
+    public $columns;
     public static  function initDBCon($connect,$no=0){
         switch($connect['dbmode']){
             case 'mysql':$db = &new mysql($connect,$no=0);break;

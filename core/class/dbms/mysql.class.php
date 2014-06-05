@@ -39,7 +39,10 @@ class mysql extends \db {
         $this->result_rows = mysql_num_rows($result);
         //预留sql日志位置
         if($this->result_rows){
-            $data = mysql_fetch_assoc($result);
+            while($row = mysql_fetch_assoc($result)){
+                $data[] = $row;
+            }
+            $this->columns = array_keys($data[0]);
         }
         mysql_free_result($result);
         return $data;
