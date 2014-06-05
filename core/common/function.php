@@ -111,6 +111,36 @@ function M($path='',$link_ID = 0){
     $config = C('sf_db_connect');
     return new $model($config[$link_ID],$link_ID);
 }
+//创建url以及跳转方法
+function H($path='',$params='',$redirect = false){
+    $url = '';
+    if(is_string($path)){
+        $url = 'http://'. $_SERVER['HTTP_HOST'] . '/index.php?';
+        //如果path为‘’即可直接使用
+        $fun = $_REQUEST['fun'] ? $_REQUEST['fun'] : C('sf_default_fun');
+        $act = $_REQUEST['act'] ? $_REQUEST['act'] : C('sf_default_act');
+        $app = $_REQUEST['app'] ? $_REQUEST['app'] : C('sf_default_app');
+        if(strstr($path,'/')) {
+            $path = explode('/',$path);
+            $fun = $path[0] ? $path[0] : C('sf_default_fun');
+            $act = $_REQUEST['act'] ? $_REQUEST['act'] : C('sf_default_act');
+            $app = $_REQUEST['app'] ? $_REQUEST['app'] : C('sf_default_app');
+        }
+        $url .='app='.$app.'&act='.$act.'&fun='.$fun;
+    }
+    if(is_array($params)){
+        foreach($params as $key =>$value){
+            $url .= '&'.$key.'='.$value;
+        }
+    } else {
+        $url .= $params;
+    }
+    if($redirect){
+        http_redirect($url);
+    } else {
+        return $url;
+    }
+}
 //新建文件夹
 function addDir($path){
     $dir = dirname($path);
