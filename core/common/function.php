@@ -15,24 +15,25 @@ function loadDirFile($path = '.'){
         } else if(is_dir($sub_dir)) {    //如果是目录,进行递归
             loadDirFile($sub_dir);
         } else {    //如果是文件,直接输出
-            include_once $path . DIRECTORY_SEPARATOR . $file;
+            require_once $path . DIRECTORY_SEPARATOR . $file;
         }
     }
 }
 //加载controller
 function runController($application,$controller){
     loadDirFile(__ROOT__.'/application/'.$application.'/common');
-    $controller .= 'Controller';
-    $file_path = __ROOT__.'/application/'.$application.'/controller/'.$controller.'.class.php';
+    $file_path = __ROOT__.'/application/'.$application.'/controller/'.$controller.'Controller.class.php';
     if(file_exists($file_path)){
         //加载请求模块需要的controller文件
-        $str = include_once $file_path;// errorPage('又错了，下次认真点！',$_REQUEST['app'].'/'.$_REQUEST['act'].'类文件错误',500);
+        $str = require_once $file_path;// errorPage('又错了，下次认真点！',$application.'/'.$controller.'类文件错误',500);
     } else {
-        errorPage('又错了，下次认真点！',$_REQUEST['app'].'/'.$_REQUEST['act'].'类文件不存在',404);
+        errorPage('又错了，下次认真点！',$application.'/'.$controller.'类文件不存在',404);
     }
+    $controller .= 'Controller';
     $result = new $controller();
     return $result;
 }
+//错误页面显示
 function errorPage($msg,$info,$error_code = 404,$path=''){
     if($path == ''){
         $path = CORE_PATH.'/pages/errorPage.html';
@@ -42,6 +43,10 @@ function errorPage($msg,$info,$error_code = 404,$path=''){
     } else {
         echo $info;
     }
+}
+//日志打印
+function sflog($str,$type,$mode){
+
 }
 //加载config
 function loadConfig(){

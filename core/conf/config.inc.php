@@ -28,6 +28,7 @@ return array(
             'dbmode'=>''
         ),
     ),
+    'sf_db_charset'=>'utf8',
     //多数据库处理
     'sf_db_multi' => false,
 );
