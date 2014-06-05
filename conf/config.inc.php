@@ -14,11 +14,11 @@ return array(
 
     'sf_db_connect'=>array(
         0 => array(
-            'dbhost'=>'192.168.97.108',
+            'dbhost'=>'127.0.0.1',
             'dbname'=>'information_schema',
             'dbport'=>3306,
-            'dbuser'=>'cms',
-            'dbpass'=>'1704061891',
+            'dbuser'=>'root',
+            'dbpass'=>'',
             'dbmode'=>'mysql',
         ),
     ),
