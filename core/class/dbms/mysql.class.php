@@ -27,14 +27,16 @@ class mysql extends \db {
         if($dbVersion >'5.0.1'){
             mysql_query("SET sql_mode=''",$this->con);
         }
-
-        mysql_select_db($config['dbname'],$this->con);
+        if(isset($config['dbname'])){
+            mysql_select_db($config['dbname'],$this->con);
+            $this->select_db = true;
+        }
         return $this->con;
     }
 
     public function query($str){
         $data = array();
-        $this->query_str = $str;
+        $this->sql_str = $str;
         $result = mysql_query($str,$this->con);
         $this->result_rows = mysql_num_rows($result);
         //预留sql日志位置

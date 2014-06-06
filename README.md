@@ -26,4 +26,9 @@ SimpleFramework
 2. 数据库查询流程跑通；<br/>
 3. 获取数据中的key值；<br/>
 <br/>
+<b>2014.6.6</b><br/>
+1. 添加sql语句select和from部分替换和判断的流程；<br/>
+2. 整理index页面；<br/>
+3. 该query方法名为select方法，正式列入外部使用；<br/>
+<p style='color:red;'>4. （待修正问题）任务1的流程完善工作以及table关系的存储和缓存机制的建立；<br/><p/>
 </p>

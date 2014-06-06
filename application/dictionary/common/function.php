@@ -14,7 +14,7 @@ function addSelectType($type,$t){
 function getTable($remark,$dbname){
     $sql = "SELECT  TABLE_NAME as '表名',TABLE_COMMENT as '注释'  FROM TABLES where TABLE_SCHEMA='".$dbname."' order by TABLE_NAME";
     $con = M();
-    $result = $con->query($sql);
+    $result = $con->select($sql);
     $columns = $con->getColumns();
 // 获取查询结果
     echo "<table>";
@@ -47,7 +47,6 @@ function getTable($remark,$dbname){
     mysql_free_result($result);
 }
 function getTableInfo($remark,$table_list,$dbname){
-    mysql_query("SET NAMES 'UTF8'");
     $sql = "SELECT  TABLE_NAME,COLUMN_NAME as '列名',IS_NULLABLE as 'null',DATA_TYPE as '类型',COLUMN_KEY,COLUMN_COMMENT as '注释'  FROM COLUMNS   where TABLE_SCHEMA='".$dbname."' ";
     if(is_array($table_list)){
         $sql .= " and TABLE_NAME in ('".implode("','",$table_list)."') ";
@@ -64,7 +63,7 @@ function getTableInfo($remark,$table_list,$dbname){
     }
     $sql .= " order by TABLE_NAME";
     $model = M();
-    $result = $model->query($sql);
+    $result = $model->select($sql);
 //获取列名
     $columns = $model->getColumns();
     $sum_column = count($columns);
@@ -110,10 +109,9 @@ function getTableInfo($remark,$table_list,$dbname){
     mysql_free_result($result);
 }
 function getSqlInfo($sql_list,$con){
-    mysql_query("SET NAMES 'UTF8'");
     if(count($sql_list)){
         foreach($sql_list as $key => $sql){
-            $result = mysql_db_query($_REQUEST['dbname'],$sql);
+            $result = M()->select($sql);
             // 获取查询结果
             $row=mysql_fetch_row($result);
             // 定位到第一条记录

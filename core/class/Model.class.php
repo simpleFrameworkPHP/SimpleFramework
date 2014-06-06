@@ -8,8 +8,17 @@
 
 class Model {
     public static $db;
+    public $option;
+    public $table = '';
+    public $link_ID;
     public function __construct($connect = '',$no = 0){
-        return self::initDBConnect($connect,$no);
+        $con = self::initDBConnect($connect,$no);
+        if(isset($this->table) && $this->table != ''){
+            //默认操作表
+            $con->table = $this->table;
+        }
+        $this->link_ID = $no;
+        return $con;
     }
 
     public static function initDBConnect($connect = '',$no = 0){
@@ -25,17 +34,125 @@ class Model {
         }
     }
 
-    public function query($sql,$no = 0){
+    public function select($sql = ''){
         $data = array();
-        $data = self::$db[$no]->query($sql);
+        if($sql == ''){
+            $sql = $this->option;
+        }
+        $data = self::$db[$this->link_ID]->select($sql);
         return $data;
     }
+    /**设置查询的列
+     * @params str|array option 列名参数，当它是数组时key不是数字的时候key为输出列名
+     */
+    public function fields($option){
+        $this->removeMark($option);
+        if(strstr($option,',')){
+            $option = explode(',',$option);
+        }
+        if(is_array($option)){
+            foreach($option as $key => $value){
+                if(is_int($key)){
+                    $this->rField($value);
+                } else {
+                    $this->rField($value.' as '.$key);
+                }
+            }
+        } else {
+            $this->rField($option);
+        }
+    }
 
-    public function getColumns($no = 0){
-        if(isset(self::$db[$no])){
-            return self::$db[$no]->columns;
+    public function  rField($option){
+        //自动判断列是否存在所查表中
+        $columns = $this->getAllColumns();
+        if($no = strpos($option,'.')){
+            $table = substr($option,0,$no);
+            if(!isset($columns[$table])){
+                //表名不符合
+            }
+            $option = explode('.',$option);
+            if(in_array($option[1],$columns[$table])){
+                $result = $table.$option[1];
+            }
+        } elseif($option == '*'){
+            $result = $option;
+        } else {
+            foreach($columns as $key => $column_array){
+                //处理as的情况
+                $no = strpos($option,' ');
+                $field = substr($option,0,$no);
+                if(in_array($field,$column_array)){
+                    //取第一张表中的列
+                    $result = $key.'.'.$option;
+                    break;
+                }
+            }
+        }
+        if($this->option['FIELD'] != ''){
+            $this->option['FIELD'] .= ','.$result;
+        } else {
+            $this->option['FIELD'] = $result;
+        }
+    }
+
+    //获取sql语句中的列名
+    public function getColumns(){
+        if(isset(self::$db[$this->link_ID])){
+            return self::$db[$this->link_ID]->columns;
         } else {
             return false;
         }
+    }
+
+    public function tables($option = ''){
+        $this->removeMark($option);
+        if($this->table !=''){
+            $this->rTable($this->table);
+        }
+        if($option != ''){
+            if(strstr($option,',')){
+                $option = explode(',',$option);
+            }
+            if(is_array($option)){
+                foreach($option as $key => $value){
+                    if(is_int($key)){
+                        $this->rTable($value);
+                    } else {
+                        $this->rTable($value.' as '.$key);
+                    }
+                }
+            }
+        }
+    }
+
+    public function rTable($option){
+        $result = '';
+        //辨别是否为有效表
+        if(self::$db[$this->link_ID]->select_db){
+            //该sql语句是存在于数据库内部
+            $result = $option;
+        } else {
+            //该sql语句可以跨越相同链接的数据库执行，需要在表明前面添加库名
+            $result = $option;
+        }
+        $this->option['TABLE'] .= ($this->option['TABLE'] != '') ? ','.$result : $result;
+    }
+
+    //获取所有关联表中的列名
+    public function getAllColumns(){
+        if(!isset($this->option['TABLE'])){
+            $this->tables();
+        }
+        //预留---根据表来获取列
+        self::$db[$this->link_ID]->getColumns();
+    }
+
+    function removeMark($option,$mark = ';'){
+        //去掉不能存在的符号——目前仅知道；为不可存在的符号
+        if($i = strpos($option,$mark)){
+            $option = substr($option,0,$i);
+        }
+        return $option;
     }
 } 
