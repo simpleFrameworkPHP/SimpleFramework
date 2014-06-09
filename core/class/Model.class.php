@@ -61,6 +61,7 @@ class Model {
         } else {
             $this->rField($option);
         }
+        return $this;
     }
 
     public function  rField($option){
@@ -105,6 +106,10 @@ class Model {
         }
     }
 
+    /**
+     * 标准化sql表
+     * @param string|array $option = array('表简称'=>'表名')
+     */
     public function tables($option = ''){
         $this->removeMark($option);
         if($this->table !=''){
@@ -122,8 +127,11 @@ class Model {
                         $this->rTable($value.' as '.$key);
                     }
                 }
+            } else {
+                $this->rTable($option);
             }
         }
+        return $this;
     }
 
     public function rTable($option){
@@ -144,8 +152,32 @@ class Model {
         if(!isset($this->option['TABLE'])){
             $this->tables();
         }
-        //预留---根据表来获取列
-        self::$db[$this->link_ID]->getColumns();
+        if(strstr($this->option['TABLE'],',')){
+            $tables = explode(',',$this->option['TABLE']);
+            foreach($tables as $k=>$v){
+                if(strstr($v,'as')){
+                    $tables[$k] = explode(' as ',$v)[0];
+                }
+            }
+        } else {
+            if(strstr($this->option['TABLE'],'as')){
+                $tables = explode(' as ',$this->option['TABLE'])[0];
+            } else {
+                $tables = $this->option['TABLE'];
+            }
+        }
+        if(is_array($tables)){
+            foreach($tables as $v){
+                //预留---根据表来获取列
+                $columns[$v] = self::$db[$this->link_ID]->getColumns($v);
+                S('table_column',$columns);
+            }
+        } else {
+            //预留---根据表来获取列
+            $columns[$tables] = self::$db[$this->link_ID]->getColumns($tables);
+            S('table_column',$columns);
+        }
+        return $columns;
     }
 
     function removeMark($option,$mark = ';'){

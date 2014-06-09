@@ -30,5 +30,9 @@ SimpleFramework
 1. 添加sql语句select和from部分替换和判断的流程；<br/>
 2. 整理index页面；<br/>
 3. 该query方法名为select方法，正式列入外部使用；<br/>
-<p style='color:red;'>4. （待修正问题）任务1的流程完善工作以及table关系的存储和缓存机制的建立；<br/><p/>
+<b>2014.6.10</b><br/>
+1. 将sql语句渲染的select和from部分跑通；<br/>
+2. 更改常量__ROOT__为__PATH__是根目录字符串，保留__ROOT__为url基础值（不包含http://）；<br/>
+<p style='color:red;'>3. 添加缓存接口，待实现；<br/></p>
+<p style='color:red;'>4. （待修正问题）任务1的流程完善工作以及table关系的存储和缓存机制的建立；<br/></p>
 </p>

@@ -34,12 +34,18 @@ class mysql extends \db {
         return $this->con;
     }
 
+    public function getColumns($table){
+        $sql = 'SHOW COLUMNS FROM '.$table;
+        $data = $this->query($sql);
+        return $data;
+    }
+
     public function query($str){
         $data = array();
         $this->sql_str = $str;
         $result = mysql_query($str,$this->con);
         $this->result_rows = mysql_num_rows($result);
-        //预留sql日志位置
+        //预留--sql日志位置
         if($this->result_rows){
             while($row = mysql_fetch_assoc($result)){
                 $data[] = $row;

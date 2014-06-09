@@ -21,8 +21,8 @@ function loadDirFile($path = '.'){
 }
 //加载controller
 function runController($application,$controller){
-    loadDirFile(__ROOT__.'/application/'.$application.'/common');
-    $file_path = __ROOT__.'/application/'.$application.'/controller/'.$controller.'Controller.class.php';
+    loadDirFile(__PATH__.'/application/'.$application.'/common');
+    $file_path = __PATH__.'/application/'.$application.'/controller/'.$controller.'Controller.class.php';
     if(file_exists($file_path)){
         //加载请求模块需要的controller文件
         $str = require_once $file_path;// errorPage('又错了，下次认真点！',$application.'/'.$controller.'类文件错误',500);
@@ -52,7 +52,7 @@ function sflog($str,$type,$mode){
 function loadConfig(){
     $config = array();
     $config = loadConfigFile(CORE_PATH.'/conf');
-    $config = loadConfigFile(__ROOT__.'/conf',$config);
+    $config = loadConfigFile(__PATH__.'/conf',$config);
     if(!$_REQUEST['app']){
         $_REQUEST['app'] = $config['sf_default_app'];
     }
@@ -62,7 +62,7 @@ function loadConfig(){
     if(!$_REQUEST['fun']){
         $_REQUEST['fun'] = $config['sf_default_fun'];
     }
-    $config = loadConfigFile(__ROOT__.'/application/'.$_REQUEST['app'].'/conf',$config);
+    $config = loadConfigFile(__PATH__.'/application/'.$_REQUEST['app'].'/conf',$config);
     return $config;
 }
 //加载config文件
@@ -115,7 +115,7 @@ function M($path='',$link_ID = 0){
 function H($path='',$params='',$redirect = false){
     $url = '';
     if(is_string($path)){
-        $url = 'http://'. __WWW__ . '/index.php?';
+        $url = 'http://'. __ROOT__ . '/index.php?';
         //如果path为‘’即可直接使用
         $fun = $_REQUEST['fun'] ? $_REQUEST['fun'] : C('sf_default_fun');
         $act = $_REQUEST['act'] ? $_REQUEST['act'] : C('sf_default_act');
@@ -141,14 +141,21 @@ function H($path='',$params='',$redirect = false){
         return $url;
     }
 }
+//预留---缓存方法
+function S($key,$value = ''){
+    switch(C('cache_type')){
+        default:
+    }
+    return ;
+}
 //新建文件夹
 function addDir($path){
     $dir = dirname($path);
-    $dir = str_replace(__ROOT__.'/','',$dir);
+    $dir = str_replace(__PATH__.'/','',$dir);
     $dir_array = array();
     $dir_array = explode('/',$dir);
     $count = count($dir_array);
-    $idir = __ROOT__;
+    $idir = __PATH__;
     for($i=0;$i<$count;$i++){
         $idir .= '/'.$dir_array[$i];
         if(!file_exists($idir)){

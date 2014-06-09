@@ -28,7 +28,10 @@ return array(
             'dbmode'=>''
         ),
     ),
+    //数据库字符集
     'sf_db_charset'=>'utf8',
+    //表前缀
+    'sf_db_prefix'=>'sf_',
     //多数据库处理
     'sf_db_multi' => false,
 );

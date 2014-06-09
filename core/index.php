@@ -6,12 +6,13 @@
  * Time: 下午3:19
  */
 
-define('CORE_PATH',__ROOT__.'/core');
+define('CORE_PATH',__PATH__.'/core');
 include_once CORE_PATH.'/common/define.inc.php';
 include_once CORE_PATH.'/common/function.php';
 //初值设置
 global $config;
 $config = loadConfig();
+define('DB_PREFIX',C('sf_db_prefix'));
 //自动加载基础类
 loadDirFile(CORE_PATH.'/class');
 

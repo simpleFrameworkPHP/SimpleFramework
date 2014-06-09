@@ -28,13 +28,13 @@ class db {
         if(is_array($option)){
             $sql = str_replace(array('%FIELD%','%TABLE%','%WHERE%','%GROUP%','%HAVING%','%ORDER%','%LIMIT%'),
                 array(
-                    replaceSql(empty($option['FIELD']) ? $option['FIELD'] : '*','SELECT '),
-                    replaceSql(empty($option['TABLE']) ? $option['TABLE'] : $this->table,' FORM '),
-                    replaceSql(empty($option['WHERE']) ? $option['WHERE'] : '',' HWERE '),
-                    replaceSql(empty($option['GROUP']) ? $option['GROUP'] : '',' GROPU BY '),
-                    replaceSql(empty($option['HAVING']) ? $option['HAVING'] : '',' HAVING '),
-                    replaceSql(empty($option['ORDER']) ? $option['ORDER'] : '',' ORDER BY '),
-                    replaceSql(empty($option['LIMIT']) ? $option['LIMIT'] : '',' LIMIT '),
+                    $this->replaceSql(empty($option['FIELD']) ? '*' : $option['FIELD'],'SELECT '),
+                    $this->replaceSql(empty($option['TABLE']) ? $this->table : $option['TABLE'],' FROM '),
+                    $this->replaceSql(empty($option['WHERE']) ? '' : $option['WHERE'],' HWERE '),
+                    $this->replaceSql(empty($option['GROUP']) ? '' : $option['GROUP'],' GROPU BY '),
+                    $this->replaceSql(empty($option['HAVING']) ? '' : $option['HAVING'],' HAVING '),
+                    $this->replaceSql(empty($option['ORDER']) ? '' : $option['ORDER'],' ORDER BY '),
+                    $this->replaceSql(empty($option['LIMIT']) ? '' : $option['LIMIT'],' LIMIT '),
             ),$this->select_sql);
             $data = $this->query($sql);
         } else {
