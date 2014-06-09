@@ -62,9 +62,9 @@ global $config;
                 <?php
             //表结构内容展现
             if($_REQUEST['t']!="table"){
-                getTableInfo($config['remark'],$config['relate_table'][$_REQUEST['t']],'cms');
+                getTableInfo($config['remark'],$config['relate_table'][$_REQUEST['t']],'zl_blog');
             }else{
-                getTable($config['remark'],'cms');
+                getTable($config['remark'],'zl_blog');
             }
             // 关闭连接
             mysql_close($conn);?>

@@ -7,4 +7,6 @@
  */
 defined('APP_PATH') or define('APP_PATH',__ROOT__.'/application');
 defined('CACHE_PATH') or define('CACHE_PATH',__ROOT__.'/cache');
+$self =explode('/',$_SERVER['PHP_SELF']);
+defined('__WWW__') or define('__WWW__',count($self) == 3 ? $_SERVER['SERVER_NAME'] . '/' . $self[1] : $_SERVER['SERVER_NAME']);
 return array();

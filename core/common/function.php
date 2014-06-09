@@ -115,7 +115,7 @@ function M($path='',$link_ID = 0){
 function H($path='',$params='',$redirect = false){
     $url = '';
     if(is_string($path)){
-        $url = 'http://'. $_SERVER['HTTP_HOST'] . '/index.php?';
+        $url = 'http://'. __WWW__ . '/index.php?';
         //如果path为‘’即可直接使用
         $fun = $_REQUEST['fun'] ? $_REQUEST['fun'] : C('sf_default_fun');
         $act = $_REQUEST['act'] ? $_REQUEST['act'] : C('sf_default_act');

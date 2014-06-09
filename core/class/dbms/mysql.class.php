@@ -19,7 +19,7 @@ class mysql extends \db {
         $this->link_ID = $no;
         //处理端口号
         $host = $config['dbhost'].($config['dbport']?":{$config['dbport']}":'');
-        $this->con = mysql_connect( $host, $config['dbuser'], $config['dbpass'],131072);
+        $this->con = mysql_connect( $host, $config['dbuser'], $config['dbpass'],131072) or exit('没连上数据库');
         $dbVersion = mysql_get_server_info($this->con);
         //使用UTF8存取数据库
         mysql_query("SET NAMES '".C('sf_db_charset')."'", $this->con);
