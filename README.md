@@ -1,7 +1,6 @@
 SimpleFramework
 ===============
 
-<p>
 <b>2014.5.29</b><br/>
 1.文件架构初成，活用include方法引入和自动加载必要文件；<br/>
 <br/>
@@ -35,4 +34,3 @@ SimpleFramework
 2. 更改常量__ROOT__为__PATH__是根目录字符串，保留__ROOT__为url基础值（不包含http://）；<br/>
 <p style='color:red;'>3. 添加缓存接口，待实现；<br/></p>
 <p style='color:red;'>4. （待修正问题）任务1的流程完善工作以及table关系的存储和缓存机制的建立；<br/></p>
-</p>
