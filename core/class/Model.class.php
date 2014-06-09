@@ -166,16 +166,27 @@ class Model {
                 $tables = $this->option['TABLE'];
             }
         }
+        $table_column = S('table_column');
         if(is_array($tables)){
             foreach($tables as $v){
-                //预留---根据表来获取列
-                $columns[$v] = self::$db[$this->link_ID]->getColumns($v);
-                S('table_column',$columns);
+                if(isset($table_column[$v])){
+                    $columns[$v] = $table_column[$v];
+                } else {
+                    //预留---根据表来获取列
+                    $columns[$v] = self::$db[$this->link_ID]->getColumns($v);
+                    $table_column[$v] = $columns[$v];
+                    S('table_column',$table_column);
+                }
             }
         } else {
-            //预留---根据表来获取列
-            $columns[$tables] = self::$db[$this->link_ID]->getColumns($tables);
-            S('table_column',$columns);
+            if(isset($table_column[$tables])){
+                $columns[$tables] = $table_column[$tables];
+            } else {
+                //预留---根据表来获取列
+                $columns[$tables] = self::$db[$this->link_ID]->getColumns($tables);
+                $table_column[$tables] = $columns[$tables];
+                S('table_column',$table_column);
+            }
         }
         return $columns;
     }
