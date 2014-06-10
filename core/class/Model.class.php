@@ -108,7 +108,7 @@ class Model {
 
     /**
      * 标准化sql表
-     * @param string|array $option = array('表简称'=>'表名')
+     * @param string|array $option = array('表简称'=>'表名')|表名 [as 表简称][,表名 [as 表简称]]
      */
     public function tables($option = ''){
         $this->removeMark($option);
@@ -189,6 +189,14 @@ class Model {
             }
         }
         return $columns;
+    }
+
+    public function where($option){
+        if(is_array($option)){
+            foreach($option as $key=>$value){
+                //预留--检验所有条件，将不符合规格的条件剔除
+            }
+        }
     }
 
     function removeMark($option,$mark = ';'){
