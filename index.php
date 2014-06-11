@@ -5,6 +5,5 @@
  * Date: 14-5-28
  * Time: 下午3:19
  */
-define("__PATH__",__DIR__);
+define("__PATH__",getcwd());
 include_once(__PATH__.'/core/index.php');
-$config = include_once(__PATH__."/conf/config.inc.php");
