@@ -18,15 +18,15 @@ function getTable($remark,$dbname){
     $columns = $con->getColumns();
 // 获取查询结果
     echo "<table>";
-    echo getColumnHTML($columns);
+    echo getColumnHTML($columns,0);
     $j = 0;
     // 循环取出记录
-    while ($row=$result[$j++])
+    foreach($result as $row)
     {
         echo "<tr>";
         //强制替换注释
-        if(!$row[$columns[1]]){
-            $row[$columns[1]] = $remark[$row[0]][0];
+        if(!$row['注释'] && isset($remark[$row['表名']])){
+            $row['注释'] = $remark[$row['表名']][0];
         }
         for ($i=0; $i<2; $i++ )
         {
@@ -36,10 +36,7 @@ function getTable($remark,$dbname){
         }
         echo "</tr>";
     }
-
     echo "</table>";
-    // 释放资源
-    mysql_free_result($result);
 }
 function getTableInfo($remark,$table_list,$dbname){
     $sql = "SELECT  TABLE_NAME,COLUMN_NAME as '列名',IS_NULLABLE as 'null',DATA_TYPE as '类型',COLUMN_KEY,COLUMN_COMMENT as '注释'  FROM COLUMNS   where TABLE_SCHEMA='".$dbname."' ";
@@ -93,7 +90,7 @@ function getTableInfo($remark,$table_list,$dbname){
     }
     echo "</table>";
 }
-function getSqlInfo($sql_list,$con){
+function getSqlInfo($sql_list){
     if(count($sql_list)){
         foreach($sql_list as $key => $sql){
             $model = M('',1);

@@ -12,7 +12,7 @@ include CORE_PATH.'/common/function.php';
 //初值设置
 global $config;
 $config = loadConfig();
-define('DB_PREFIX',C('sf_db_prefix'));
+define('DB_PREFIX',C('SF_DB_PREFIX'));
 //自动加载基础类
 loadDirFile(CORE_PATH.'/class');
 

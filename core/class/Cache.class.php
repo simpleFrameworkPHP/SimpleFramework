@@ -9,13 +9,13 @@
 class Cache {
 
     public static function initCacheMode($type,$param = ''){
-        $cache_conf = C('sf_cache_conf');
+        $cache_conf = C('SF_CACHE_CONF');
         switch($type){
             case 'FILE':
-                $cache = &new FileCache($cache_conf[$type]['cache_path'],$cache_conf[$type]['time']);
+                $cache = &new FileCache($cache_conf[$type]['CACHE_PATH'],$cache_conf[$type]['TIME']);
                 break;
             default:
-                $cache = &new FileCache($cache_conf['FILE']['cache_path'],$cache_conf['FILE']['time']);
+                $cache = &new FileCache($cache_conf['FILE']['CACHE_PATH'],$cache_conf['FILE']['TIME']);
                 break;
         }
         return $cache;

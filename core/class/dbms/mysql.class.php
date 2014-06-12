@@ -13,22 +13,22 @@ class mysql extends db {
         if(!empty($config)) {
             $this->config   =   $config;
         } else {
-            $db_connect = C('sf_db_connect');
+            $db_connect = C('SF_DB_CONNECT');
             $this->config = $db_connect[0];
         }
         $this->link_ID = $no;
         //处理端口号
-        $host = $this->config['dbhost'].($this->config['dbport']?":{$this->config['dbport']}":'');
-        $this->con = mysql_connect( $host, $this->config['dbuser'], $this->config['dbpass'],131072) or exit('没连上数据库'.':'.$no.':'.json_encode($this->config));
+        $host = $this->config['DBHOST'].($this->config['DBPORT']?":{$this->config['DBPORT']}":'');
+        $this->con = mysql_connect( $host, $this->config['DBUSER'], $this->config['DBPASS'],131072) or exit('没连上数据库'.':'.$no.':'.json_encode($this->config));
         $dbVersion = mysql_get_server_info($this->con);
         //使用UTF8存取数据库
-        mysql_query("SET NAMES '".C('sf_db_charset')."'", $this->con);
+        mysql_query("SET NAMES '".C('SF_DB_CHARSET')."'", $this->con);
         //设置 sql_model
         if($dbVersion >'5.0.1'){
             mysql_query("SET sql_mode=''",$this->con);
         }
-        if(isset($config['dbname'])){
-            mysql_select_db($config['dbname'],$this->con);
+        if(isset($config['DBNAME'])){
+            mysql_select_db($config['DBNAME'],$this->con);
             $this->select_db = true;
         }
         return $this->con;

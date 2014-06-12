@@ -15,7 +15,7 @@ class db {
     public $select_db = false;
     public $select_sql = '%FIELD% %TABLE% %WHERE% %GROUP% %HAVING% %ORDER% %LIMIT%';
     public static  function initDBCon($connect,$no=0){
-        switch($connect['dbmode']){
+        switch($connect['DBMODE']){
             case 'mysql':$db = &new mysql($connect,$no=0);break;
             case 'mysqli':$db = &new mysqli($connect,$no=0);break;
             default:$db = &new mysql($connect,$no=0);

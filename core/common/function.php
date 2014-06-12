@@ -54,13 +54,13 @@ function loadConfig(){
     $config = loadConfigFile(CORE_PATH.'/conf');
     $config = loadConfigFile(__PATH__.'/conf',$config);
     if(!$_REQUEST['app']){
-        $_REQUEST['app'] = $config['sf_default_app'];
+        $_REQUEST['app'] = $config['SF_DEFAULT_APP'];
     }
     if(!$_REQUEST['act']){
-        $_REQUEST['act'] = $config['sf_default_act'];
+        $_REQUEST['act'] = $config['SF_DEFAULT_ACT'];
     }
     if(!$_REQUEST['fun']){
-        $_REQUEST['fun'] = $config['sf_default_fun'];
+        $_REQUEST['fun'] = $config['SF_DEFAULT_FUN'];
     }
     $config = loadConfigFile(__PATH__.'/application/'.$_REQUEST['app'].'/conf',$config);
     return $config;
@@ -84,7 +84,7 @@ function C($name,$value = ''){
     if($value == ''){
         if($name != ''){
             $result = $config[$name];
-        } else if($config['sf_debug'] == true) {
+        } else if($config['SF_DEBUG'] == true) {
             $result =  $config;
         }
     } else {
@@ -108,7 +108,7 @@ function M($path='',$link_ID = 0){
     } else {
         $model = 'Model';
     }
-    $config = C('sf_db_connect');
+    $config = C('SF_DB_CONNECT');
     if(class_exists($model)){
         return new $model($config[$link_ID],$link_ID);
     } else {
@@ -121,14 +121,14 @@ function H($path='',$params='',$redirect = false){
     if(is_string($path)){
         $url = 'http://'. __ROOT__ . '/index.php?';
         //如果path为‘’即可直接使用
-        $fun = $_REQUEST['fun'] ? $_REQUEST['fun'] : C('sf_default_fun');
-        $act = $_REQUEST['act'] ? $_REQUEST['act'] : C('sf_default_act');
-        $app = $_REQUEST['app'] ? $_REQUEST['app'] : C('sf_default_app');
+        $fun = $_REQUEST['fun'] ? $_REQUEST['fun'] : C('SF_DEFAULT_FUN');
+        $act = $_REQUEST['act'] ? $_REQUEST['act'] : C('SF_DEFAULT_ACT');
+        $app = $_REQUEST['app'] ? $_REQUEST['app'] : C('SF_DEFAULT_APP');
         if(strstr($path,'/')) {
             $path = explode('/',$path);
-            $fun = $path[0] ? $path[0] : C('sf_default_fun');
-            $act = $_REQUEST['act'] ? $_REQUEST['act'] : C('sf_default_act');
-            $app = $_REQUEST['app'] ? $_REQUEST['app'] : C('sf_default_app');
+            $fun = $path[0] ? $path[0] : C('SF_DEFAULT_FUN');
+            $act = $_REQUEST['act'] ? $_REQUEST['act'] : C('SF_DEFAULT_ACT');
+            $app = $_REQUEST['app'] ? $_REQUEST['app'] : C('SF_DEFAULT_APP');
         }
         $url .='app='.$app.'&act='.$act.'&fun='.$fun;
     }
@@ -147,7 +147,7 @@ function H($path='',$params='',$redirect = false){
 }
 //预留---缓存方法
 function S($key,$value = '',$type='system',$time=85400){
-    $cache = Cache::initCacheMode(C('sf_cache_mode'));
+    $cache = Cache::initCacheMode(C('SF_CACHE_MODE'));
     $result = '';
     if($value == ''){
         $result = $cache->getParam($key,$type,$time);

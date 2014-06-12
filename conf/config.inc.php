@@ -6,22 +6,30 @@
  * Time: 下午3:34
  */
 return array(
-    'sf_default_app'=>'dictionary',
-    'sf_default_act'=>'list',
-    'sf_default_fun'=>'index',
-    'sf_refresh_pages'=>true,
+    'SF_DEFAULT_APP'=>'dictionary',
+    'SF_DEFAULT_ACT'=>'list',
+    'SF_DEFAULT_FUN'=>'index',
+    'SF_REFRESH_PAGES'=>true,
 
 
-    'sf_db_connect'=>array(
+    'SF_DB_CONNECT'=>array(
         0 => array(
-            'dbhost'=>'127.0.0.1',
-            'dbname'=>'information_schema',
-            'dbport'=>3306,
-            'dbuser'=>'root',
-            'dbpass'=>'',
-            'dbmode'=>'mysql',
+            'DBHOST'=>'',
+            'DBNAME'=>'information_schema',
+            'DBPORT'=>3306,
+            'DBUSER'=>'',
+            'DBPASS'=>'',
+            'DBMODE'=>'mysql',
+        ),
+        1 => array(
+            'DBHOST',
+            'DBNAME'=>'cms',
+            'DBPORT'=>3306,
+            'DBUSER'=>'',
+            'DBPASS'=>'',
+            'DBMODE'=>'mysql',
         ),
     ),
     //调试阶段
-    'sf_debug'=> true,
+    'SF_DEBUG'=> true,
 );

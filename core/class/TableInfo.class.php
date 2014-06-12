@@ -20,8 +20,8 @@ class TableInfo {
     function initTableInfo($link_ID = 0){
         $sql = 'SHOW TABLES';
         $tables = M('',$link_ID)->select($sql);
-        $dbname = C('sf_db_connect');
-        $dbname = $dbname[$link_ID]['dbname'];
+        $dbname = C('SF_DB_CONNECT');
+        $dbname = $dbname[$link_ID]['DBNAME'];
         foreach($tables as $value){
             $this->getColumnInfo($value['Tables_in_'.$dbname]);
         }

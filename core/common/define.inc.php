@@ -5,6 +5,7 @@
  * Date: 14-5-30
  * Time: 上午11:09
  */
+defined('ONE_DAY') or define('ONE_DAY',86400);
 defined('APP_PATH') or define('APP_PATH',__PATH__.'/application');
 defined('CACHE_PATH') or define('CACHE_PATH',__PATH__.'/cache');
 $self =explode('/',$_SERVER['PHP_SELF']);

@@ -40,8 +40,8 @@ class FileCache extends Cache {
         return $result;
     }
 
-    public function setParam($key,$data,$type = 'system',$cache_time = 86400){
-        $save_data = array('end_time'=>nowTime()+86400*7,$key=>array('end_time'=>nowTime()+$cache_time,'data'=>$data));
+    public function setParam($key,$data,$type = 'system',$cache_time = ONE_DAY){
+        $save_data = array('end_time'=>nowTime()+ONE_DAY*7,$key=>array('end_time'=>nowTime()+$cache_time,'data'=>$data));
         $path = $this->cache_path.'/'.$type.'.ch';
         if(!file_exists($path)){
             //创建缓存文件

@@ -24,7 +24,7 @@ class Model {
 
     public static function initDBConnect($connect = '',$no = 0){
         if($connect == ''){
-            $connect = C('sf_db_connect');
+            $connect = C('SF_DB_CONNECT');
             $connect = $connect[$no];
         }
         if(!isset(self::$db[$no])){

@@ -7,40 +7,40 @@
  */
 return array(
     //默认参数设置
-    'sf_default_app'=>'home',
-    'sf_default_act'=>'index',
-    'sf_default_fun'=>'index',
+    'SF_DEFAULT_APP'=>'home',
+    'SF_DEFAULT_ACT'=>'index',
+    'SF_DEFAULT_FUN'=>'index',
 
     //缓存页面实时更新(建议关闭)
-    'sf_refresh_pages'=> false,
+    'SF_REFRESH_PAGES'=> false,
 
     //调试阶段
-    'sf_debug'=> false,
+    'SF_DEBUG'=> false,
 
     //默认数据库链接
-    'sf_db_connect' => array(
+    'SF_DB_CONNECT' => array(
         0 => array(
-            'dbhost'=>'127.0.0.1',
-            'dbport'=>3306,
-            'dbuser'=>'root',
-            'dbpass'=>'',
-            'dbname'=>'',
-            'dbmode'=>''
+            'DBHOST'=>'127.0.0.1',
+            'DBPORT'=>3306,
+            'DBUSER'=>'root',
+            'DBPASS'=>'',
+            'DBNAME'=>'',
+            'DBMODE'=>''
         ),
     ),
     //数据库字符集
-    'sf_db_charset'=>'utf8',
+    'SF_DB_CHARSET'=>'utf8',
     //表前缀
-    'sf_db_prefix'=>'sf_',
-    //多数据库处理
-    'sf_db_multi' => false,
+    'SF_DB_PREFIX'=>'sf_',
+    //预留--目前还没有判断多数据库处理
+    'SF_DB_MULTI' => false,
 
     //缓存设置
-    'sf_cache_mode'=>'FILE',
-    'sf_cache_conf'=>array(
+    'SF_CACHE_MODE'=>'FILE',
+    'SF_CACHE_CONF'=>array(
         'FILE'=>array(
-            'cache_path'=>CACHE_PATH.'/data',//文件缓存根目录
-            'time'=>86400*7,//缓存文件过期默认时长
+            'CACHE_PATH'=>CACHE_PATH.'/data',//文件缓存根目录
+            'TIME'=>ONE_DAY*7,//缓存文件过期默认时长
         ),
     ),
 );

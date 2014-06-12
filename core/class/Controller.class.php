@@ -23,7 +23,7 @@ class Controller {
         if($this->cache_file_dir != ''){
             $file_path = $this->file_dir.'/'.$fun.'.html';
             $cache_file_path = $this->cache_file_dir.'/'.$fun.'.phtml';
-            if(C('sf_refresh_pages') || !file_exists($cache_file_path) || filemtime($file_path)>=filemtime($cache_file_path) || !file_exists($file_path)){
+            if(C('SF_REFRESH_PAGES') || !file_exists($cache_file_path) || filemtime($file_path)>=filemtime($cache_file_path) || !file_exists($file_path)){
                 //生成模板文件不存在或生成模板文件的修改时间比实际模板文件的修改时间早即生成模板文件已过时
                 $contentStr = file_get_contents($file_path);
                 //可以实现字符替换以达到函数改写
