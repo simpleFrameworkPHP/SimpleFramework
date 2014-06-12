@@ -18,12 +18,7 @@ function getTable($remark,$dbname){
     $columns = $con->getColumns();
 // 获取查询结果
     echo "<table>";
-    // 显示字段名称
-    $column ="<tr>";
-    for ($i=0; $i<2; $i++)
-        $column .= '<th class="column">'.$columns[$i]."</th>";
-    $column .= "</tr>";
-    echo $column;
+    echo getColumnHTML($columns);
     $j = 0;
     // 循环取出记录
     while ($row=$result[$j++])
@@ -68,14 +63,7 @@ function getTableInfo($remark,$table_list,$dbname){
     $columns = $model->getColumns();
     $sum_column = count($columns);
 // 显示字段名称
-    $column ="<tr>";
-    for ($i=1; $i<$sum_column; $i++)
-    {
-        $column .= '<th class="column">'.
-            $columns[$i];
-        $column .= "</th>";
-    }
-    $column .= "</tr>";
+    $column =getColumnHTML($columns);
     $table_name = '';
 // 循环取出记录
     foreach($result as $row)
@@ -111,44 +99,42 @@ function getTableInfo($remark,$table_list,$dbname){
 function getSqlInfo($sql_list,$con){
     if(count($sql_list)){
         foreach($sql_list as $key => $sql){
-            $result = M()->select($sql);
-            // 获取查询结果
-            $row=mysql_fetch_row($result);
-            // 定位到第一条记录
-            mysql_data_seek($result, 0);
-            $sum_column = mysql_num_fields($result);
+            $model = M('',1);
+            $result = $model->select($sql);
+            //获取列名
+            $columns = $model->getColumns();
+            $sum_column = count($columns);
             // 获取查询结果
             echo "<table>";
             $table_name ="<tr><th colspan='".$sum_column."'>".$key."</th></tr>";
             $table_name .="<tr><td colspan='".$sum_column."'>".$sql."</td></tr>";
             echo $table_name;
-            // 显示字段名称
-            $column ="<tr>";
-            for ($i=0; $i<$sum_column; $i++)
-            {
-                $column .= '<th class="column">'.
-                    mysql_field_name($result, $i);
-                $column .= "</th>";
-            }
-            $column .= "</tr>";
-            echo $column;
+            echo getColumnHTML($columns,0);
             // 循环取出记录
-            while ($row=mysql_fetch_row($result))
+            foreach($result as $row)
             {
                 echo "<tr>";
                 for ($i=0; $i<$sum_column; $i++ )
                 {
                     echo '<td>';
-                    echo $row[$i];
+                    echo $row[$columns[$i]];
                     echo '</td>';
                 }
                 echo "</tr>";
             }
 
             echo "</table>";
-            // 释放资源
-            mysql_free_result($result);
         }
     }
+}
+function getColumnHTML($columns,$start = 1){
+    $count = count($columns);
+    $column ="<tr>";
+    for($i=$start;$i<$count;$i++)
+    {
+        $column .= '<th class="column">'. $columns[$i]."</th>";
+    }
+    $column .= "</tr>";
+    return $column;
 }
 ?>

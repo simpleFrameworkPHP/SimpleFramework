@@ -61,7 +61,7 @@ global $config;
             <div class="div_content" id="tagContent0">
                 <?php
                 $dbname = C('sf_db_connect');
-                $dbname = $dbname[0]['dbname'];
+                $dbname = $dbname[1]['dbname']?$dbname[1]['dbname']:$dbname[0]['dbname'];
             //表结构内容展现
             if($_REQUEST['t']!="table"){
                 getTableInfo($config['remark'],$config['relate_table'][$_REQUEST['t']],$dbname);

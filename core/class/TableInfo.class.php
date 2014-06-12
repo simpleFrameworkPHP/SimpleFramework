@@ -66,11 +66,11 @@ class TableInfo {
         }
         foreach($tables as $table_name => $value){
             if(array_key_exists($column,$value)){
-                //该表名有效
+                //该列名有效
                 $column = $table_name.'.'.$column;
                 break;
             } else {
-                //该表明无效
+                //该列名无效
                 $column = '';
             }
         }
