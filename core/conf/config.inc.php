@@ -34,4 +34,13 @@ return array(
     'sf_db_prefix'=>'sf_',
     //多数据库处理
     'sf_db_multi' => false,
+
+    //缓存设置
+    'sf_cache_mode'=>'FILE',
+    'sf_cache_conf'=>array(
+        'FILE'=>array(
+            'cache_path'=>CACHE_PATH.'/data',//文件缓存根目录
+            'time'=>86400*7,//缓存文件过期默认时长
+        ),
+    ),
 );

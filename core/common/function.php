@@ -15,7 +15,7 @@ function loadDirFile($path = '.'){
         } else if(is_dir($sub_dir)) {    //如果是目录,进行递归
             loadDirFile($sub_dir);
         } else {    //如果是文件,直接输出
-            require_once $path . DIRECTORY_SEPARATOR . $file;
+            require $path . DIRECTORY_SEPARATOR . $file;
         }
     }
 }
@@ -23,9 +23,9 @@ function loadDirFile($path = '.'){
 function runController($application,$controller){
     loadDirFile(__PATH__.'/application/'.$application.'/common');
     $file_path = __PATH__.'/application/'.$application.'/controller/'.$controller.'Controller.class.php';
-    if(file_exists($file_path)){
+    if(!class_exists($controller.'Controller') && file_exists($file_path)){
         //加载请求模块需要的controller文件
-        $str = require_once $file_path;// errorPage('又错了，下次认真点！',$application.'/'.$controller.'类文件错误',500);
+        $str = require $file_path;// errorPage('又错了，下次认真点！',$application.'/'.$controller.'类文件错误',500);
     } else {
         errorPage('又错了，下次认真点！',$application.'/'.$controller.'类文件不存在',404);
     }
@@ -38,7 +38,7 @@ function errorPage($msg,$info,$error_code = 404,$path=''){
     if($path == ''){
         $path = CORE_PATH.'/pages/errorPage.html';
     }
-    if($path){
+    if(file_exists($path)){
         include $path;
     } else {
         echo $info;
@@ -73,7 +73,7 @@ function loadConfigFile($path,$config = array()){
         if($file == '.' || $file == '..') {
             continue;
         } else {    //如果是文件,直接输出
-            $config = array_merge($config,include_once $path . DIRECTORY_SEPARATOR . $file);
+            $config = array_merge($config,include $path . DIRECTORY_SEPARATOR . $file);
         }
     }
     return $config;
@@ -104,7 +104,7 @@ function M($path='',$link_ID = 0){
             $app = $_REQUEST['app'];
             $model = $path.'Model';
         }
-        require_once APP_PATH.'/'.$app.'/model/'.$model.'.class.php';
+        class_exists($model) or require(APP_PATH.'/'.$app.'/model/'.$model.'.class.php');
     } else {
         $model = 'Model';
     }
@@ -142,11 +142,14 @@ function H($path='',$params='',$redirect = false){
     }
 }
 //预留---缓存方法
-function S($key,$value = ''){
-    switch(C('cache_type')){
-        default:
+function S($key,$value = '',$type='system',$time=85400){
+    $cache = Cache::initCacheMode(C('sf_cache_mode'));
+    if($value == ''){
+        $result = $cache->getParam($key,$type,$time);
+    } else {
+        $cache->setParam($key,$value,$type,$time);
     }
-    return ;
+    return $result;
 }
 //新建文件夹
 function addDir($path){
@@ -161,5 +164,38 @@ function addDir($path){
         if(!file_exists($idir)){
             mkdir($idir,0755);
         }
+    }
+}
+//获取当前时间
+function nowTime(){
+    //优化--当多服务器设置时应获取数据库时间或时间服务器的时间或者是请求时间
+    return time();
+}
+//删除文件
+function removeFile($path){
+    //优化--
+    unlink($path);
+}
+//删除文件夹
+function removeDir($path) {
+    //先删除目录下的文件：
+    $dh=opendir($path);
+    while ($file=readdir($dh)) {
+        if($file!="." && $file!="..") {
+            $fullpath=$path."/".$file;
+            if(!is_dir($fullpath)) {
+                unlink($fullpath);
+            } else {
+                deldir($fullpath);
+            }
+        }
+    }
+
+    closedir($dh);
+    //删除当前文件夹：
+    if(rmdir($path)) {
+        return true;
+    } else {
+        return false;
     }
 }

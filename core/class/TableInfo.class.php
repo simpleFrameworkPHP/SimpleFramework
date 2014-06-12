@@ -9,13 +9,12 @@
 class TableInfo {
 
     public $tables;
-    public $columns;
 
     public function __construct(){
         $this->initTableInfo();
     }
 
-    public function initTableInfo($link_ID = 0){
+    function initTableInfo($link_ID = 0){
         $sql = 'SHOW TABLES';
         $tables = M('',$link_ID)->select($sql);
         $dbname = C('sf_db_connect');
@@ -24,7 +23,7 @@ class TableInfo {
             $this->getColumnInfo($value['Tables_in_'.$dbname]);
         }
     }
-    public function getColumnInfo($table_name,$link_ID = 0){
+    function getColumnInfo($table_name,$link_ID = 0){
         $sql = 'SHOW COLUMNS FROM '.$table_name;
         $columns = M('',$link_ID)->select($sql);
         foreach($columns as $value){
@@ -32,7 +31,7 @@ class TableInfo {
         }
     }
 
-    /**
+    /** 过滤表名----将不存在的表名滤除
      * @param string $table_name 表名，须填写表全称
      * @return string
      */
@@ -46,8 +45,8 @@ class TableInfo {
         }
     }
 
-    /**
-     * @param $column
+    /** 过滤列名----将不存在的列名滤除
+     * @param $column 列名
      * @param array $table_list 表名数组
      * @return mixed
      */

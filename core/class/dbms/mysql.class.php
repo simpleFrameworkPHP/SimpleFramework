@@ -5,7 +5,7 @@
  * Date: 14-6-4
  * Time: 下午5:03
  */
-class mysql extends \db {
+class mysql extends db {
     public function __construct($config,$no = 0){
         if ( !extension_loaded('mysql') ) {
             errorPage('你没有安装mysql模块，快去安装吧','系统不支持:mysql');

@@ -9,7 +9,9 @@
 class ListController extends Controller {
 
     public function index(){
-        $_REQUEST[t] = $_REQUEST['t']?$_REQUEST['t'] : 'all';
+        if(!isset($_REQUEST['t'])){
+            $_REQUEST[t] =  'all';
+        }
         $this->display();
     }
 } 

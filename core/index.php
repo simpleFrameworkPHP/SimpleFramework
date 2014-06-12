@@ -7,8 +7,8 @@
  */
 
 define('CORE_PATH',__PATH__.'/core');
-include_once CORE_PATH.'/common/define.inc.php';
-include_once CORE_PATH.'/common/function.php';
+include CORE_PATH.'/common/define.inc.php';
+include CORE_PATH.'/common/function.php';
 //初值设置
 global $config;
 $config = loadConfig();

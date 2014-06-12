@@ -80,7 +80,7 @@ function getTableInfo($remark,$table_list,$dbname){
         }
         echo "<tr>";
         //强制替换注释
-        if(!$row['注释']){
+        if(!$row['注释'] && isset($remark[$row['TABLE_NAME']][$row['列名']])){
             $row['注释'] = $remark[$row['TABLE_NAME']][$row['列名']];
         }
         for ($i=1; $i<$sum_column; $i++ )
@@ -91,10 +91,7 @@ function getTableInfo($remark,$table_list,$dbname){
         }
         echo "</tr>";
     }
-
     echo "</table>";
-// 释放资源
-    mysql_free_result($result);
 }
 function getSqlInfo($sql_list,$con){
     if(count($sql_list)){
