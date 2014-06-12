@@ -10,18 +10,23 @@ class TableInfo {
 
     public $tables;
 
-    public function __construct(){
-        $this->initTableInfo();
+    public function __construct($link_ID){
+        if($this->tables = S('DB_INFO','','DB_INFO_'.$link_ID))
+            ;
+        else
+            $this->initTableInfo($link_ID);
     }
 
     function initTableInfo($link_ID = 0){
         $sql = 'SHOW TABLES';
         $tables = M('',$link_ID)->select($sql);
         $dbname = C('sf_db_connect');
-        $dbname = $dbname[0]['dbname'];
+        $dbname = $dbname[$link_ID]['dbname'];
         foreach($tables as $value){
             $this->getColumnInfo($value['Tables_in_'.$dbname]);
         }
+        //存储数据结构
+        S('DB_INFO',$this->tables,'DB_INFO_'.$link_ID);
     }
     function getColumnInfo($table_name,$link_ID = 0){
         $sql = 'SHOW COLUMNS FROM '.$table_name;
@@ -41,7 +46,7 @@ class TableInfo {
             return $table_name;
         } else {
             //该表明无效
-            return '';
+            return false;
         }
     }
 
@@ -70,7 +75,7 @@ class TableInfo {
                 break;
             } else {
                 //该列名无效
-                $column = '';
+                $column = false;
             }
         }
         return $column;

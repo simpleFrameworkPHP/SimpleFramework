@@ -5,7 +5,7 @@
  * Date: 14-6-4
  * Time: 下午3:46
  */
-
+//include CORE_PATH.'/class/TableInfo.class.php';
 class Model {
     public static $db;//数据库链接数组
     public $option;//记录所有sql子句的数组，在执行时输出出来
@@ -54,11 +54,75 @@ class Model {
         }
     }
 
-    function removeMark($option,$mark = ';'){
-        //去掉不能存在的符号——目前仅知道；为不可存在的符号
-        if($i = strpos($option,$mark)){
-            $option = substr($option,0,$i);
+    public function table($tables = ''){
+        $table_list = array();
+        if($tables == ''){
+            $table_list[] = $this->table;
+        } else {
+            if(!is_array($tables)){
+                if(strstr($tables,',')){
+                    $table_list = explode(',',$tables);
+                } else {
+                    $table_list[] = $tables;
+                }
+            }
         }
-        return $option;
+        $TableInfo = new TableInfo($this->link_ID);
+        foreach($table_list as $key=>$value){
+            if(!$TableInfo->filterTable($value)){
+                unset($table_list[$key]);
+            }
+        }
+        $this->option['TABLE'] = implode(',',$table_list);
+        return $this;
+    }
+
+    public function fields($fields = '',$auto_check = true){
+        if($auto_check){
+            if($fields == '' || $fields == '*'){
+                $this->option['FIELD'] = '*';
+            } else{
+                $field_list = array();
+                if(!is_array($fields)){
+                    if(strstr($fields,',')){
+                        $field_list = explode(',',$fields);
+                    } else {
+                        $field_list[] = $fields;
+                    }
+                } else {
+                    $field_list = $fields;
+                }
+                $TableInfo = new TableInfo($this->link_ID);
+                if(!isset($this->option['TABLE'])){
+                    if($this->table <> ''){
+                        $table_array[] = $this->table;
+                    } else {
+                        errorPage('没有表格啦','你需要先使用table方法或设置Model中的$table值来设置查询的表格');
+                    }
+                } else {
+                    if(strstr($this->option['TABLE'],',')){
+                        $table_array = explode(',',$this->option['TABLE']);
+                    } else {
+                        $table_array[] = $this->option['TABLE'];
+                    }
+                }
+                $field_array = array();
+                foreach($field_list as $key=>$value){
+                    //优化--在此处考虑 as 渲染
+                    $field_v = $TableInfo->filterColumn($value,$table_array);
+                    if($field_v){
+                        $field_array[] = $field_v;
+                    }
+                }
+                if(count($field_array)){
+                    $this->option['FIELD'] = implode(',',$field_array);
+                } else {
+                    return false;
+                }
+            }
+        } else {
+            $this->option['FIELD'] = is_array($fields) ? implode(',',$fields) : $fields;
+        }
+        return $this;
     }
 } 

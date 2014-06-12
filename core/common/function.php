@@ -109,7 +109,11 @@ function M($path='',$link_ID = 0){
         $model = 'Model';
     }
     $config = C('sf_db_connect');
-    return new $model($config[$link_ID],$link_ID);
+    if(class_exists($model)){
+        return new $model($config[$link_ID],$link_ID);
+    } else {
+        return false;
+    }
 }
 //创建url以及跳转方法
 function H($path='',$params='',$redirect = false){
@@ -144,6 +148,7 @@ function H($path='',$params='',$redirect = false){
 //预留---缓存方法
 function S($key,$value = '',$type='system',$time=85400){
     $cache = Cache::initCacheMode(C('sf_cache_mode'));
+    $result = '';
     if($value == ''){
         $result = $cache->getParam($key,$type,$time);
     } else {

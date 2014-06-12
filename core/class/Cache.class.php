@@ -15,7 +15,7 @@ class Cache {
                 $cache = &new FileCache($cache_conf[$type]['cache_path'],$cache_conf[$type]['time']);
                 break;
             default:
-                $cache = &new FileCache($cache_conf[$type]['cache_path'],$cache_conf[$type]['time']);
+                $cache = &new FileCache($cache_conf['FILE']['cache_path'],$cache_conf['FILE']['time']);
                 break;
         }
         return $cache;
