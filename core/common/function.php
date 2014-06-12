@@ -53,13 +53,13 @@ function loadConfig(){
     $config = array();
     $config = loadConfigFile(CORE_PATH.'/conf');
     $config = loadConfigFile(__PATH__.'/conf',$config);
-    if(!$_REQUEST['app']){
+    if(!isset($_REQUEST['app'])){
         $_REQUEST['app'] = $config['SF_DEFAULT_APP'];
     }
-    if(!$_REQUEST['act']){
+    if(!isset($_REQUEST['act'])){
         $_REQUEST['act'] = $config['SF_DEFAULT_ACT'];
     }
-    if(!$_REQUEST['fun']){
+    if(!isset($_REQUEST['fun'])){
         $_REQUEST['fun'] = $config['SF_DEFAULT_FUN'];
     }
     $config = loadConfigFile(__PATH__.'/application/'.$_REQUEST['app'].'/conf',$config);

@@ -77,7 +77,7 @@ function getTableInfo($remark,$table_list,$dbname){
             }
             $table_name = $row['TABLE_NAME'];
             echo '<br/><table>';
-            echo "<tr><th colspan='".($sum_column-1)."'>".$table_name."(".$remark[$row['TABLE_NAME']][0].")</th></tr>";
+            echo "<tr><th colspan='".($sum_column-1)."'>".$table_name."(".(isset($remark[$row['TABLE_NAME']][0])?$remark[$row['TABLE_NAME']][0]:'').")</th></tr>";
             // 显示字段名称
             echo $column;
         }

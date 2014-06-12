@@ -12,10 +12,10 @@ class Cache {
         $cache_conf = C('SF_CACHE_CONF');
         switch($type){
             case 'FILE':
-                $cache = &new FileCache($cache_conf[$type]['CACHE_PATH'],$cache_conf[$type]['TIME']);
+                $cache = new FileCache($cache_conf[$type]['CACHE_PATH'],$cache_conf[$type]['TIME']);
                 break;
             default:
-                $cache = &new FileCache($cache_conf['FILE']['CACHE_PATH'],$cache_conf['FILE']['TIME']);
+                $cache = new FileCache($cache_conf['FILE']['CACHE_PATH'],$cache_conf['FILE']['TIME']);
                 break;
         }
         return $cache;
