@@ -12,7 +12,7 @@ function addSelectType($type,$t){
     return $data;
 }
 function getTable($remark,$dbname){
-    $sql = "SELECT  TABLE_NAME as '表名',TABLE_COMMENT as '注释'  FROM TABLES where TABLE_SCHEMA='".$dbname."' order by TABLE_NAME";
+    $sql = "SELECT  TABLE_NAME as '表名',TABLE_COMMENT as '注释',TABLE_ROWS as '数据行数',UPDATE_TIME as '最后更新'  FROM TABLES where TABLE_SCHEMA='".$dbname."' order by TABLE_NAME";
     $con = M();
     $result = $con->select($sql);
     $columns = $con->getColumns();
@@ -23,15 +23,21 @@ function getTable($remark,$dbname){
     // 循环取出记录
     foreach($result as $row)
     {
-        echo "<tr>";
+        echo '<tr';
+        if(strtotime($row['最后更新'])+ONE_DAY*31<nowTime()){
+            echo ' class="yellow" ';
+        } elseif($row['数据行数']>100000) {
+            echo ' class="red" ';
+        }
+        echo '>';
         //强制替换注释
         if(!$row['注释'] && isset($remark[$row['表名']])){
             $row['注释'] = $remark[$row['表名']][0];
         }
-        for ($i=0; $i<2; $i++ )
+        foreach($row as $v_row)
         {
             echo '<td>';
-            echo $row[$columns[$i]];
+            echo $v_row;
             echo '</td>';
         }
         echo "</tr>";
