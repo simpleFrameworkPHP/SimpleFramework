@@ -43,3 +43,6 @@ SimpleFramework
 3. 开启php调试模式，在index.php文件中；<br/>
 4. Model中实现table方法和不包含as的fields方法；<br/>
 5. 修改了一些可能报错的地方，完善错误代码；<br/>
+<b>2014.6.13</b><br/>
+1. 添加mysqli链接方式以及查询方法的接口；<br/>
+2. 完善代码中不够完善的地方；<br/>

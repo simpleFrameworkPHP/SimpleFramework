@@ -5,7 +5,7 @@
  * Date: 14-6-4
  * Time: 下午5:03
  */
-class mysql extends db {
+class DBMysql extends db {
     public function __construct($config,$no = 0){
         if ( !extension_loaded('mysql') ) {
             errorPage('你没有安装mysql模块，快去安装吧','系统不支持:mysql');
@@ -14,7 +14,7 @@ class mysql extends db {
             $this->config   =   $config;
         } else {
             $db_connect = C('SF_DB_CONNECT');
-            $this->config = $db_connect[0];
+            $this->config = $db_connect[$no];
         }
         $this->link_ID = $no;
         //处理端口号
@@ -27,17 +27,11 @@ class mysql extends db {
         if($dbVersion >'5.0.1'){
             mysql_query("SET sql_mode=''",$this->con);
         }
-        if(isset($config['DBNAME'])){
-            mysql_select_db($config['DBNAME'],$this->con);
+        if(isset($this->config['DBNAME'])){
+            mysql_select_db($$this->config['DBNAME'],$this->con);
             $this->select_db = true;
         }
         return $this->con;
-    }
-
-    public function getColumns($table){
-        $sql = 'SHOW COLUMNS FROM '.$table;
-        $data = $this->query($sql);
-        return $data;
     }
 
     public function query($str){
