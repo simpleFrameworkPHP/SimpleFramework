@@ -5,7 +5,6 @@
  * Date: 14-6-4
  * Time: 下午3:46
  */
-//include CORE_PATH.'/class/TableInfo.class.php';
 class Model {
     public static $db;//数据库链接数组
     public $option;//记录所有sql子句的数组，在执行时输出出来

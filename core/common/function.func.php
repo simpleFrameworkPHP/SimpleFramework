@@ -44,39 +44,9 @@ function errorPage($msg,$info,$error_code = 404,$path=''){
         echo $info;
     }
 }
-//日志打印
+//预留--日志打印
 function sflog($str,$type,$mode){
 
-}
-//加载config
-function loadConfig(){
-    $config = array();
-    $config = loadConfigFile(CORE_PATH.'/conf');
-    $config = loadConfigFile(__PATH__.'/conf',$config);
-    if(!isset($_REQUEST['app'])){
-        $_REQUEST['app'] = $config['SF_DEFAULT_APP'];
-    }
-    if(!isset($_REQUEST['act'])){
-        $_REQUEST['act'] = $config['SF_DEFAULT_ACT'];
-    }
-    if(!isset($_REQUEST['fun'])){
-        $_REQUEST['fun'] = $config['SF_DEFAULT_FUN'];
-    }
-    $config = loadConfigFile(__PATH__.'/application/'.$_REQUEST['app'].'/conf',$config);
-    return $config;
-}
-//加载config文件
-function loadConfigFile($path,$config = array()){
-    $current_dir = opendir($path);    //opendir()返回一个目录句柄,失败返回false
-    while(($file = readdir($current_dir)) !== false) {    //readdir()返回打开目录句柄中的一个条目
-        $sub_dir = $path . DIRECTORY_SEPARATOR . $file;    //构建子目录路径
-        if($file == '.' || $file == '..') {
-            continue;
-        } else {    //如果是文件,直接输出
-            $config = array_merge($config,include $path . DIRECTORY_SEPARATOR . $file);
-        }
-    }
-    return $config;
 }
 //获取和设置config参数
 function C($name,$value = ''){
