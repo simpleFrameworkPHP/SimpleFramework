@@ -6,32 +6,31 @@
  * Time: 下午3:46
  */
 class Model {
-    public static $db;//数据库链接数组
+    public $db;//数据库链接数组
     public $option;//记录所有sql子句的数组，在执行时输出出来
     public $table = '';//model默认表名
     public $link_ID;//数据库链接ID，平时为0，多数据库链接时使用
-    public $info;//array('表名'=>array('列名'))
-    public function __construct($connect = '',$no = 0){
-        $con = self::initDBConnect($connect,$no);
+    public $tables_info;//array('表名'=>array('列名'))
+    public $db_name;
+    public function __construct($host,$user,$pass,$db_name,$port,$mode,$no = 0){
+        $con = $this->initDBConnect($host,$user,$pass,$db_name,$port,$mode,$no);
         if(isset($this->table) && $this->table != ''){
             //默认操作表
             $con->table = $this->table;
         }
+
+        if($this->tables_info = S('DB_INFO','','DB_INFO_'.$no))
+            ;
+        else
+            $this->initTableInfo($no);
+        $this->db_name = $db_name;
         $this->link_ID = $no;
         return $con;
     }
 
-    public static function initDBConnect($connect = '',$no = 0){
-        if($connect == ''){
-            $connect = C('SF_DB_CONNECT');
-            $connect = $connect[$no];
-        }
-        if(!isset(self::$db[$no])){
+    public function initDBConnect($host,$user,$pass,$db_name,$port,$mode,$no = 0){
             //创建对应的数据库链接；
-            return self::$db[$no] = db::initDBCon($connect,$no);
-        } else {
-            return self::$db[$no];
-        }
+            return $this->db = db::initDBCon($host,$user,$pass,$db_name,$port,$mode,$no);
     }
 
     public function select($sql = ''){
@@ -39,15 +38,14 @@ class Model {
         if($sql == ''){
             $sql = $this->option;
         }
-
-        $data = self::$db[$this->link_ID]->select($sql);
+        $data = $this->db->select($sql);
         return $data;
     }
 
     //获取sql语句中的列名
     public function getColumns(){
-        if(isset(self::$db[$this->link_ID])){
-            return self::$db[$this->link_ID]->columns;
+        if(isset($this->db->columns)){
+            return $this->db->columns;
         } else {
             return false;
         }
@@ -64,11 +62,11 @@ class Model {
                 } else {
                     $table_list[] = $tables;
                 }
+                $table_list[] = $this->table;
             }
         }
-        $TableInfo = new TableInfo($this->link_ID);
         foreach($table_list as $key=>$value){
-            if(!$TableInfo->filterTable($value)){
+            if(!$this->filterTable($value)){
                 unset($table_list[$key]);
             }
         }
@@ -76,6 +74,7 @@ class Model {
         return $this;
     }
 
+    //优化--as情况未考虑
     public function fields($fields = '',$auto_check = true){
         if($auto_check){
             if($fields == '' || $fields == '*'){
@@ -91,7 +90,6 @@ class Model {
                 } else {
                     $field_list = $fields;
                 }
-                $TableInfo = new TableInfo($this->link_ID);
                 if(!isset($this->option['TABLE'])){
                     if($this->table <> ''){
                         $table_array[] = $this->table;
@@ -108,7 +106,7 @@ class Model {
                 $field_array = array();
                 foreach($field_list as $key=>$value){
                     //优化--在此处考虑 as 渲染
-                    $field_v = $TableInfo->filterColumn($value,$table_array);
+                    $field_v = $this->filterColumn($value,$table_array);
                     if($field_v){
                         $field_array[] = $field_v;
                     }
@@ -123,5 +121,110 @@ class Model {
             $this->option['FIELD'] = is_array($fields) ? implode(',',$fields) : $fields;
         }
         return $this;
+    }
+
+    //优化--列是否有效有待确认
+    public function where($where){
+        if(is_array($where)){
+            $where_array = array();
+            foreach($where as $key => $value){
+                if(is_int($key)){
+                    //该情况说明表达式直接写在$value中
+                    $where_array[] = $value;
+                } else {
+                    if(is_array($value)){
+                        if(in_array($value[0],array('<>','!=','<','>','<=','>='))){
+                            $where_array[] = $key .$value[0].$this->replaceValue($key, $value[1]);
+                        } else if(in_array( strtoupper($value[0]),array('IN','NOT IN','NOT NULL'))) {
+                            $term = strtoupper($value[0]);
+                            unset($value[0]);
+                            $where_array[] = $key.' '.strtoupper($value[0]).' ('.implode(' , ',$this->replaceValue($key,$value)).')';
+                        }
+                    } else {
+                        //预留--条件不符合
+                    }
+                }
+            }
+            $where_str = implode(' AND ',$where_array);
+        } else {
+            $where_str = $where;
+        }
+        $this->option['WHERE'] = $where_str;
+        return $this;
+    }
+
+    public function replaceValue($field,$value){
+        if(is_string($value)){
+            $value = '\''. addslashes($value) .'\'';
+        } else if(is_array($value)) {
+            $value = array_map('replaceValue',$value);
+        }
+        return $value;
+    }
+
+    function initTableInfo($link_ID = 0){
+        $sql = 'SHOW TABLES';
+        $tables = $this->db->select($sql);
+        if(isset($this->db_name)){
+            foreach($tables as $value){
+                $this->getColumnInfo($value['Tables_in_'.$this->db_name]);
+            }
+        }
+        //存储数据结构
+        S('DB_INFO',$this->tables_info,'DB_INFO_'.$link_ID);
+    }
+    function getColumnInfo($table_name,$link_ID = 0){
+        $sql = 'SHOW COLUMNS FROM '.$table_name;
+        $columns = $this->select($sql);
+        if($columns && is_array($columns)){
+            foreach($columns as $value){
+                $this->tables_info[$table_name][$value['Field']] = substr($value['Type'],0,strpos($value['Type'],'('));
+            }
+        }
+    }
+
+    /** 过滤表名----将不存在的表名滤除
+     * @param string $table_name 表名，须填写表全称
+     * @return string
+     */
+    public function filterTable($table_name){
+        if(is_array($this->tables_info) && array_key_exists($table_name,$this->tables_info)){
+            //该表名有效
+            return $table_name;
+        } else {
+            //该表明无效
+            return false;
+        }
+    }
+
+    /** 过滤列名----将不存在的列名滤除
+     * @param $column 列名
+     * @param array $table_list 表名数组
+     * @return mixed
+     */
+    public function filterColumn($column,$table_list = array()){
+        //获取查询的表
+        if(count($table_list)){
+            if(is_array($table_list)){
+                foreach($table_list as $v){
+                    $tables[$v] = $this->tables_info[$v];
+                }
+            } else {
+                $tables = array();
+            }
+        } else {
+            $tables = $this->tables_info;
+        }
+        foreach($tables as $table_name => $value){
+            if(array_key_exists($column,$value)){
+                //该列名有效
+                $column = $table_name.'.'.$column;
+                break;
+            } else {
+                //该列名无效
+                $column = false;
+            }
+        }
+        return $column;
     }
 } 

@@ -5,7 +5,6 @@
  * Date: 14-5-28
  * Time: 下午3:19
  */
-
 define('CORE_PATH',__PATH__.'/core');
 /** 自动加载一次文件的方法
  * @param $path

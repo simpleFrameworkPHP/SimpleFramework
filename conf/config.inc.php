@@ -14,20 +14,20 @@ return array(
 
     'SF_DB_CONNECT'=>array(
         0 => array(
-            'DBHOST'=>'',
-            'DBNAME'=>'information_schema',
-            'DBPORT'=>3306,
-            'DBUSER'=>'',
-            'DBPASS'=>'',
-            'DBMODE'=>'mysql',
+            'DB_HOST'=>'127.0.0.1',
+            'DB_NAME'=>'information_schema',
+            'DB_PORT'=>3306,
+            'DB_USER'=>'root',
+            'DB_PASS'=>'root',
+            'DB_MODE'=>'mysqli',
         ),
         1 => array(
-            'DBHOST',
-            'DBNAME'=>'cms',
-            'DBPORT'=>3306,
-            'DBUSER'=>'',
-            'DBPASS'=>'',
-            'DBMODE'=>'mysql',
+            'DB_HOST'=>'127.0.0.1',
+            'DB_NAME'=>'zl_blog',
+            'DB_PORT'=>3306,
+            'DB_USER'=>'root',
+            'DB_PASS'=>'root',
+            'DB_MODE'=>'mysqli',
         ),
     ),
     //调试阶段

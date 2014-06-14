@@ -62,13 +62,13 @@ global $config;
         <li>
             <div class="div_content" id="tagContent0">
                 <?php
-                $dbname = C('SF_DB_CONNECT');
-                $dbname = $dbname[1]['DBNAME']?$dbname[1]['DBNAME']:$dbname[0]['DBNAME'];
+                $db_name = C('SF_DB_CONNECT');
+                $db_name = $db_name[1]['DB_NAME']?$db_name[1]['DB_NAME']:$db_name[0]['DB_NAME'];
             //表结构内容展现
             if($_REQUEST['t']!="table"){
-                getTableInfo($config['remark'],$config['relate_table'][$_REQUEST['t']],$dbname);
+                getTableInfo($config['remark'],$config['relate_table'][$_REQUEST['t']],$db_name);
             }else{
-                getTable($config['remark'],$dbname);
+                getTable($config['remark'],$db_name);
             }
             ?>
             </div>

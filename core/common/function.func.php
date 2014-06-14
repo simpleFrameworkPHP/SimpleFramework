@@ -69,18 +69,19 @@ function M($path='',$link_ID = 0){
         if(strstr($path,'/')){
             $path = explode('/',$path);
             $app = $path[0];
-            $model = $path[1].'Model.class.php';
+            $model = $path[1].'Model';
         } else {
             $app = $_REQUEST['app'];
             $model = $path.'Model';
         }
-        class_exists($model) or require(APP_PATH.'/'.$app.'/model/'.$model.'.class.php');
+        loadFile_once(APP_PATH.'/'.$app.'/model/'.$model.'.class.php', $model, 'CLASS');
     } else {
         $model = 'Model';
     }
     $config = C('SF_DB_CONNECT');
-    if(class_exists($model)){
-        return new $model($config[$link_ID],$link_ID);
+    if(class_exists($model) && isset($config[$link_ID])){
+        return new $model($config[$link_ID]['DB_HOST'],$config[$link_ID]['DB_USER'],$config[$link_ID]['DB_PASS'],
+            $config[$link_ID]['DB_NAME'],$config[$link_ID]['DB_PORT'],$config[$link_ID]['DB_MODE'],$link_ID);
     } else {
         return false;
     }

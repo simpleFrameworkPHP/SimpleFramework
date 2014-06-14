@@ -12,6 +12,7 @@ class ListController extends Controller {
         if(!isset($_REQUEST['t'])){
             $_REQUEST['t'] =  'all';
         }
+        M('',1)->table('zl_document')->where(array('content'=>' '))->select();
         $this->display();
     }
 } 

@@ -14,11 +14,12 @@ class db {
     public $table;
     public $select_db = false;
     public $select_sql = '%FIELD% %TABLE% %WHERE% %GROUP% %HAVING% %ORDER% %LIMIT%';
-    public static  function initDBCon($connect,$no=0){
-        switch($connect['DBMODE']){
-            case 'mysql':$db = new DBMysql($connect,$no=0);break;
-            case 'mysqli':$db = new DBMysqli($connect,$no=0);break;
-            default:$db = new DBMysql($connect,$no=0);
+    public static  function initDBCon($host,$user,$pass,$db_name,$port,$mode,$no=0){
+
+        switch($mode){
+            case 'mysql':$db = new DBMysql($host,$user,$pass,$db_name,$port,$no);break;
+            case 'mysqli':$db = new DBMysqli($host,$user,$pass,$db_name,$port,$no);break;
+            default:$db = new DBMysqli($host,$user,$pass,$db_name,$port,$no);
         }
         return $db;
     }

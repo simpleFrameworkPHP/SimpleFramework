@@ -20,12 +20,12 @@ return array(
     //默认数据库链接
     'SF_DB_CONNECT' => array(
         0 => array(
-            'DBHOST'=>'127.0.0.1',
-            'DBPORT'=>3306,
-            'DBUSER'=>'root',
-            'DBPASS'=>'',
-            'DBNAME'=>'',
-            'DBMODE'=>''
+            'DB_HOST'=>'127.0.0.1',
+            'DB_PORT'=>3306,
+            'DB_USER'=>'root',
+            'DB_PASS'=>'',
+            'DB_NAME'=>'',
+            'DB_MODE'=>''
         ),
     ),
     //数据库字符集

@@ -11,8 +11,8 @@ function addSelectType($type,$t){
     }
     return $data;
 }
-function getTable($remark,$dbname){
-    $sql = "SELECT  TABLE_NAME as '表名',TABLE_COMMENT as '注释',TABLE_ROWS as '数据行数',UPDATE_TIME as '最后更新'  FROM TABLES where TABLE_SCHEMA='".$dbname."' order by TABLE_NAME";
+function getTable($remark,$db_name){
+    $sql = "SELECT  TABLE_NAME as '表名',TABLE_COMMENT as '注释',TABLE_ROWS as '数据行数',UPDATE_TIME as '最后更新'  FROM TABLES where TABLE_SCHEMA='".$db_name."' order by TABLE_NAME";
     $con = M();
     $result = $con->select($sql);
     $columns = $con->getColumns();
@@ -44,8 +44,8 @@ function getTable($remark,$dbname){
     }
     echo "</table>";
 }
-function getTableInfo($remark,$table_list,$dbname){
-    $sql = "SELECT  TABLE_NAME,COLUMN_NAME as '列名',IS_NULLABLE as 'null',DATA_TYPE as '类型',COLUMN_KEY,COLUMN_COMMENT as '注释'  FROM COLUMNS   where TABLE_SCHEMA='".$dbname."' ";
+function getTableInfo($remark,$table_list,$db_name){
+    $sql = "SELECT  TABLE_NAME,COLUMN_NAME as '列名',IS_NULLABLE as 'null',DATA_TYPE as '类型',COLUMN_KEY,COLUMN_COMMENT as '注释'  FROM COLUMNS   where TABLE_SCHEMA='".$db_name."' ";
     if(is_array($table_list)){
         $sql .= " and TABLE_NAME in ('".implode("','",$table_list)."') ";
     }elseif($table_list == "*"){
