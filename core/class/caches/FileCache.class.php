@@ -19,21 +19,25 @@ class FileCache extends Cache {
      * @param $key 缓存键值
      */
     public function getParam($key,$type = 'system'){
-        $result = null;
+        $result = false;
         $path = $this->cache_path.'/'.$type.'.ch';
         if(file_exists($path)){
             $json = file_get_contents($path);
             $result = json_decode($json,true);
-            if($result['end_time']<nowTime()){
-                //缓存文件数据过期
-                removeFile($path);
-            } else {
-                //缓存文件数据未过期
-                if($result[$key]['end_time']<nowTime()){
-                    //缓存数据过期，清除数据
-                    $this->removeParam($key,$type);
+            if($result){
+                if(!isset($result[$key])){
+                    $result = false;
+                } elseif($result['end_time']<nowTime()){
+                    //缓存文件数据过期
+                    removeFile($path);
                 } else {
-                    $result = $result[$key]['data'];
+                    //缓存文件数据未过期
+                    if($result[$key]['end_time']<nowTime()){
+                        //缓存数据过期，清除数据
+                        $this->removeParam($key,$type);
+                    } else {
+                        $result = $result[$key]['data'];
+                    }
                 }
             }
         }

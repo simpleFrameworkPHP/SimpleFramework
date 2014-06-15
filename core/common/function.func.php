@@ -119,25 +119,31 @@ function H($path='',$params='',$redirect = false){
 //预留---缓存方法
 function S($key,$value = '',$type='system',$time=85400){
     $cache = Cache::initCacheMode(C('SF_CACHE_MODE'));
-    $result = '';
+    $result = false;
     if($value == ''){
-        $result = $cache->getParam($key,$type,$time);
+        $result = $cache->getParam($key,$type);
     } else {
         $cache->setParam($key,$value,$type,$time);
     }
     return $result;
 }
-//新建文件夹
-function addDir($path){
-    $dir = dirname($path);
+
+/**自动创建文件目录
+ * @param $file 带目录的文件名
+ */
+function addDir($file){
+    $dir = dirname($file);
     $dir = str_replace(__PATH__.'/','',$dir);
     $dir_array = array();
     $dir_array = explode('/',$dir);
     $count = count($dir_array);
-    $idir = __PATH__;
+    $idir = __PATH__.'/';
+    if(!is_dir($idir)){
+        mkdir($idir,0755);
+    }
     for($i=0;$i<$count;$i++){
-        $idir .= '/'.$dir_array[$i];
-        if(!file_exists($idir)){
+        $idir .= $dir_array[$i] . '/';
+        if(!is_dir($idir)){
             mkdir($idir,0755);
         }
     }
@@ -166,7 +172,6 @@ function removeDir($path) {
             }
         }
     }
-
     closedir($dh);
     //删除当前文件夹：
     if(rmdir($path)) {

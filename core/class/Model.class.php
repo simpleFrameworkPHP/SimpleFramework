@@ -18,13 +18,12 @@ class Model {
             //默认操作表
             $con->table = $this->table;
         }
-
+        $this->db_name = $db_name;
+        $this->link_ID = $no;
         if($this->tables_info = S('DB_INFO','','DB_INFO_'.$no))
             ;
         else
             $this->initTableInfo($no);
-        $this->db_name = $db_name;
-        $this->link_ID = $no;
         return $con;
     }
 
@@ -175,7 +174,7 @@ class Model {
     }
     function getColumnInfo($table_name,$link_ID = 0){
         $sql = 'SHOW COLUMNS FROM '.$table_name;
-        $columns = $this->select($sql);
+        $columns = $this->db->select($sql);
         if($columns && is_array($columns)){
             foreach($columns as $value){
                 $this->tables_info[$table_name][$value['Field']] = substr($value['Type'],0,strpos($value['Type'],'('));
