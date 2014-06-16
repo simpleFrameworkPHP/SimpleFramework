@@ -12,7 +12,91 @@ class ListController extends Controller {
         if(!isset($_REQUEST['t'])){
             $_REQUEST['t'] =  'all';
         }
-        M('',1)->table('zl_document')->where(array('content'=>' '))->select();
+        $remark = C('remark');
+        $con1 = M('',1);
+        $data = array();
+        if($_REQUEST['t'] == 'table'){
+            $data = $this->getAllTable($con1, $remark);
+        } else {
+            $relate_table = C('relate_table');
+            $relate_table_key = array_keys($relate_table);
+            if(in_array($_REQUEST['t'],$relate_table_key)){
+                if($relate_table[$_REQUEST['t']] <> array('*')){
+                    $table_array = $relate_table[$_REQUEST['t']];
+                } else {
+                    $table_list = $con1->select('SHOW TABLES');
+                    foreach($table_list as $row){
+                        $table_array[] = $row['Tables_in_'.$con1->db_name];
+                    }
+
+                }
+                $data = $this->getRelateTable($con1,$remark,$table_array);
+            }
+        }
+        $this->assign('data',$data);
+        $this->relateSqlData($con1);
         $this->display();
+    }
+
+    public function getAllTable($model,$remark){
+        $data = $model->select('SHOW TABLE STATUS FROM '.$model->db_name);
+        $table_data = array();
+        if($data){
+            foreach($data as $key=>$value){
+                $i_data['Update_time'] = strtotime($value['Update_time']);
+                $i_data['表名'] = $value['Name'];
+                $i_data['注释'] = $value['Comment'] ? $value['Comment']:(isset($remark[$value['Name']][0])?$remark[$value['Name']][0]:'');
+                $i_data['数据行数'] = $value['Rows'];
+                $i_data['最后更新'] = $value['Update_time'];
+                $result[] = $i_data;
+            }
+            $table['title'] = '表的列表';
+            $table['remark'] = '以下是“'.$model->db_name.'”库中的所有表的信息';
+            $table['data'] = $result;
+            $table['columns'] = array_keys($i_data);
+            $table['rule'] = array('数据行数'=>array('>','10000','red'),'Update_time'=>array('<',nowTime()-ONE_DAY*31,'yellow'));
+            $table_data[] = $table;
+        }
+        $this->assign('start',1);
+        return $table_data;
+    }
+
+    public function relateSqlData($model){
+        $relate_sql = C('relate_sql');
+        if(isset($relate_sql[$_REQUEST['t']]) && is_array($relate_sql[$_REQUEST['t']])){
+            foreach($relate_sql[$_REQUEST['t']] as $key =>$sql){
+                $i_data['title'] = $key;
+                $i_data['remark'] = $sql;
+                $i_data['data'] = $model->select($sql);
+                if(is_array($i_data['data']) && !empty($i_data['data'])){
+                    $i_data['columns'] = $model->getColumns();
+                }
+                $relate_data[] = $i_data;
+            }
+            $this->assign('relate_data',$relate_data);
+        }
+    }
+
+    public function getRelateTable($model,$remark,$relate_table=array()){
+        $result = array();
+        foreach($relate_table as $key => $table){
+            $sql = 'SHOW FULL COLUMNS FROM '.$table;
+            $data = $model->select($sql);
+            $list = array();
+            if(is_array($data)){
+                foreach($data as $row){
+                    $i_data['列名'] = $row['Field'];
+                    $i_data['Null'] = $row['Null'];
+                    $i_data['类型'] = $row['Type'];
+                    $i_data['注释'] = $row['Comment'] ? $row['Comment']:(isset($remark[$table][$row['Field']])?$remark[$table][$row['Field']]:'');
+                    $list[] = $i_data;
+                }
+            }
+            $result[$key]['title'] = $table;
+            $result[$key]['data'] = $list;
+            $result[$key]['columns'] = array_keys($i_data);
+        }
+        $this->assign('start',0);
+        return $result;
     }
 } 

@@ -6,7 +6,7 @@
         table.tcenter {margin: auto;}
         table tr th.column {background-color: #99ff99;}
         table tr td {min-width: 80px;background-color: #88afff;}
-        table tr.yellow td{background-color: #fffa88;}
+        table tr.yellow  td{background-color: #fffa88;}
         table tr.red td{background-color: #ff3388;}
         ul{list-style: none;padding: 0px;}
         ul li{display: inline;padding: 8px;}
@@ -55,21 +55,15 @@ global $config;
     ?>
     <ul id="tags">
         <li class="selectTag" onclick="selectTag('tagContent0',this)">相关表</li>
-        <?php if(isset($config['relate_sql'][$_REQUEST['t']])){ ?><li onclick="selectTag('tagContent1',this)">业务sql</li><?php }?>
+        <?php if($relate_data){ ?><li onclick="selectTag('tagContent1',this)">业务sql</li><?php }?>
     </ul>
     <div class="div_hline"></div>
     <ul>
         <li>
             <div class="div_content" id="tagContent0">
                 <?php
-                $db_name = C('SF_DB_CONNECT');
-                $db_name = $db_name[1]['DB_NAME']?$db_name[1]['DB_NAME']:$db_name[0]['DB_NAME'];
             //表结构内容展现
-            if($_REQUEST['t']!="table"){
-                getTableInfo($config['remark'],$config['relate_table'][$_REQUEST['t']],$db_name);
-            }else{
-                getTable($config['remark'],$db_name);
-            }
+            getSqlInfo($data,$start);
             ?>
             </div>
         </li>
@@ -77,8 +71,8 @@ global $config;
             <div class="div_content" id="tagContent1" style="display: none;">
                 <?php
             //具体业务查询展现
-            if($_REQUEST['t'] && isset($config['relate_sql'][$_REQUEST['t']])){
-                getSqlInfo($config['relate_sql'][$_REQUEST['t']]);
+            if(isset($relate_data)){
+                getSqlInfo($relate_data);
             }
             ?>
             </div>
