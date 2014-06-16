@@ -31,7 +31,8 @@ function loadDirFile($path = '.'){
 }
 //加载controller
 function runController($application,$controller){
-    loadDirFile(__PATH__.'/application/'.$application.'/common');
+    if(is_dir(__PATH__.'/application/'.$application.'/common'))
+        loadDirFile(__PATH__.'/application/'.$application.'/common');
     $file_path = __PATH__.'/application/'.$application.'/controller/'.$controller.'Controller.class.php';
     if(!class_exists($controller.'Controller') && file_exists($file_path)){
         //加载请求模块需要的controller文件
@@ -105,12 +106,10 @@ function H($path='',$params='',$redirect = false){
         $fun = $_REQUEST['fun'] ? $_REQUEST['fun'] : C('SF_DEFAULT_FUN');
         $act = $_REQUEST['act'] ? $_REQUEST['act'] : C('SF_DEFAULT_ACT');
         $app = $_REQUEST['app'] ? $_REQUEST['app'] : C('SF_DEFAULT_APP');
-        if(strstr($path,'/')) {
-            $path = explode('/',$path);
-            $fun = $path[0] ? $path[0] : C('SF_DEFAULT_FUN');
-            $act = $_REQUEST['act'] ? $_REQUEST['act'] : C('SF_DEFAULT_ACT');
-            $app = $_REQUEST['app'] ? $_REQUEST['app'] : C('SF_DEFAULT_APP');
-        }
+        $path = explode('/',$path);
+        $fun = (isset($path[0]) && $path[0] <> '') ? $path[0] : $fun;
+        $act = isset($path[1]) ? $path[1] : $act;
+        $app = isset($path[2]) ? $path[2] : $app;
         $url .='app='.$app.'&act='.$act.'&fun='.$fun;
     }
     if(is_array($params)){

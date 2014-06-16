@@ -7,7 +7,7 @@
  */
 return array(
     'SF_DEFAULT_APP'=>'dictionary',
-    'SF_DEFAULT_ACT'=>'list',
+    'SF_DEFAULT_ACT'=>'List',
     'SF_DEFAULT_FUN'=>'index',
     'SF_REFRESH_PAGES'=>true,
 

@@ -6,7 +6,7 @@
  * Time: 20:15
  */
 
-class ListController {
+class ListController extends Controller {
 
     public function index(){
         $this->display();
