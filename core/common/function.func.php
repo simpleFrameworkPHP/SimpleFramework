@@ -15,9 +15,19 @@ function loadDirFile($path = '.'){
         } else if(is_dir($sub_dir)) {    //如果是目录,进行递归
             loadDirFile($sub_dir);
         } else {    //如果是文件,直接输出
-            require $path . DIRECTORY_SEPARATOR . $file;
+            $file_type = explode('.',$file);
+            if(isset($file_type[2]) && strtolower($file_type[2]) == 'php'){
+                if(isset($file_type[1]) && strtolower($file_type[1]) == 'class'){
+                    $result[] = loadFile_once($sub_dir,$file_type[0],'CLASS');
+                } else {
+                    $result[] = require $sub_dir;
+                }
+            } else {
+               $result[] = include $sub_dir;
+            }
         }
     }
+    return $result;
 }
 //加载controller
 function runController($application,$controller){

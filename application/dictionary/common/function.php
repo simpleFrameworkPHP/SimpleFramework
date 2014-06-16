@@ -68,31 +68,33 @@ function getTableInfo($remark,$table_list,$db_name){
 // 显示字段名称
     $column =getColumnHTML($columns);
     $table_name = '';
-// 循环取出记录
-    foreach($result as $row)
-    {
-        if($row['TABLE_NAME'] <> $table_name){
-            if($table_name <> ""){
-                echo "</table>";
-            }
-            $table_name = $row['TABLE_NAME'];
-            echo '<br/><table>';
-            echo "<tr><th colspan='".($sum_column-1)."'>".$table_name."(".(isset($remark[$row['TABLE_NAME']][0])?$remark[$row['TABLE_NAME']][0]:'').")</th></tr>";
-            // 显示字段名称
-            echo $column;
-        }
-        echo "<tr>";
-        //强制替换注释
-        if(!$row['注释'] && isset($remark[$row['TABLE_NAME']][$row['列名']])){
-            $row['注释'] = $remark[$row['TABLE_NAME']][$row['列名']];
-        }
-        for ($i=1; $i<$sum_column; $i++ )
+    if(is_array($result)){
+        // 循环取出记录
+        foreach($result as $row)
         {
-            echo '<td>';
-            echo $row[$columns[$i]];
-            echo '</td>';
+            if($row['TABLE_NAME'] <> $table_name){
+                if($table_name <> ""){
+                    echo "</table>";
+                }
+                $table_name = $row['TABLE_NAME'];
+                echo '<br/><table>';
+                echo "<tr><th colspan='".($sum_column-1)."'>".$table_name."(".(isset($remark[$row['TABLE_NAME']][0])?$remark[$row['TABLE_NAME']][0]:'').")</th></tr>";
+                // 显示字段名称
+                echo $column;
+            }
+            echo "<tr>";
+            //强制替换注释
+            if(!$row['注释'] && isset($remark[$row['TABLE_NAME']][$row['列名']])){
+                $row['注释'] = $remark[$row['TABLE_NAME']][$row['列名']];
+            }
+            for ($i=1; $i<$sum_column; $i++ )
+            {
+                echo '<td>';
+                echo $row[$columns[$i]];
+                echo '</td>';
+            }
+            echo "</tr>";
         }
-        echo "</tr>";
     }
     echo "</table>";
 }

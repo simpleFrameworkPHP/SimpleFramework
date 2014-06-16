@@ -6,7 +6,7 @@
  * Time: 1:09
  */
 
-class DBMysqli extends db {
+class DBMysqli extends Db {
 
     public function __construct($host,$user,$pass,$db_name,$port,$no){
         if ( !extension_loaded('mysqli') ) {

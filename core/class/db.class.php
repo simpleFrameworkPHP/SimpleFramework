@@ -5,7 +5,7 @@
  * Date: 14-6-4
  * Time: 下午4:58
  */
-class db {
+class Db {
     public $con;
     public $link_ID;
     public $sql_str;
