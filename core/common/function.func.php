@@ -107,9 +107,17 @@ function H($path='',$params='',$redirect = false){
         $act = $_REQUEST['act'] ? $_REQUEST['act'] : C('SF_DEFAULT_ACT');
         $app = $_REQUEST['app'] ? $_REQUEST['app'] : C('SF_DEFAULT_APP');
         $path = explode('/',$path);
-        $fun = (isset($path[0]) && $path[0] <> '') ? $path[0] : $fun;
-        $act = isset($path[1]) ? $path[1] : $act;
-        $app = isset($path[2]) ? $path[2] : $app;
+        $count_url = count($path);
+        if($count_url == 1 ){
+            $fun = (isset($path[0]) && $path[0] <> '') ? $path[0] : $fun;
+        } elseif($count_url == 2){
+            $fun = $path[1];
+            $act = $path[0];
+        } else {
+            $fun = $path[2];
+            $act = $path[1];
+            $app = $path[0];
+        }
         $url .='app='.$app.'&act='.$act.'&fun='.$fun;
     }
     if(is_array($params)){
