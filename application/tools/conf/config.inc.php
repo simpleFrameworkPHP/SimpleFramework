@@ -9,10 +9,11 @@ return array(
     "type" => array(
         0 =>array("name"=>"表目录","value"=>"table"),
         1 =>array("name"=>"全部","value"=>"all"),
+        2 =>array('name'=>'预告片','value'=>'prevue'),
     ),
     "relate_table"=>array(
         //模式=>关联表
-        "all" => "*",
+        "all" => array("*"),
     ),
     "relate_sql"=>array(
         //模式=>关联表
