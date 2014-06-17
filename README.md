@@ -73,3 +73,4 @@ SimpleFramework
 3. 目前注意include方法中需要写入绝对地址，因为缓存页面渲染时并没有执行include方法；<br/>
 4. 添加获取文件信息的方法(优化file_get_contents方法)；<br/>
 5. 优化了一下model类；<br/>
+6. 添加curl类，待测试；<br/>
