@@ -6,7 +6,7 @@
  * Time: 下午3:52
  */
 
-class ListController extends Controller {
+class DictionaryController extends Controller {
 
     public function index(){
         if(!isset($_REQUEST['t'])){

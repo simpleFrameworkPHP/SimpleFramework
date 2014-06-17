@@ -55,7 +55,7 @@ global $config;
     ?>
     <ul id="tags">
         <li class="selectTag" onclick="selectTag('tagContent0',this)">相关表</li>
-        <?php if($relate_data){ ?><li onclick="selectTag('tagContent1',this)">业务sql</li><?php }?>
+        <?php if(isset($relate_data)){ ?><li onclick="selectTag('tagContent1',this)">业务sql</li><?php }?>
     </ul>
     <div class="div_hline"></div>
     <ul>

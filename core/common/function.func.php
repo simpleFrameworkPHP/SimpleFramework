@@ -133,6 +133,9 @@ function H($path='',$params='',$redirect = false){
         return $url;
     }
 }
+function writeUrl($path='',$params=''){
+    echo H($path,$params);
+}
 //预留---缓存方法
 function S($key,$value = '',$type='system',$time=85400){
     $cache = Cache::initCacheMode(C('SF_CACHE_MODE'));
