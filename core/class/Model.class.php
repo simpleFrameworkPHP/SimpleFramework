@@ -22,7 +22,7 @@ class Model{
      * @param $mode 链接模式
      * @param int $no   链接id
      */
-    public function __construct($host,$user,$pass,$db_name,$port,$mode,$no = 0){
+    public function __construct($host = '',$user = '',$pass = '',$db_name = '',$port = '',$mode = '',$no = 0){
         $con = $this->initDBConnect($host,$user,$pass,$db_name,$port,$mode,$no);
         if(isset($this->table) && $this->table != ''){
             //默认操作表
@@ -37,7 +37,16 @@ class Model{
         return $con;
     }
 
-    public function initDBConnect($host,$user,$pass,$db_name,$port,$mode,$no = 0){
+    public function initDBConnect($host,$user,$pass,$db_name,$port,$mode,$no){
+        if($host == ''){
+            $con = C('SF_DB_CONNECT');
+            $host = $con[$no]['DB_HOST'];
+            $user = $con[$no]['DB_USER'];
+            $pass = $con[$no]['DB_PASS'];
+            $db_name = $con[$no]['DB_NAME'];
+            $port = $con[$no]['DB_PORT'];
+            $mode = $con[$no]['DB_MODE'];
+        }
             //创建对应的数据库链接；
             return $this->db = Db::initDBCon($host,$user,$pass,$db_name,$port,$mode,$no);
     }

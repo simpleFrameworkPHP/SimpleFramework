@@ -18,7 +18,7 @@ class DBMysqli extends Db {
         $this->link_ID = $no;
         //处理端口号
         $this->con = new mysqli($host,$user,$pass,$db_name,$port)
-            or exit('没连上数据库'.':'.$no.':'.json_encode($this->config));
+            or errorPage('没有连上数据库','错误信息：'.mysql_error());
         //使用UTF8存取数据库
         $this->con->query("SET NAMES '".C('SF_DB_CHARSET')."'");
         $this->select_db = true;
@@ -26,20 +26,19 @@ class DBMysqli extends Db {
     }
 
     public function query($str){
+        $data = array();
         $this->sql_str = $str;
         $result = $this->con->query($str);
         if(!empty($result)){
             $this->result_rows = $result->num_rows;
             $data = array();
-            if($this->result_rows>0){                                               //判断结果集中行的数目是否大于0
-                while($row =$result->fetch_assoc()){                        //循环输出结果集中的记录
+            if($this->result_rows>0){
+                while($row =$result->fetch_assoc()){
                     $data[] = $row;
                 }
                 $this->columns = array_keys($data[0]);
             }
             $result->free();
-        } else {
-            $data = false;
         }
         return $data;
     }

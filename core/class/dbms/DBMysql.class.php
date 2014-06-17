@@ -13,7 +13,7 @@ class DBMysql extends Db {
         $this->link_ID = $no;
         //处理端口号
         $host = $host.($port?':'.$port:'');
-        $this->con = mysql_connect( $host, $user, $pass,true,CLIENT_MULTI_RESULTS) or die('没连上数据库'.':'.$no.':'.json_encode($host));
+        $this->con = mysql_connect( $host, $user, $pass,true,CLIENT_MULTI_RESULTS) or errorPage('没有连上数据库','错误信息：'.mysql_error());
         $dbVersion = mysql_get_server_info($this->con);
         //使用UTF8存取数据库
         mysql_query("SET NAMES '".C('SF_DB_CHARSET')."'", $this->con);
@@ -22,7 +22,7 @@ class DBMysql extends Db {
             mysql_query("SET sql_mode=''",$this->con);
         }
         if(isset($db_name)){
-            mysql_select_db($db_name,$this->con) or die("创建完{$this->config['DB_NAME']}数据库再说吧！");
+            mysql_select_db($db_name,$this->con) or errorPage('没有数据库',"创建完{$this->config['DB_NAME']}数据库再说吧！");
             $this->select_db = true;
         }
         return $this->con;
@@ -32,9 +32,14 @@ class DBMysql extends Db {
         $data = array();
         $this->sql_str = $str;
         $result = mysql_query($str,$this->con);
+        //预留--sql日志位置
+        if(mysql_errno($this->con)){
+            //待优化显示查询中的异常及错误
+        } else {
+            //正常查询日志
+        }
         if($result){
             $this->result_rows = mysql_num_rows($result);
-            //预留--sql日志位置
             if($this->result_rows){
                 while($row = mysql_fetch_assoc($result)){
                     $data[] = $row;
@@ -42,9 +47,8 @@ class DBMysql extends Db {
                 $this->columns = array_keys($data[0]);
             }
             mysql_free_result($result);
-        } else {
-            $data = false;
         }
+
         return $data;
     }
 } 

@@ -71,3 +71,5 @@ SimpleFramework
 1. 添加各种常量以使程序更方便给其他人编辑；<br/>
 2. 在html模块中输出示例以测试；<br/>
 3. 目前注意include方法中需要写入绝对地址，因为缓存页面渲染时并没有执行include方法；<br/>
+4. 添加获取文件信息的方法(优化file_get_contents方法)；<br/>
+5. 优化了一下model类；<br/>

@@ -22,7 +22,7 @@ class FileCache extends Cache {
         $result = false;
         $path = $this->cache_path.'/'.$type.'.ch';
         if(file_exists($path)){
-            $json = file_get_contents($path);
+            $json = getFileContent($path);
             $result = json_decode($json,true);
             if($result){
                 if(!isset($result[$key])){
@@ -51,7 +51,7 @@ class FileCache extends Cache {
             //创建缓存文件
             addDir($path);
         } else {
-            $file_data = json_decode(file_get_contents($path),true);
+            $file_data = json_decode(getFileContent($path),true);
             $save_data = array_merge($file_data,$save_data);
         }
         file_put_contents($path,json_encode($save_data));
@@ -61,7 +61,7 @@ class FileCache extends Cache {
         $result = null;
         $path = $this->cache_path.'/'.$type.'.ch';
         if(file_exists($path)){
-            $json = file_get_contents($path);
+            $json = getFileContent($path);
             $result = json_decode($json,true);
             //优化--该处时间获取可以优化
             unset($result[$key]);

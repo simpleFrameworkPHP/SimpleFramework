@@ -200,3 +200,10 @@ function removeDir($path) {
         return false;
     }
 }
+//获取稳健信息
+function getFileContent($url){
+    $opts = array('http'=>array('method'=>"GET",'timeout'=>5));
+    $context = stream_context_create($opts);
+    $data = file_get_contents($url, false, $context);
+    return  $data;
+}
