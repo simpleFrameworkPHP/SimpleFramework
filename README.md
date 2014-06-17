@@ -74,3 +74,4 @@ SimpleFramework
 4. 添加获取文件信息的方法(优化file_get_contents方法)；<br/>
 5. 优化了一下model类；<br/>
 6. 添加curl类，待测试；<br/>
+7. 添加Log类，基本功能已完善，待需要添加的地方添加上；<br/>

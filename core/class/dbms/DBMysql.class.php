@@ -32,12 +32,6 @@ class DBMysql extends Db {
         $data = array();
         $this->sql_str = $str;
         $result = mysql_query($str,$this->con);
-        //预留--sql日志位置
-        if(mysql_errno($this->con)){
-            //待优化显示查询中的异常及错误
-        } else {
-            //正常查询日志
-        }
         if($result){
             $this->result_rows = mysql_num_rows($result);
             if($this->result_rows){
@@ -48,7 +42,14 @@ class DBMysql extends Db {
             }
             mysql_free_result($result);
         }
-
+        //预留--sql日志位置
+        if(mysql_errno($this->con)){
+            //待优化显示查询中的异常及错误
+            Log::write('SQL ERROR',mysql_error($this->con),'sql_'.date('Y_m_d'));
+        } else {
+            //正常查询日志
+            Log::write('SQL',$str."\t[{$this->result_rows}]",'sql_'.date('Y_m_d'));
+        }
         return $data;
     }
 } 

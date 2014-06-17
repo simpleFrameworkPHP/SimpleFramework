@@ -8,7 +8,7 @@
 
 class Cache {
 
-    public static function initCacheMode($type,$param = ''){
+    public static function initCacheMode($type,$param = 'system'){
         $cache_conf = C('SF_CACHE_CONF');
         switch($type){
             case 'FILE':

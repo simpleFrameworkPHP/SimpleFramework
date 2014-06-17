@@ -9,6 +9,7 @@
 class ListController extends Controller {
 
     public function index(){
+        Log::write('nihao','test','test');
         $this->display();
     }
 } 
