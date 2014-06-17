@@ -43,4 +43,7 @@ return array(
             'TIME'=>ONE_DAY*7,//缓存文件过期默认时长
         ),
     ),
+
+    //网站主题
+    'SF_THEME_DEFAULT'=>'default',
 );

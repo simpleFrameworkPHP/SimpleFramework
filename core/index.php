@@ -32,6 +32,7 @@ if($config['SF_DEBUG']){
 }
 loadFile_once(CORE_PATH.'/common/function.func.php','loadDirFile','FUNCTION');
 
+defined('__THEME__') or define('__THEME__',__ROOT__.'/public/'.C('SF_THEME_DEFAULT'));
 define('DB_PREFIX',C('SF_DB_PREFIX'));
 //自动加载基础类
 loadDirFile(CORE_PATH.'/class');

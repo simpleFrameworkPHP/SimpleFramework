@@ -48,6 +48,8 @@ class Controller extends View {
 
     public function replaceContent($content){
         $content = preg_replace(array('/\{\$(\w+)\}/','/{:(\w+)(\([\S+\,?]*\))}/'),array('<?php echo \$\1;?>','<?php \1\2;?>'),$content);
+        //待优化---扩展常量数组
+        $content = str_replace(array('__ROOT__','__JSROOT__','__THEME__'),array(__ROOT__,__JSROOT__,__THEME__),$content);
         return $content;
     }
 
