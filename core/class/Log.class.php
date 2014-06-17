@@ -8,12 +8,12 @@
 
 class Log {
 
-    public static function write($title,$info,$file){
-        $path = CACHE_PATH.'/log/'.$file.'.txt';
+    public static function write($title,$info,$file = 'log'){
+        $path = CACHE_PATH.'/log/'.$file.'_'.date('Y_m_d').'.txt';
         if(!is_dir($path)){
             addDir($path);
         }
-        $content = '['.date('Y-m-d H:n:s',nowTime()).']'.$title.' LOG : '.$info . ".\r\n";
+        $content = '['.date('Y-m-d H:n:s',nowTime()).'] '.$title.' LOG : '.$info . ".\r\n";
         file_put_contents($path,$content,FILE_APPEND);
     }
 } 

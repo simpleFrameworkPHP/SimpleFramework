@@ -31,13 +31,19 @@ class Controller extends View {
                 //可以实现字符替换以达到函数改写
                 $contentStr = $this->replaceContent($contentStr);
                 addDir($cache_file_path);
-                file_put_contents($cache_file_path,$contentStr);
+                file_put_contents($cache_file_path,$contentStr) or Log::write('ACT ERROR',$cache_file_path.'文件写入出错');
             } else {
                 //打开文件异常
                 $this->errorPage('这个页面还没做呢，做了再找我！',$file_path.'这个文件还没创建');
+                $log_title = ' ACT ERROR ';
+                $log_info = '访问'.$file_path.'文件出错，请检查';
             }
         } else {
             $cache_file_path = $this->file_dir.'/'.$fun.'.html';
+        }
+        //controller日志位置
+        if(mysqli_errno($this->con)){
+            Log::write($log_title,$log_info);
         }
         include $cache_file_path;
     }

@@ -8,10 +8,9 @@
 //待测试
 class CreateHtmlController {
 
-    public function curlCreate(){
+    public function index(){
         $url = H('tools/List/index');
-        echo $url;
         $content = CURL::get($url);
-        echo $content;
+        file_put_contents(CACHE_PATH.'/test.txt',$content);
     }
 } 

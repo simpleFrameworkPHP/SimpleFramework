@@ -6,7 +6,7 @@
  * Time: 下午3:34
  */
 return array(
-    'SF_DEFAULT_APP'=>'dictionary',
+    'SF_DEFAULT_APP'=>'tools',
     'SF_DEFAULT_ACT'=>'List',
     'SF_DEFAULT_FUN'=>'index',
     'SF_REFRESH_PAGES'=>true,

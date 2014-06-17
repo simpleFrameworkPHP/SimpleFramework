@@ -73,6 +73,7 @@ class CURL {
         $data = curl_exec($ch);//运行curl
         if(curl_errno($ch)){
            errorPage('请求过程中出错了', curl_error($ch),curl_errno($ch));
+            Log::write('CRUL ERROR',curl_error($ch).' : '.curl_errno($ch));
         }
         curl_close($ch);
         return $data;

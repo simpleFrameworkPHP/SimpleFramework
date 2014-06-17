@@ -39,6 +39,7 @@ function runController($application,$controller){
         $str = require $file_path;// errorPage('又错了，下次认真点！',$application.'/'.$controller.'类文件错误',500);
     } else {
         errorPage('又错了，下次认真点！',$application.'/'.$controller.'类文件不存在',404);
+        Log::write('ACT ERROR',$application.'/'.$controller.'类文件不存在');
     }
     $controller .= 'Controller';
     $result = new $controller();
@@ -152,7 +153,7 @@ function S($key,$value = '',$type='system',$time=85400){
  * @param $file 带目录的文件名
  */
 function addDir($file){
-    $dir = dirname($file);
+    $dir = is_dir($file) ? $file : dirname($file);
     $dir = str_replace(__PATH__.'/','',$dir);
     $dir_array = array();
     $dir_array = explode('/',$dir);

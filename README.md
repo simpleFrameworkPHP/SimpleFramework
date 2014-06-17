@@ -75,3 +75,7 @@ SimpleFramework
 5. 优化了一下model类；<br/>
 6. 添加curl类，待测试；<br/>
 7. 添加Log类，基本功能已完善，待需要添加的地方添加上；<br/>
+<br/>
+<b>2014.6.18</b><br/>
+1. CURL类通过测试；<br/>
+2. 完善log记录；<br/>

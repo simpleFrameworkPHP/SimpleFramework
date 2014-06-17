@@ -42,13 +42,13 @@ class DBMysql extends Db {
             }
             mysql_free_result($result);
         }
-        //预留--sql日志位置
+        //sql日志位置
         if(mysql_errno($this->con)){
             //待优化显示查询中的异常及错误
-            Log::write('SQL ERROR',mysql_error($this->con),'sql_'.date('Y_m_d'));
+            Log::write('SQL ERROR',mysql_error($this->con).' ; '.mysql_errno($this->con),'sql');
         } else {
             //正常查询日志
-            Log::write('SQL',$str."\t[{$this->result_rows}]",'sql_'.date('Y_m_d'));
+            Log::write('SQL',$str."\t[{$this->result_rows}]",'sql');
         }
         return $data;
     }
