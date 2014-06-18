@@ -159,6 +159,24 @@ class Model{
         return $this;
     }
 
+    public function getAllTable(){
+        $table_array = array();
+        if(!isset($this->option['TABLE'])){
+            if($this->table <> ''){
+                $table_array[] = $this->table;
+            } else {
+                errorPage('没有表格啦','你需要先使用table方法或设置Model中的$table值来设置查询的表格');
+            }
+        } else {
+            if(strstr($this->option['TABLE'],',')){
+                $table_array = explode(',',$this->option['TABLE']);
+            } else {
+                $table_array[] = $this->option['TABLE'];
+            }
+        }
+        return $table_array;
+    }
+
     //优化--as情况未考虑
     public function fields($fields = '',$auto_check = true){
         if($auto_check){
@@ -175,19 +193,8 @@ class Model{
                 } else {
                     $field_list = $fields;
                 }
-                if(!isset($this->option['TABLE'])){
-                    if($this->table <> ''){
-                        $table_array[] = $this->table;
-                    } else {
-                        errorPage('没有表格啦','你需要先使用table方法或设置Model中的$table值来设置查询的表格');
-                    }
-                } else {
-                    if(strstr($this->option['TABLE'],',')){
-                        $table_array = explode(',',$this->option['TABLE']);
-                    } else {
-                        $table_array[] = $this->option['TABLE'];
-                    }
-                }
+                //获取所有table
+                $table_array = $this->getAllTable();
                 $field_array = array();
                 foreach($field_list as $key=>$value){
                     //优化--在此处考虑 as 渲染
@@ -211,22 +218,27 @@ class Model{
     //优化--列是否有效有待确认
     public function where($where){
         if(is_array($where)){
+            $table_array = $this->getAllTable();
             $where_array = array();
             foreach($where as $key => $value){
                 if(is_int($key)){
                     //该情况说明表达式直接写在$value中
                     $where_array[] = $value;
                 } else {
-                    if(is_array($value)){
-                        if(in_array($value[0],array('<>','!=','<','>','<=','>='))){
-                            $where_array[] = $key .$value[0].$this->replaceValue($key, $value[1]);
-                        } else if(in_array( strtoupper($value[0]),array('IN','NOT IN','NOT NULL'))) {
-                            $term = strtoupper($value[0]);
-                            unset($value[0]);
-                            $where_array[] = $key.' '.strtoupper($value[0]).' ('.implode(' , ',$this->replaceValue($key,$value)).')';
+                    if($v_field = $this->filterColumn($key,$table_array)){
+                        if(is_array($value)){
+                            if(in_array($value[0],array('<>','!=','<','>','<=','>='))){
+                                $where_array[] = $v_field .$value[0].$this->replaceValue($value[1]);
+                            } else if(in_array( strtoupper($value[0]),array('IN','NOT IN','NOT NULL'))) {
+                                $term = strtoupper($value[0]);
+                                unset($value[0]);
+                                $where_array[] = $v_field.' '.strtoupper($value[0]).' ('.implode(' , ',$this->replaceValue($value)).')';
+                            }
+                        } else {
+                            $where_array[] = $v_field.' = '.$value;
                         }
                     } else {
-                        //预留--条件不符合
+                        Log::write('SQL ERROR','where语句中出现的'.$key.'不存在','sql');
                     }
                 }
             }
@@ -238,7 +250,49 @@ class Model{
         return $this;
     }
 
-    public function replaceValue($field,$value){
+    public function group($params){
+        if(!is_array($params)){
+            if(strstr($params,',')){
+                $params = explode(',',$params);
+            } else {
+                $params[] = $params;
+            }
+        }
+        $table_array = $this->getAllTable();
+        foreach($params as $value){
+            if($v_field = $this->filterColumn($value,$table_array)){
+                $group_array[] = $v_field;
+            } else {
+                Log::write('SQL ERROR','group语句中出现的'.$value.'不存在','sql');
+            }
+        }
+        $group_str = implode(',',$group_array);
+        $this->option['GROUP'] = $group_str;
+        return $this;
+    }
+
+    public function order($params){
+        if(!is_array($params)){
+            if(strstr($params,',')){
+                $params = explode(',',$params);
+            } else {
+                $params[] = $params;
+            }
+        }
+        $table_array = $this->getAllTable();
+        foreach($params as $value){
+            if($v_field = $this->filterColumn($value,$table_array)){
+                $group_array[] = $v_field;
+            } else {
+                Log::write('SQL ERROR','order语句中出现的'.$value.'不存在','sql');
+            }
+        }
+        $group_str = implode(',',$group_array);
+        $this->option['ORDER'] = $group_str;
+        return $this;
+    }
+
+    public function replaceValue($value){
         if(is_string($value)){
             $value = '\''. addslashes($value) .'\'';
         } else if(is_array($value)) {

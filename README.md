@@ -79,3 +79,7 @@ SimpleFramework
 <b>2014.6.18</b><br/>
 1. CURL类通过测试；<br/>
 2. 完善log记录；<br/>
+<br/>
+<b>2014.6.18</b><br/>
+1. 添加where的field过滤；<br/>
+2. 添加group和order接口；<br/>
