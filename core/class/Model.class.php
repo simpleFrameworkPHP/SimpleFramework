@@ -102,30 +102,48 @@ class Model{
      * @return mixed
      */
     public function filterColumn($column,$table_list = array()){
-        //获取查询的表
-        if(count($table_list)){
-            if(is_array($table_list)){
-                foreach($table_list as $k =>$v){
-                    if(is_int($k)){
-                        $tables[$v] = $this->tables_info[$v];
-                    } else {
-                        $tables[$k] = $this->tables_info[$k];
+        if(strstr($column,'.')){
+            //待优化--带表名的列名未过滤
+            $table_array = $this->getAllTable();
+            $i_column = explode('.',$column);
+            foreach($table_array as $key=>$table_name){
+                if(is_int($key)){
+                    if($i_column[0] == $table_name){
+                        $tables[] = $table_name;break;
+                    }
+                } else {
+                    if($i_column[0] == $key){
+                        $tables[$table_name] = $key;break;
                     }
                 }
-            } else {
-                $tables = array();
             }
-        } else {
-            $tables = $this->tables_info;
-        }
-        foreach($tables as $table_name => $value){
-            if(array_key_exists($column,$value)){
-                //该列名有效
-                $column = (isset($table_list[$table_name]) ? $table_list[$table_name] : $table_name).'.'.$column;
-                break;
+            return $this->filterColumn($i_column[1],$tables);
+        }else{
+            //获取查询的表
+            if(count($table_list)){
+                if(is_array($table_list)){
+                    foreach($table_list as $k =>$v){
+                        if(is_int($k)){
+                            $tables[$v] = $this->tables_info[$v];
+                        } else {
+                            $tables[$k] = $this->tables_info[$k];
+                        }
+                    }
+                } else {
+                    $tables = array();
+                }
             } else {
-                //该列名无效
-                $column = false;
+                $tables = $this->tables_info;
+            }
+            foreach($tables as $table_name => $value){
+                if(array_key_exists($column,$value)){
+                    //该列名有效
+                    $column = (isset($table_list[$table_name]) ? $table_list[$table_name] : $table_name).'.'.$column;
+                    break;
+                } else {
+                    //该列名无效
+                    $column = false;
+                }
             }
         }
         return $column;
@@ -194,8 +212,12 @@ class Model{
         return $table_array;
     }
 
-    //优化--as情况未考虑
-    public function fields($fields = '',$auto_check = true){
+    /**
+     * @param array $fields  array（简称=>列名）
+     * @param bool $auto_check  是否检测
+     * @return $this
+     */
+    public function fields($fields = array(),$auto_check = true){
         if($auto_check){
             if(empty($fields) || $fields == '*'){
                 $this->option['FIELD'] = '*';
@@ -214,10 +236,16 @@ class Model{
                 $table_array = $this->getAllTable();
                 $field_array = array();
                 foreach($field_list as $key=>$value){
-                    //优化--在此处考虑 as 渲染
-                    $field_v = $this->filterColumn($value,$table_array);
-                    if($field_v){
-                        $field_array[] = $field_v;
+                    if(strstr($value, ' AS ')){
+                        //滤出保函AS的列名
+                        $i_field = explode(' AS ',$value);
+                        $key = $i_field[1];
+                        $value = $i_field[0];
+                    }
+                    if($field_v = $this->filterColumn($value,$table_array)){
+                        if(is_string($key)){
+                            $field_array[] = $field_v . ' AS ' . $key;
+                        }
                     }
                 }
                 if(count($field_array)){
@@ -266,15 +294,9 @@ class Model{
     }
 
     public function group($params){
-        if(!is_array($params)){
-            if(strstr($params,',')){
-                $params = explode(',',$params);
-            } else {
-                $params[] = $params;
-            }
-        }
+        $param_array = $this->replaceColumns($params);
         $table_array = $this->getAllTable();
-        foreach($params as $value){
+        foreach($param_array as $value){
             if($v_field = $this->filterColumn($value,$table_array)){
                 $group_array[] = $v_field;
             } else {
@@ -287,24 +309,32 @@ class Model{
     }
 
     public function order($params){
-        if(!is_array($params)){
-            if(strstr($params,',')){
-                $params = explode(',',$params);
-            } else {
-                $params[] = $params;
-            }
-        }
+        $param_array = $this->replaceColumns($params);
         $table_array = $this->getAllTable();
-        foreach($params as $value){
-            if($v_field = $this->filterColumn($value,$table_array)){
-                $group_array[] = $v_field;
+        foreach($param_array as $key => $value){
+            $order_str = strtoupper($value) == 'DESC' ? 'DESC' : 'ASC';
+            if($v_field = $this->filterColumn($key,$table_array)){
+                $order_array[] = $v_field .' '.$order_str;
             } else {
                 Log::write('SQL ERROR','order语句中出现的'.$value.'不存在','sql');
             }
         }
-        $group_str = implode(',',$group_array);
+        $group_str = implode(',',$order_array);
         $this->option['ORDER'] = $group_str;
         return $this;
+    }
+
+    public function replaceColumns($params){
+        if(!is_array($params)){
+            if(strstr($params,',')){
+                $param_array = explode(',',$params);
+            } else {
+                $param_array[] = $params;
+            }
+        } else {
+            $param_array = $params;
+        }
+        return $param_array;
     }
 
     public function replaceValue($value){

@@ -82,8 +82,8 @@ SimpleFramework
 <br/>
 <b>2014.6.18</b><br/>
 1. 添加部分where的field过滤；<br/>
-2. 添加group和order接口；<br/>
+2. 添加group和order接口，并完善；<br/>
 3. 优化添加文件夹方法；<br/>
 4. 文件缓存提出可以输入任何内容的方法，以便后期修改内容结构使用；<br/>
 5. 时间获取优化，添加时区设置；<br/>
-6. 改善table接口的数据渲染，添加as，将table接口的输入简化；<br/>
+6. 改善table接口的数据渲染，添加as处理，将table接口的输入简化；<br/>
