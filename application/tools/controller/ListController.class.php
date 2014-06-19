@@ -9,7 +9,9 @@
 class ListController extends Controller {
 
     public function index(){
-        Log::write('nihao','test');
+        $model = M();
+        $data = $model->table(array('adfs'=>'GLOBAL_STATUS'))->fields('VARIABLE_NAME AS a')->select();
+        print_r($model->db->sql_str);
         $this->display();
     }
 } 

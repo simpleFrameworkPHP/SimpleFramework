@@ -8,7 +8,7 @@
 class Model{
     public $db;//数据库链接数组
     public $option;//记录所有sql子句的数组，在执行时输出出来
-    public $table = '';//model默认表名
+    public $table = array();//model默认表 array('简称'=>'表名');
     public $link_ID;//数据库链接ID，平时为0，多数据库链接时使用
     public $tables_info;//array('表名'=>array('列名'))
     public $db_name;
@@ -34,7 +34,7 @@ class Model{
             ;
         else
             $this->initTableInfo($no);
-        return $con;
+        return $this;
     }
 
     public function initDBConnect($host,$user,$pass,$db_name,$port,$mode,$no){
@@ -105,8 +105,12 @@ class Model{
         //获取查询的表
         if(count($table_list)){
             if(is_array($table_list)){
-                foreach($table_list as $v){
-                    $tables[$v] = $this->tables_info[$v];
+                foreach($table_list as $k =>$v){
+                    if(is_int($k)){
+                        $tables[$v] = $this->tables_info[$v];
+                    } else {
+                        $tables[$k] = $this->tables_info[$k];
+                    }
                 }
             } else {
                 $tables = array();
@@ -117,7 +121,7 @@ class Model{
         foreach($tables as $table_name => $value){
             if(array_key_exists($column,$value)){
                 //该列名有效
-                $column = $table_name.'.'.$column;
+                $column = (isset($table_list[$table_name]) ? $table_list[$table_name] : $table_name).'.'.$column;
                 break;
             } else {
                 //该列名无效
@@ -136,42 +140,55 @@ class Model{
         }
     }
 
-    public function table($tables = ''){
-        $table_list = array();
-        if($tables == ''){
-            $table_list[] = $this->table;
+    /**
+     * @param array $tables array('简称'=>'表名')；
+     * @return $this
+     */
+    public function table($tables = array()){
+        if(!count($tables)){
+            $tables = $this->table;
         } else {
-            if(!is_array($tables)){
-                if(strstr($tables,',')){
-                    $table_list = explode(',',$tables);
-                } else {
-                    $table_list[] = $tables;
-                }
-                $table_list[] = $this->table;
-            }
+            $tables = array_merge($tables,$this->table);
         }
-        foreach($table_list as $key=>$value){
+        foreach($tables as $key=>$value){
             if(!$this->filterTable($value)){
-                unset($table_list[$key]);
+                unset($tables[$key]);
+                Log::write('SQL ERROR','form语句中出现的'.$value.'表不存在','sql');
+            } else {
+                if(is_string($key)){
+                    $table_array[] = $value.' AS '.$key;
+                }
             }
         }
-        $this->option['TABLE'] = implode(',',$table_list);
+        if(isset($table_array)){
+            $this->option['TABLE'] = implode(',',$table_array);
+        }
         return $this;
     }
 
+    /** 获取关联表及简称
+     * @return array array('表全名‘=>'表简称')
+     */
     public function getAllTable(){
         $table_array = array();
         if(!isset($this->option['TABLE'])){
-            if($this->table <> ''){
-                $table_array[] = $this->table;
-            } else {
-                errorPage('没有表格啦','你需要先使用table方法或设置Model中的$table值来设置查询的表格');
-            }
+            $this->table();
+        }
+        if(!isset($this->option['TABLE'])){
+            errorPage('没有表格啦','你需要先使用table方法或设置Model中的$table值来设置查询的表格');
         } else {
             if(strstr($this->option['TABLE'],',')){
-                $table_array = explode(',',$this->option['TABLE']);
+                $table_list = explode(',',$this->option['TABLE']);
             } else {
-                $table_array[] = $this->option['TABLE'];
+                $table_list[] = $this->option['TABLE'];
+            }
+            if(isset($table_list[0]) && strstr($table_list[0],' AS ')){
+                foreach($table_list as $value){
+                    $i_table = explode(' AS ',$value);
+                    $table_array[$i_table[0]] = $i_table[1];
+                }
+            } else {
+                $table_array = $table_list;
             }
         }
         return $table_array;
@@ -180,9 +197,9 @@ class Model{
     //优化--as情况未考虑
     public function fields($fields = '',$auto_check = true){
         if($auto_check){
-            if($fields == '' || $fields == '*'){
+            if(empty($fields) || $fields == '*'){
                 $this->option['FIELD'] = '*';
-            } else{
+            } else {
                 $field_list = array();
                 if(!is_array($fields)){
                     if(strstr($fields,',')){
@@ -205,8 +222,6 @@ class Model{
                 }
                 if(count($field_array)){
                     $this->option['FIELD'] = implode(',',$field_array);
-                } else {
-                    return false;
                 }
             }
         } else {
