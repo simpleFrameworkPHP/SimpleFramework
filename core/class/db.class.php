@@ -31,7 +31,7 @@ class Db {
                 array(
                     $this->replaceSql(empty($option['FIELD']) ? '*' : $option['FIELD'],'SELECT '),
                     $this->replaceSql(empty($option['TABLE']) ? $this->table : $option['TABLE'],' FROM '),
-                    $this->replaceSql(empty($option['WHERE']) ? '' : $option['WHERE'],' HWERE '),
+                    $this->replaceSql(empty($option['WHERE']) ? '' : $option['WHERE'],' WHERE '),
                     $this->replaceSql(empty($option['GROUP']) ? '' : $option['GROUP'],' GROPU BY '),
                     $this->replaceSql(empty($option['HAVING']) ? '' : $option['HAVING'],' HAVING '),
                     $this->replaceSql(empty($option['ORDER']) ? '' : $option['ORDER'],' ORDER BY '),
