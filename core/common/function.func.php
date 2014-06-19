@@ -7,7 +7,7 @@
  */
 //加载目录内所有文件
 function loadDirFile($path = '.'){
-    $current_dir = opendir($path);    //opendir()返回一个目录句柄,失败返回false
+    $current_dir = is_dir($path) ? opendir($path) : opendir(CORE_PATH);    //opendir()返回一个目录句柄,失败返回false
     while(($file = readdir($current_dir)) !== false) {    //readdir()返回打开目录句柄中的一个条目
         $sub_dir = $path . DIRECTORY_SEPARATOR . $file;    //构建子目录路径
         if($file == '.' || $file == '..') {
@@ -103,22 +103,11 @@ function H($path='',$params='',$redirect = false){
     $url = '';
     if(is_string($path)){
         $url = 'http://'. __ROOT__ . '/index.php?';
-        //如果path为‘’即可直接使用
-        $fun = $_REQUEST['fun'] ? $_REQUEST['fun'] : C('SF_DEFAULT_FUN');
-        $act = $_REQUEST['act'] ? $_REQUEST['act'] : C('SF_DEFAULT_ACT');
-        $app = $_REQUEST['app'] ? $_REQUEST['app'] : C('SF_DEFAULT_APP');
         $path = explode('/',$path);
         $count_url = count($path);
-        if($count_url == 1 ){
-            $fun = (isset($path[0]) && $path[0] <> '') ? $path[0] : $fun;
-        } elseif($count_url == 2){
-            $fun = $path[1];
-            $act = $path[0];
-        } else {
-            $fun = $path[2];
-            $act = $path[1];
-            $app = $path[0];
-        }
+        $fun = (isset($path[$count_url-1]) && $path[$count_url-1] <> '') ? $path[$count_url-1] :  C('SF_DEFAULT_FUN');
+        $act = (isset($path[$count_url-2]) && $path[$count_url-2] <> '') ? $path[$count_url-2] :  C('SF_DEFAULT_ACT');
+        $app = (isset($path[$count_url-3]) && $path[$count_url-3] <> '') ? $path[$count_url-3] :  C('SF_DEFAULT_APP');
         $url .='app='.$app.'&act='.$act.'&fun='.$fun;
     }
     if(is_array($params)){
@@ -137,7 +126,14 @@ function H($path='',$params='',$redirect = false){
 function writeUrl($path='',$params=''){
     echo H($path,$params);
 }
-//预留---缓存方法
+
+/** 缓存方法
+ * @param $key
+ * @param string $value
+ * @param string $type  缓存的大类型
+ * @param int $time     缓存过期时长
+ * @return bool|mixed   返回缓存值   false为失败
+ */
 function S($key,$value = '',$type='system',$time=85400){
     $cache = Cache::initCacheMode(C('SF_CACHE_MODE'));
     $result = false;
@@ -151,23 +147,21 @@ function S($key,$value = '',$type='system',$time=85400){
 
 /**自动创建文件目录
  * @param $file 带目录的文件名
+ * @return bool
  */
 function addDir($file){
     $dir = is_dir($file) ? $file : dirname($file);
-    $dir = str_replace(__PATH__.'/','',$dir);
     $dir_array = array();
     $dir_array = explode('/',$dir);
     $count = count($dir_array);
-    $idir = __PATH__.'/';
-    if(!is_dir($idir)){
-        mkdir($idir,0755);
-    }
+    $idir = '';
     for($i=0;$i<$count;$i++){
         $idir .= $dir_array[$i] . '/';
         if(!is_dir($idir)){
             mkdir($idir,0755);
         }
     }
+    return is_dir($dir);
 }
 //获取当前时间
 function nowTime(){

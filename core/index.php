@@ -30,6 +30,9 @@ if($config['SF_DEBUG']){
     //调试模式
     ini_set("display_errors",1);
 }
+if(C('SF_TIME_ZONE')){
+    date_default_timezone_set(C('SF_TIME_ZONE'));
+}
 loadFile_once(CORE_PATH.'/common/function.func.php','loadDirFile','FUNCTION');
 
 defined('__THEME__') or define('__THEME__',__ROOT__.'/public/'.C('SF_THEME_DEFAULT'));

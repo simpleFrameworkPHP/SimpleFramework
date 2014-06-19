@@ -47,14 +47,19 @@ class FileCache extends Cache {
     public function setParam($key,$data,$type = 'system',$cache_time = ONE_DAY){
         $save_data = array('end_time'=>nowTime()+ONE_DAY*7,$key=>array('end_time'=>nowTime()+$cache_time,'data'=>$data));
         $path = $this->cache_path.'/'.$type.'.ch';
-        if(!file_exists($path)){
-            //创建缓存文件
-            addDir($path);
-        } else {
+        if(file_exists($path)){
             $file_data = json_decode(getFileContent($path),true);
             $save_data = array_merge($file_data,$save_data);
         }
-        file_put_contents($path,json_encode($save_data));
+        $this->writeParam($path,json_encode($save_data));
+    }
+
+    function writeParam($file,$content){
+        if(!file_exists($file)){
+            //创建缓存文件
+            addDir($file);
+        }
+        file_put_contents($file,$content);
     }
 
     public function removeParam($key,$type){

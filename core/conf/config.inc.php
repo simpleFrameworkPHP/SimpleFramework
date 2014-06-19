@@ -46,4 +46,7 @@ return array(
 
     //网站主题
     'SF_THEME_DEFAULT'=>'default',
+
+    //时区设置
+    'SF_TIME_ZONE' => 'Asia/Shanghai',
 );

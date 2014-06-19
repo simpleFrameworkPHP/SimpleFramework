@@ -42,7 +42,7 @@ class Controller extends View {
             $cache_file_path = $this->file_dir.'/'.$fun.'.html';
         }
         //controller日志位置
-        if(mysqli_errno($this->con)){
+        if(isset($log_title)){
             Log::write($log_title,$log_info);
         }
         include $cache_file_path;
