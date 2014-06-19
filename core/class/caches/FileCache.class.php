@@ -75,6 +75,6 @@ class FileCache extends Cache {
     }
 
     public function clearCache(){
-        removeDir($this->cache_path);
+        removeDir(dirname($this->cache_path));
     }
 }
