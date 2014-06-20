@@ -1,13 +1,12 @@
 <?php
 function addSelectType($type,$t){
     $data = "";
-    $count = count($type);
-    for($i=0;$i<$count;$i++){
-        $data .= '<option value="'.$type[$i]['value'].'" ';
-        if($t == $type[$i]['value']){
+    foreach($type as $value){
+        $data .= '<option value="'.$value['value'].'" ';
+        if($t == $value['value']){
             $data .= 'selected';
         }
-        $data .=' >'.$type[$i]['name'].'</option>';
+        $data .=' >'.$value['name'].'</option>';
     }
     return $data;
 }

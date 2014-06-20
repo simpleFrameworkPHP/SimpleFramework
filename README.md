@@ -98,4 +98,7 @@ SimpleFramework
 1. 将errorPage方法和C方法放到core/common/system.func.php文件中，以便以后纠错方便（该文件不适宜修改）；<br/>
 2. 自定义fullPage示例；<br/>
 3. 优化Model中的replaceValue方法；<br/>
+4. 添加方法比较示例Controller；<br/>
+5. 将框架里能用foreach的全部转换为foreach；<br/>
+
 

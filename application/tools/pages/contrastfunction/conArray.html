@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+<?php
+        $max = 20000;
+        $test_arr = range(0, $max);
+        $temp = 0;
+
+        $t1 = microtime(true);
+        for ($i = 0; $i < $max; $i++) {
+            $test_arr[$i] = $test_arr[$i] + 1;
+        }
+        $t2 = microtime(true);
+        $t = $t2 - $t1;
+        echo $t."--->>使用for 直接对数组操作 花费 <br/>";
+
+$t1 = microtime(true);
+foreach ($test_arr as $k => &$v) {
+$v = $v + 1;
+}
+$t2 = microtime(true);
+$t = $t2 - $t1;
+echo $t."--->>使用 foreach 直接对数组操作<br/><br/><br/>";
+
+$t1 = microtime(true);
+for ($i = 0; $i < $max; $i++) {
+addOne($test_arr[$i]);
+}
+$t2 = microtime(true);
+$t = $t2 - $t1;
+echo $t."--->>使用for 调用函数对数组操作<br/>";
+
+$t1 = microtime(true);
+foreach ($test_arr as $k => &$v) {
+addOne($v);
+}
+$t2 = microtime(true);
+$t = $t2 - $t1;
+echo $t."--->>使用 foreach 调用函数对数组操作<br/>";
+
+$t1 = microtime(true);
+array_walk($test_arr,'addOne');
+$t2 = microtime(true);
+$t = $t2 - $t1;
+echo $t."--->>使用 array_walk 花费 <br/>";
+
+$t1 = microtime(true);
+array_map('addOne',$test_arr);
+$t2 = microtime(true);
+$t = $t2 - $t1;
+echo $t."--->>使用 array_map 花费 <br/>";
+
+$test_array = range(3,5);
+$test_array1 = range(3,8);
+$a = 'nihao<br/>';
+echo array_walk($test_array,'addTest',$a);
+print_r($test_array);
+print_r(array_map('addV',$test_array,$test_array,$test_array1,$test_array1));
+
+function addV($a,$b,$c){
+return $a*$b+$c;
+}
+
+function addOne(&$temp){
+$temp += 1;
+}
+
+function addTest(&$temp,$key,&$a){
+$temp += 1;echo $temp.' '.$a;
+}
+?>
+<?php
+    $test_array = range(1,3);
+    $test_array1 = range(2,8);
+    $test_array2 = range(3,8);
+    $test_array3 = range(4,10);
+    $result = array_map('addC',$test_array,$test_array1,$test_array2,$test_array3);
+    function addC($a,$a1,$a2,$a3){
+        echo $a.$a1.$a2.$a3."<br/>";
+}
+?>
+<?php
+   $test_array = array('a'=>1,'b'=>3,'c'=>5);
+$test_array1 = array('c'=>2,'d'=>4,'e'=>6);
+$result = array_map('addD',$test_array,$test_array1);
+print_r($result);
+function addD($a){
+return $a*2;
+}
+$result = array_map('addD',$test_array);
+print_r($result);
+?>
+</body>
+</html>

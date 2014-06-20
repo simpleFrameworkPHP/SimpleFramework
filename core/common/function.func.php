@@ -129,8 +129,8 @@ function addDir($file){
     $dir_array = explode('/',$dir);
     $count = count($dir_array);
     $idir = '';
-    for($i=0;$i<$count;$i++){
-        $idir .= $dir_array[$i] . '/';
+    foreach($dir_array as $value){
+        $idir .= $value . '/';
         if(!is_dir($idir)){
             mkdir($idir,0755);
         }
