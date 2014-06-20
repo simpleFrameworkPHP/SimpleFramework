@@ -341,7 +341,7 @@ class Model{
         if(is_string($value)){
             $value = '\''. addslashes($value) .'\'';
         } else if(is_array($value)) {
-            $value = array_map('replaceValue',$value);
+            $value = array_map(array(__CLASS__,'replaceValue'),$value);
         }
         return $value;
     }

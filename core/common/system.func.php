@@ -4,6 +4,7 @@
  * User: shaochen.liu
  * Date: 14-6-13
  * Time: 上午11:59
+ * Remark: The file is not suitable for modification.
  */
 //加载config
 function loadConfig(){
@@ -40,4 +41,46 @@ function loadConfigFile($path,$config = array()){
         }
     }
     return $config;
+}
+//获取和设置config参数
+function C($name,$value = ''){
+    global $config;
+    if(empty($config)){
+        $config = loadConfig();
+    }
+    if($value == ''){
+        if($name != ''){
+            $result = $config[$name];
+        } else if($config['SF_DEBUG'] == true) {
+            $result =  $config;
+        }
+    } else {
+        $config[$name] = $value;
+        $result = $value;
+    }
+    return $result;
+}
+//错误页面显示
+function errorPage($msg = '',$info = '',$error_code = 404,$path=''){
+    //参数默认时初始化参数
+    if($msg == ''){
+        $error = error_get_last();
+        $msg = 'ERROR';
+        $info = $error['message'] . ' in <b>' . $error['file'] . '</b> on line ' . $error['line'];
+        $error_code = 500;
+    }
+    if($path == ''){ echo __THEME__;
+        $path[] = __THEME__.'/pages/errorPage.html';
+        $path[] = CORE_PATH.'/pages/errorPage.html';
+    }
+    $echo_info = true;
+    foreach($path as $i_path){
+        if(file_exists($i_path)){
+            $echo_info = false;
+            include $i_path;
+        }
+    }
+    if($echo_info){
+        echo $info;
+    }
 }

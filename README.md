@@ -93,3 +93,9 @@ SimpleFramework
 6. 添加IP定位GPS的示例；<br/>
 7. 将核心入口文件拆分；<br/>
 8. 添加about页面示例；<br/>
+<br/>
+<b>2014.6.20</b><br/>
+1. 将errorPage方法和C方法放到core/common/system.func.php文件中，以便以后纠错方便（该文件不适宜修改）；<br/>
+2. 自定义fullPage示例；<br/>
+3. 优化Model中的replaceValue方法；<br/>
+

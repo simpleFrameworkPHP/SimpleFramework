@@ -5,6 +5,8 @@
  * Date: 14-6-19
  * Time: 下午5:27
  */
+error_reporting(E_ALL ^ E_NOTICE);
+register_shutdown_function('erroPage');
 define('CORE_PATH',__PATH__.'/core');
 /** 自动加载一次文件的方法
  * @param $path
@@ -23,20 +25,17 @@ function loadFile_once($path,$param,$type){
 }
 loadFile_once(CORE_PATH.'/common/define.inc.php','ONE_DAY','CONSTANT');
 loadFile_once(CORE_PATH.'/common/system.func.php','loadDirFile','FUNCTION');
-//初值设置
-global $config;
-$config = loadConfig();
-if($config['SF_DEBUG']){
+if(C('SF_DEBUG')){
     //调试模式
     ini_set("display_errors",1);
 }
-if($config['SF_TIME_ZONE']){
-    date_default_timezone_set($config['SF_TIME_ZONE']);
+if(C('SF_TIME_ZONE')){
+    date_default_timezone_set(C('SF_TIME_ZONE'));
 }
+defined('__THEME__') or define('__THEME__',__PUBLIC__.'/'.C('SF_THEME_DEFAULT'));
+define('DB_PREFIX',C('SF_DB_PREFIX'));
 loadFile_once(CORE_PATH.'/common/function.func.php','loadDirFile','FUNCTION');
 
-defined('__THEME__') or define('__THEME__',__ROOT__.'/public/'.C('SF_THEME_DEFAULT'));
-define('DB_PREFIX',C('SF_DB_PREFIX'));
 
 //自动加载基础类
 loadDirFile(CORE_PATH.'/class');

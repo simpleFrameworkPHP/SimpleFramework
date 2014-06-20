@@ -11,4 +11,8 @@ class AboutController extends Controller {
     public function fullPage(){
         $this->display();
     }
-} 
+
+    public function fullPage1(){
+        $this->display();
+    }
+}

@@ -1,0 +1,162 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>fullPage.js制作网易邮箱6.0介绍页面演示_jQuery插件库</title>
+<link rel="stylesheet" href="__THEME__/css/jquery.fullPage.css">
+<style>
+    * { margin: 0; padding: 0;}
+    body { font: 16px/1.8 "Microsoft Yahei",verdana;}
+
+    /* 右侧导航 */
+    #fullPage-nav { _display: none; font-size: 12px;}
+    #fullPage-nav li { width: 90px; height: 21px; margin: 10px 0 0; vertical-align: middle;}
+    #fullPage-nav li a { float: right; width: 21px; height: 21px; color: #8F9DA4; text-decoration: none; text-align: right; background: url(__THEME__/images/dot.png) 5px 5px no-repeat;}
+    #fullPage-nav li .active { background-position: 0 bottom;}
+    #fullPage-nav span { display: none;}
+    .fullPage-tooltip { float: left; top: 0; margin-right: 5px; font: 12px "Microsoft Yahei"; color: #8F9DA4; line-height: 21px;}
+
+    .section { position: relative; overflow: hidden;}
+    .section .bg { position: absolute; left: 0; top: 0; width: 100%; height: 100%;}
+    .section .bg img { display: block; width: 100%; height: 100%;}
+
+    .bg11 { position: absolute; bottom: 0; width: 100%; height: 850px; background: url(__THEME__/images/bg11.png) 50% 0 no-repeat; transition: all 1s;}
+    .bg12 { position: absolute; bottom: -392px; width: 100%; height: 392px; background: url(__THEME__/images/bg12.png) 50% 0 no-repeat; opacity: 0; transition: all 1.7s; bottom: 90px\0;}
+    .bg13 { position: absolute; bottom: -377px; width: 100%; height: 377px; background: url(__THEME__/images/bg13.png) 50% 0 no-repeat; transition: all 1s;}
+    .hgroup { position: absolute; width: 554px; height: 176px; left: 50%; top: 25%; margin: 0 0 0 -277px; text-indent: -9999px; background-image: url(__THEME__/images/slogan.png); opacity: 0; -webkit-transform:scale(0.5, 0.5); transform:scale(0.5, 0.5); transition: all 1s;}
+    .p11 { position: absolute; left: 50%; top: 50%; width: 600px; margin: 0 0 0 -280px; font-size: 14px; color: #94a7c6; opacity: 0; transition: all 0.5s;}
+    .mail { position: absolute; left: 50%; top: -26px; width: 375px; height: 26px; margin-left: -187px; background-image: url(__THEME__/images/logo.png); transition: all 1s;}
+    .mail { float: left; height: 26px; text-indent: -9999px;}
+    .mail-163 { float: left; width: 107px;}
+    .mail-126 { float: left;width: 108px; margin-left: 23px;}
+    .mail-yeah { float: right; width: 115px;}
+
+    .bg21 { position: absolute; left: 50%; bottom: 15%; width: 819px; height: 250px; margin-left: -608px; margin-bottom: 40px; background: url(__THEME__/images/bg21.png) 0 0 no-repeat; transition: all 1s;  opacity: 0; margin-left: -1108px;}
+    .bg22 { position: absolute; left: 50%; bottom: 15%; width: 819px; height: 299px; margin-left: -280px; margin-bottom: 70px; background: url(__THEME__/images/bg22.png) right 0 no-repeat; transition: all 1s; opacity: 0; margin-left: 320px;}
+    .bg23 { position: absolute; left: 50%; bottom: 15%; width: 819px; height: 325px; margin-left: -409px; background: url(__THEME__/images/bg23.png) 50% 0 no-repeat; transition: all 1s;  bottom: -40%;}
+    .section strong { position: absolute; left: 50%; top: 15%; z-index: 10; width: 512px; height: 45px; margin-left: -256px; font-size: 24px; font-weight: 500; color: #748A9E; opacity: 0; -webkit-transform:scale(0.5, 0.5); transform:scale(0.5, 0.5); transition: all 1s;}
+    .section h3 { position: absolute; left: 50%; top: 15%; z-index: 10; width: 512px; height: 45px; margin-left: -256px; margin-top: 60px; text-indent: -9999px; background-repeat: no-repeat; opacity: 0; -webkit-transform:scale(0.5, 0.5); transform:scale(0.5, 0.5); transition: all 1s;}
+    .p1 { position: absolute; left: 50%; top: 15%; width: 510px; margin-left: -255px; margin-top: 130px; font-size: 16px; color: #727F8C; opacity: 0; transition: all 1s;}
+
+    .section2 h3 { background-image: url(__THEME__/images/t2.png);}
+    .section3 h3 { background-image: url(__THEME__/images/t3.png);}
+    .section4 h3 { background-image: url(__THEME__/images/t4.png);}
+    .section5 h3 { background-image: url(__THEME__/images/t5.png);}
+    .section6 strong { width: 561px; margin-left: -280px;}
+    .section6 h3 { width: 561px; margin-left: -280px; background-image: url(__THEME__/images/t6.png);}
+    .section7 strong { width: 561px; margin-left: -280px;}
+    .section7 h3 { width: 561px; margin-left: -280px; background-image: url(__THEME__/images/t7.png);}
+    .section8 strong { width: 561px; margin-left: -280px;}
+    .section8 h3 { width: 561px; margin-left: -280px; background-image: url(__THEME__/images/t8.png);}
+    .section9 strong { width: 609px; margin-left: -304px;}
+    .section9 h3 { width: 609px; margin-left: -304px; background-image: url(__THEME__/images/t9.png);}
+    .section9 h3 span { position: absolute; left: -100px; top: -48px; width: 89px; height: 90px; background-image: url(__THEME__/images/yixin.png);}
+
+    .bg31 { position: absolute; left: 50%; bottom: 0; width: 892px; height: 472px; margin-left: -396px; margin-bottom: 80px; background-image: url(__THEME__/images/bg31.png); opacity: 0; transition: all 1s;}
+    .bg32 { position: absolute; left: 50%; bottom: 0; width: 892px; height: 472px; margin-left: -396px; background: url(__THEME__/images/bg32.png) 470px bottom no-repeat; opacity: 0; transition: all 1s;}
+    .bg33 { position: absolute; left: 50%; bottom: 0; width: 441px; height: 380px; margin-left: 50%; background: url(__THEME__/images/bg33.png) 0 0 no-repeat; opacity: 0; transition: all 1s;}
+    .p3 { position: absolute; width: 430px; left: 50%; top: 15%; margin-top: 250px; margin-left: -100%; font-size: 16px; color: #FFFDE1; opacity: 0; transition: all 1s;}
+
+    /* CSS3过度及动画 */
+    .active strong, .active h3 { opacity: 1; -webkit-transform:scale(1, 1); transform:scale(1, 1); transition-delay: 0.7s;}
+    .active .p1 { opacity: 1; transition-delay: 1.7s;}
+
+    .active .bg12 { bottom: 90px; opacity: 1; transition-delay: 0.7s; }
+    .active .bg13 { bottom: 0; opacity: 1; transition-delay: 0.7s;}
+    .active .hgroup { opacity: 1; -webkit-transform:scale(1, 1); transform:scale(1, 1); transition-delay: 0.7s;}
+    .active .mail { top: 25px; transition-delay: 0.7s;}
+    .active .p11 { opacity: 1; transition-duration: 1s; transition-delay: 2s;}
+
+    .active .bg21 { opacity: 1; margin-left: -608px; transition-delay: 0.7s;}
+    .active .bg23 { bottom: 15%; transition-delay: 0.7s;}
+    .active .bg22 { margin-left: -280px; opacity: 1; transition-delay: 0.7s;}
+
+    .active .p3 { margin-left: -480px; opacity: 1; transition-delay: 0.7s;}
+    .active .bg31, .active .bg32 { opacity: 1; transition-delay: 1s;}
+    .active .bg33 { margin-left: -120px; opacity: 1; transition-delay: 0.7s;}
+
+
+    /* for lt ie 10 */
+    .ltie10 strong, .ltie10 h3 { opacity: 1; transform:scale(1, 1); transition-delay: 0.7s;}
+    .ltie10 .p1 { opacity: 1; transition-delay: 1.7s;}
+
+    .ltie10 .bg12 { bottom: 90px; opacity: 1; transition-delay: 0.7s; }
+    .ltie10 .bg13 { bottom: 0; opacity: 1; transition-delay: 0.7s;}
+    .ltie10 .hgroup { opacity: 1; transform:scale(1, 1); transition-delay: 0.7s;}
+    .ltie10 .mail { top: 25px; transition-delay: 0.7s;}
+    .ltie10 .p11 { opacity: 1; transition-duration: 1s; transition-delay: 2s;}
+
+    .ltie10 .bg21 { opacity: 1; margin-left: -608px; transition-delay: 0.7s;}
+    .ltie10 .bg23 { bottom: 15%; transition-delay: 0.7s;}
+    .ltie10 .bg22 { margin-left: -280px; opacity: 1; transition-delay: 0.7s;}
+
+    .ltie10 .p3 { margin-left: -480px; opacity: 1; transition-delay: 0.7s;}
+    .ltie10 .bg31, .ltie10 .bg32 { opacity: 1; transition-delay: 1s;}
+    .ltie10 .bg33 { margin-left: -120px; opacity: 1; transition-delay: 0.7s;}
+</style>
+<script src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="http://libs.baidu.com/jqueryui/1.8.22/jquery-ui.min.js "></script>
+<script src="__THEME__/js/jquery.fullPage.min.js"></script>
+<script>
+    $(function(){
+        if($.browser.msie && $.browser.version < 10){
+            $('body').addClass('ltie10');
+        }
+        $.fn.fullpage({
+            verticalCentered: false,
+            anchors: ['page1', 'page2', 'page3'],
+            navigation: true,
+            navigationTooltips: ['首页', '视觉', '交互']
+        });
+    });
+</script>
+</head>
+<body>
+<div class="section section1">
+    <div class="bg"><img src="__THEME__/images/section1.jpg" alt=""></div>
+    <div class="bg11"></div>
+    <div class="bg12"></div>
+    <div class="bg13"></div>
+    <div class="mail">
+        <a class="mail-163" href="http://www.jq22.com/">163邮箱</a>
+        <a class="mail-126" href="http://www.jq22.com/">126邮箱</a>
+        <a class="mail-yeah" href="http://www.jq22.com/">yeah邮箱</a>
+    </div>
+    <div class="hgroup">
+        <h1><a href="http://www.jq22.com/">网易邮箱6.0</a></h1>
+        <h2>改变，不止所见。</h2>
+    </div>
+    <p class="p11">网易邮箱6.0版&mdash;&mdash;2014年最具创意气质的重量级新邮箱，重生光华，为之瞩目。唯美<br>的视觉设计和视觉化交互，无可替代的独创动态情景皮肤，多项国内创意产品专利技术，<br>成就无与伦比的出众品味，无可比拟的美妙体验。</p>
+</div>
+
+<div class="section section2">
+    <div class="bg"><img src="__THEME__/images/section2.jpg" alt=""></div>
+    <div class="bg21"></div>
+    <div class="bg22"></div>
+    <div class="bg23"></div>
+    <strong>[ 视觉·简 ]</strong>
+    <h3>华丽蜕变，尽享愉悦之美</h3>
+    <p class="p1">秉承网易邮箱经典的清新简洁的设计风格，邮箱 6.0 版带来全新一代的设计理念，更追求极致唯美的视觉设计、传承更多人文和艺术底蕴，华丽蜕变，带来更舒服更爽心悦目的视觉享受。</p>
+</div>
+
+<div class="section section3">
+    <div class="bg"><img src="__THEME__/images/section3.jpg" alt=""></div>
+    <div class="bg31"></div>
+    <div class="bg32"></div>
+    <div class="bg33"></div>
+    <strong>[ 视觉化交互设计 ]</strong>
+    <h3>心随眼动，感官直接体验</h3>
+    <p class="p3">邮箱 6.0 版采用了全新的视觉化交互设计，通过对界面的整体风格设计、重要信息的视觉化处理以及元素本身的视觉传达优化，来实现产品流程设计和交互行为塑造。从视觉的角度出发，让用户无需多想，直接通过感官与产品进行交互。</p>
+</div>
+
+
+
+
+
+
+
+
+
+</body>
+</html>

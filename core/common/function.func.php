@@ -45,35 +45,9 @@ function runController($application,$controller){
     $result = new $controller();
     return $result;
 }
-//错误页面显示
-function errorPage($msg,$info,$error_code = 404,$path=''){
-    if($path == ''){
-        $path = CORE_PATH.'/pages/errorPage.html';
-    }
-    if(file_exists($path)){
-        include $path;
-    } else {
-        echo $info;
-    }
-}
 //预留--日志打印
 function sflog($str,$type,$mode){
 
-}
-//获取和设置config参数
-function C($name,$value = ''){
-    global $config;
-    if($value == ''){
-        if($name != ''){
-            $result = $config[$name];
-        } else if($config['SF_DEBUG'] == true) {
-            $result =  $config;
-        }
-    } else {
-        $config[$name] = $value;
-        $result = $value;
-    }
-    return $result;
 }
 //创建模型方法（数据库处理）
 function M($path='',$link_ID = 0){
