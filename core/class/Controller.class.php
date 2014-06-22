@@ -45,7 +45,14 @@ class Controller extends View {
         if(isset($log_title)){
             Log::write($log_title,$log_info);
         }
+        // 页面缓存
+        ob_start();
+        ob_implicit_flush(0);
         include $cache_file_path;
+        // 获取并清空缓存
+        $content = ob_get_clean();
+
+        $this->rander($content);
     }
 
     public function assign($key,$value){

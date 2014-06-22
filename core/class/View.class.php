@@ -47,4 +47,15 @@ class View {
         }
         return $str;
     }
+
+    function rander($content,$charset = '',$contentType = ''){
+        if(empty($charset))  $charset = C('DEFAULT_CHARSET');
+        if(empty($contentType)) $contentType = C('TMPL_CONTENT_TYPE');
+        // 网页字符编码
+        header('Content-Type:'.$contentType.'; charset='.$charset);
+        header('Cache-control: '.C('HTTP_CACHE_CONTROL'));  // 页面缓存控制
+        header('X-Powered-By:Fish');
+
+        echo $content;
+    }
 } 

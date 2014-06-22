@@ -49,4 +49,9 @@ return array(
 
     //时区设置
     'SF_TIME_ZONE' => 'Asia/Shanghai',
+
+    //网页设置
+    'DEFAULT_CHARSET' => 'utf-8',
+    'TMPL_CONTENT_TYPE' => 'text/html', // 默认模板输出类型
+    'HTTP_CACHE_CONTROL' => 'private',
 );
