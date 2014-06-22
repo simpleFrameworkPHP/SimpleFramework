@@ -55,7 +55,6 @@ class View {
         header('Content-Type:'.$contentType.'; charset='.$charset);
         header('Cache-control: '.C('HTTP_CACHE_CONTROL'));  // 页面缓存控制
         header('X-Powered-By:Fish');
-
         echo $content;
     }
 } 

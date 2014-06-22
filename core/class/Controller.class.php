@@ -48,7 +48,7 @@ class Controller extends View {
         // 页面缓存
         ob_start();
         ob_implicit_flush(0);
-        include $cache_file_path;
+        empty($content)?include $cache_file_path:eval('?>'.$content);
         // 获取并清空缓存
         $content = ob_get_clean();
 
