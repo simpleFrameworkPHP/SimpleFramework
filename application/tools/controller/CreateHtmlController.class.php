@@ -6,11 +6,11 @@
  * Time: 下午1:35
  */
 //待测试
-class CreateHtmlController {
+class CreateHtmlController extends Controller {
 
     public function index(){
         $url = H('tools/List/index');
-        $content = CURL::get($url);
+        $content = $this->createHtml();
         file_put_contents(CACHE_PATH.'/test.txt',$content);
     }
 } 

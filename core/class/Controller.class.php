@@ -10,14 +10,14 @@ class Controller extends View {
 
     var $file_dir = '';
     var $cache_file_dir = '';
-    var $before_content = '';
+    var $params = array();
 
     public function __construct(){
         $this->file_dir = APP_PATH.'/'.$_REQUEST['app'].'/pages/'.$_REQUEST['act'];
         $this->cache_file_dir = CACHE_PATH.'/pages/'.$_REQUEST['app'].'/'.$_REQUEST['act'];
     }
 
-    public function display($fun = ''){
+    public function display($fun = '',$is_create = false,$create_file = ''){
         if($fun == ''){
             $fun = $_REQUEST['fun'];
         }
@@ -25,9 +25,10 @@ class Controller extends View {
             $file_path = $this->file_dir.'/'.$fun.'.html';
             $cache_file_path = $this->cache_file_dir.'/'.$fun.'.phtml';
             if(C('SF_REFRESH_PAGES') || !file_exists($cache_file_path) || filemtime($file_path)>=filemtime($cache_file_path) || !file_exists($file_path)){
-                $contentStr = $this->before_content;
+                // 模板阵列变量分解成为独立变量
+                extract($this->params, EXTR_OVERWRITE);
                 //生成模板文件不存在或生成模板文件的修改时间比实际模板文件的修改时间早即生成模板文件已过时
-                $contentStr .= getFileContent($file_path);
+                $contentStr = getFileContent($file_path);
                 //可以实现字符替换以达到函数改写
                 $contentStr = $this->replaceContent($contentStr);
                 addDir($cache_file_path);
@@ -52,18 +53,16 @@ class Controller extends View {
         // 获取并清空缓存
         $content = ob_get_clean();
 
-        $this->rander($content);
+        $this->rander($content,'','',$is_create,$create_file);
+    }
+
+    public function createHtml($create_file = ''){
+        $create_file = $create_file == '' ? 'index.shtml' : $create_file;
+        $this->display('',true,$create_file);
     }
 
     public function assign($key,$value){
-        $this->before_content .= $this->replaceParam($key,$value);
-    }
-
-    public function replaceContent($content){
-        $content = preg_replace(array('/\{\$(\w+)\}/','/{:(\w+)(\([\S+\,?]*\))}/'),array('<?php echo \$\1;?>','<?php \1\2;?>'),$content);
-        //待优化---扩展常量数组
-        $content = str_replace(array('__ROOT__','__JSROOT__','__THEME__','__PUBLIC__'),array(__ROOT__,__JSROOT__,__THEME__,__PUBLIC__),$content);
-        return $content;
+        $this->params[$key] = $value;
     }
 
     public function errorPage($msg,$info,$error_code = 404){

@@ -104,6 +104,10 @@ SimpleFramework
 <b>2014.6.22</b><br/>
 1. 模板渲染部分优化；<br/>
 2. 建立简单任务模块的大框；<br/>
+3. 优化了模板渲染时，后端变量传到全台页面的方式；<br/>
+4. 在页面上添加了页面的编码方式“<meta content="text/html; charset=utf-8" http-equiv="Content-Type">”，确保正常情况下不会再出现乱码的可能性；<br/>
+5. 整理function文件中的一些方法名；<br/>
+6. 创建静态页面在Controller类中添加createHtml方法；<br/>
 
 1. 创建建表语句和示例，写出建表的表单页；
 2. 建立一个任务历史单页，可以建立任务，以及查看任务和完成任务；
