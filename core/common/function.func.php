@@ -76,7 +76,7 @@ function M($path='',$link_ID = 0){
 function H($path='',$params='',$redirect = false){
     $url = '';
     if(is_string($path)){
-        $url = 'http://'. __ROOT__ . '/index.php?';
+        $url =  __ROOT__ . '/index.php?';
         $path = explode('/',$path);
         $count_url = count($path);
         $fun = (isset($path[$count_url-1]) && $path[$count_url-1] <> '') ? $path[$count_url-1] :  C('SF_DEFAULT_FUN');
