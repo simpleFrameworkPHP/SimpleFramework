@@ -108,6 +108,11 @@ SimpleFramework
 4. 在页面上添加了页面的编码方式“<meta content="text/html; charset=utf-8" http-equiv="Content-Type">”，确保正常情况下不会再出现乱码的可能性；<br/>
 5. 整理function文件中的一些方法名；<br/>
 6. 创建静态页面在Controller类中添加createHtml方法；<br/>
+<br/>
+<b>2014.6.24</b>
+1. 添加任务类，在function中添加任务运行方法单个（runTask）和全部（runAllTask）两个方法；<br/>
+2. 添加session处理，添加logout.php登出文件；<br/>
+
 
 1. 创建建表语句和示例，写出建表的表单页；
 2. 建立一个任务历史单页，可以建立任务，以及查看任务和完成任务；

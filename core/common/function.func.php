@@ -209,3 +209,48 @@ function getClientIp($type = 0,$adv=false) {
     $ip   = $long ? array($ip, $long) : array('0.0.0.0', 0);
     return $ip[$type];
 }
+//消除session
+function logout(){
+    session_unset();
+    session_destroy();
+    //预留--换成页面来优化一下
+    echo '您已经退出登录';
+}
+//执行所有任务
+function runAllTask(){
+    $lock_path = CACHE_PATH.'/lock';
+    addDir($lock_path);
+    $lock_task = $lock_path.'/Task.lock';
+    if(file_exists($lock_task) && filemtime($lock_task) < nowTime() - 1800){
+        //超过半小时未执行
+        @unlink($lock_task);
+    }
+    if(!file_exists($lock_task)){
+        //总任务锁
+        @touch($lock_task);
+        $task_array = S('TASK_LIST','','TASK');
+        if(!$task_array){
+            $new = new Task();
+            $task_array = $new->getAllTask();
+            S('TASK_LIST',$task_array,'TASK');
+        }
+        array_walk($task_array,'runTask',$lock_path);print_r($task_array);
+        S('TASK_LIST',$task_array,'TASK');
+        @unlink($lock_task);
+    }
+}
+//单个任务执行方法
+function runTask(&$value, $key, $lock_path,$last_time = -1){
+    $lock_file = $lock_path.'/'.$key.'.lock';
+    $last_time = $last_time == -1 ? $value['last_time'] : $last_time;
+    if((!file_exists($lock_file) || filemtime($lock_file) < nowTime() - $value['i_time']) && $last_time < nowTime()){
+        //执行定时任务，建立单个任务锁
+        @touch($lock_file);
+        if(!class_exists($key))include $value['file'];
+        $i_task = new $key();
+        $i_task->run();
+        //记录任务的执行时间并记录下一次执行时间
+        $value['last_time'] = nowTime() + $value['i_time'];
+        @unlink($lock_file);
+    }
+}

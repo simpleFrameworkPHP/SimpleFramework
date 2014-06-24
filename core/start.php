@@ -35,7 +35,7 @@ if(C('SF_TIME_ZONE')){
 defined('__THEME__') or define('__THEME__',__PUBLIC__.'/'.C('SF_THEME_DEFAULT'));
 define('DB_PREFIX',C('SF_DB_PREFIX'));
 loadFile_once(CORE_PATH.'/common/function.func.php','loadDirFile','FUNCTION');
-
+session_start();
 
 //自动加载基础类
 loadDirFile(CORE_PATH.'/class');
