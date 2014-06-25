@@ -24,9 +24,9 @@ class DictionaryController extends Controller {
                 if($relate_table[$_REQUEST['t']] <> array('*')){
                     $table_array = $relate_table[$_REQUEST['t']];
                 } else {
-                    $table_list = $con1->select('SHOW TABLES');
+                    $table_list = $con1->select('SHOW TABLE STATUS FROM '.$con1->db_name);
                     foreach($table_list as $row){
-                        $table_array[] = $row['Tables_in_'.$con1->db_name];
+                        $table_array[] = array('name'=>$row['Name'],'commont'=>$row['Commont']);
                     }
 
                 }
@@ -80,7 +80,7 @@ class DictionaryController extends Controller {
     public function getRelateTable($model,$remark,$relate_table=array()){
         $result = array();
         foreach($relate_table as $key => $table){
-            $sql = 'SHOW FULL COLUMNS FROM '.$table;
+            $sql = 'SHOW FULL COLUMNS FROM '.$table['name'];
             $data = $model->select($sql);
             $list = array();
             if(is_array($data)){
@@ -88,11 +88,12 @@ class DictionaryController extends Controller {
                     $i_data['列名'] = $row['Field'];
                     $i_data['Null'] = $row['Null'];
                     $i_data['类型'] = $row['Type'];
-                    $i_data['注释'] = $row['Comment'] ? $row['Comment']:(isset($remark[$table][$row['Field']])?$remark[$table][$row['Field']]:'');
+                    $i_data['注释'] = $row['Comment'] ? $row['Comment']:(isset($remark[$table['name']][$row['Field']])?$remark[$table['name']][$row['Field']]:'');
                     $list[] = $i_data;
                 }
             }
-            $result[$key]['title'] = $table;
+            $table['commont'] = $table['commont'] ? $table['commont'] : $remark[$table['name']][0];
+            $result[$key]['title'] = $table['name'].'('.$table['commont'].')';
             $result[$key]['data'] = $list;
             $result[$key]['columns'] = array_keys($i_data);
         }

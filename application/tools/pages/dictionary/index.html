@@ -19,7 +19,7 @@
     </style>
     <script type="text/javascript">
         function selectType(t){
-            window.location.href = "<?php echo H();?>&t="+ t.value;
+            window.location.href = "{:writeUrl('tools/Dictionary/index')}&t="+ t.value;
         }
         function selectTag(showContent,selfObj){
             // 操作标签
