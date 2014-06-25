@@ -80,7 +80,15 @@ class DictionaryController extends Controller {
     public function getRelateTable($model,$remark,$relate_table=array()){
         $result = array();
         foreach($relate_table as $key => $table){
-            $sql = 'SHOW FULL COLUMNS FROM '.$table['name'];
+            if(is_array($table)){
+                $i_table_name = $table['name'];
+                $i_table_reamrk = $table['commont'];
+            } else {
+                $i_table_name = $table;
+            }
+            $i_remark = $remark[$i_table_name];
+            $i_table_reamrk = $i_table_reamrk ? $i_table_reamrk : $i_remark[0];
+            $sql = 'SHOW FULL COLUMNS FROM '.$i_table_name;
             $data = $model->select($sql);
             $list = array();
             if(is_array($data)){
@@ -88,14 +96,14 @@ class DictionaryController extends Controller {
                     $i_data['列名'] = $row['Field'];
                     $i_data['Null'] = $row['Null'];
                     $i_data['类型'] = $row['Type'];
-                    $i_data['注释'] = $row['Comment'] ? $row['Comment']:(isset($remark[$table['name']][$row['Field']])?$remark[$table['name']][$row['Field']]:'');
+                    $i_data['注释'] = $row['Comment'] ? $row['Comment']:(isset($i_remark[$row['Field']])?$i_remark[$row['Field']]:'');
                     $list[] = $i_data;
                 }
             }
-            $table['commont'] = $table['commont'] ? $table['commont'] : $remark[$table['name']][0];
-            $result[$key]['title'] = $table['name'].'('.$table['commont'].')';
+
+            $result[$key]['title'] = $i_table_name.'('.$i_table_reamrk.')';
             $result[$key]['data'] = $list;
-            $result[$key]['columns'] = array_keys($i_data);
+            $result[$key]['columns'] = is_array($i_data)?array_keys($i_data):array();
         }
         $this->assign('start',0);
         return $result;

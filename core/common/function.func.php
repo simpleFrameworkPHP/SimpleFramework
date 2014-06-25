@@ -108,7 +108,7 @@ function writeUrl($path='',$params=''){
  * @param int $time     缓存过期时长
  * @return bool|mixed   返回缓存值   false为失败
  */
-function S($key,$value = '',$type='system',$time=85400){
+function S($key,$value = '',$type='system',$time = 86400){
     $cache = Cache::initCacheMode(C('SF_CACHE_MODE'));
     $result = false;
     if($value == ''){

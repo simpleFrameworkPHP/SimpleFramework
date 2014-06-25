@@ -27,12 +27,12 @@ class FileCache extends Cache {
             if($result){
                 if(!isset($result[$key])){
                     $result = false;
-                } elseif($result['end_time']<nowTime()){
+                } elseif($result['end_time'] < nowTime() && $result['end_time'] <> 0){
                     //缓存文件数据过期
                     removeFile($path);
                 } else {
                     //缓存文件数据未过期
-                    if($result[$key]['end_time']<nowTime()){
+                    if($result[$key]['end_time']<nowTime() && $result['end_time'] <> 0){
                         //缓存数据过期，清除数据
                         $this->removeParam($key,$type);
                     } else {
@@ -44,8 +44,9 @@ class FileCache extends Cache {
         return $result;
     }
 
-    public function setParam($key,$data,$type = 'system',$cache_time = ONE_DAY){
-        $save_data = array('end_time'=>nowTime()+ONE_DAY*7,$key=>array('end_time'=>nowTime()+$cache_time,'data'=>$data));
+    public function setParam($key,$data,$type = 'system',$cache_time = 0){
+        $cache_time = $cache_time ? nowTime() + $cache_time : 0;
+        $save_data = array('end_time'=> $cache_time,$key=>array('end_time'=> $cache_time,'data'=>$data));
         $path = $this->cache_path.'/'.$type.'.ch';
         if(file_exists($path)){
             $file_data = json_decode(getFileContent($path),true);
