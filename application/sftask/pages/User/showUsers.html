@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <style>
+        .div_user_back{background-color: #FFFDE1}
+    </style>
+    <title></title>
+</head>
+<body>
+<form action="{:writeUrl('sftask/User/addUser')}" method="post">
+    姓名：<input name="user"/>
+    简称：<input name="key"/>
+    <input type="submit" value="添加"/>
+</form><?php $i=0;?>
+<?php foreach($data as $key=>$value){ ?>
+<div class="<?php if($i++%2)echo 'div_user_back';?>">
+    <ul>
+        <li> {$value['name']} </li>
+    </ul>
+</div>
+<?php } ?>
+</body>
+</html>
