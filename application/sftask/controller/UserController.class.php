@@ -12,7 +12,7 @@ class UserController extends Controller {
         $user = S('TASK/TaskUsers');
         foreach($user['user'] as $key=>$value){
             $data[$key]['name'] = $value;
-            $data[$key]['task'] = S('TASK_'.$key);
+            $data[$key]['task'] = S('TASK_'.$key.'/task');
         }
         $this->assign('data',$data);
         $this->display();
@@ -22,6 +22,13 @@ class UserController extends Controller {
         $taskUser = S('TASK/TaskUsers');
         $taskUser['user'][$_POST['key']] = $_POST['user'];
         S('TASK/TaskUsers',$taskUser);
-        $this->showUsers();
+        header('Location: '.H('showUsers'));
+    }
+
+    public function addTask(){
+        $task = S('TASK_'.$_POST['key'].'/task');
+        $task[] = array('name'=>$_POST['task_name'],'remark'=>$_POST['task_remark'],'end_time'=>strtotime($_POST['end_date']),'start_time'=>strtotime($_POST['start_date']));
+        S('TASK_'.$_POST['key'].'/task',$task);
+        header('Location: '.H('showUsers'));
     }
 } 

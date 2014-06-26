@@ -79,9 +79,9 @@ function H($path='',$params='',$redirect = false){
         $url =  __ROOT__ . '/index.php?';
         $path = explode('/',$path);
         $count_url = count($path);
-        $fun = (isset($path[$count_url-1]) && $path[$count_url-1] <> '') ? $path[$count_url-1] :  C('SF_DEFAULT_FUN');
-        $act = (isset($path[$count_url-2]) && $path[$count_url-2] <> '') ? $path[$count_url-2] :  C('SF_DEFAULT_ACT');
-        $app = (isset($path[$count_url-3]) && $path[$count_url-3] <> '') ? $path[$count_url-3] :  C('SF_DEFAULT_APP');
+        $fun = (isset($path[$count_url-1]) && $path[$count_url-1] <> '') ? $path[$count_url-1] : $_REQUEST['fun'];
+        $act = (isset($path[$count_url-2]) && $path[$count_url-2] <> '') ? $path[$count_url-2] : $_REQUEST['act'];
+        $app = (isset($path[$count_url-3]) && $path[$count_url-3] <> '') ? $path[$count_url-3] : $_REQUEST['app'];
         $url .='app='.$app.'&act='.$act.'&fun='.$fun;
     }
     if(is_array($params)){
@@ -96,9 +96,6 @@ function H($path='',$params='',$redirect = false){
     } else {
         return $url;
     }
-}
-function writeUrl($path='',$params=''){
-    echo H($path,$params);
 }
 
 /** 缓存方法
