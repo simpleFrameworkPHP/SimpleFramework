@@ -7,11 +7,23 @@
  */
 class Model{
     public $db;//数据库链接数组
-    public $option;//记录所有sql子句的数组，在执行时输出出来
-    public $table = array();//model默认表 array('简称'=>'表名');
-    public $link_ID;//数据库链接ID，平时为0，多数据库链接时使用
-    public $tables_info;//array('表名'=>array('列名'))
-    public $db_name;
+    /**记录所有sql子句的数组，在执行时输出出来
+     * array(
+     *  'TABLE'     => FROM子句string
+     *  'FIELD'     => SELECT子句string
+     *  'WHERE'     => WHERE子句string
+     *  'GROUP'     => GROUP子句string
+     *  'HAVING'    => HAVING子句string
+     *  'ORDER'     => ORDER子句string
+     *  'LIMIT'     => LIMIT子句string
+     * )
+    */
+    var $option;
+    var $var_table = array();//model默认表 array('简称'=>'表名');
+    var $link_ID;//数据库链接ID，平时为0，多数据库链接时使用
+    var $tables_info;//array('表名'=>array('列名'))
+    var $db_name;
+    var $column_str = '###column####';//如果值为列名时，需要标明前缀
 
     /**
      * @param $host 数据库域名或ip
@@ -24,9 +36,10 @@ class Model{
      */
     public function __construct($host = '',$user = '',$pass = '',$db_name = '',$port = '',$mode = '',$no = 0){
         $con = $this->initDBConnect($host,$user,$pass,$db_name,$port,$mode,$no);
-        if(isset($this->table) && $this->table != ''){
+        if(isset($this->var_table)){
             //默认操作表
-            $con->table = $this->table;
+            $key = array_keys($this->var_table);
+            $con->table = $this->var_table[$key[0]];
         }
         $this->db_name = $db_name;
         $this->link_ID = $no;
@@ -140,10 +153,11 @@ class Model{
                     //该列名有效
                     $column = (isset($table_list[$table_name]) ? $table_list[$table_name] : $table_name).'.'.$column;
                     break;
-                } else {
-                    //该列名无效
-                    $column = false;
                 }
+            }
+            if(!strstr($column,'.')){
+                //该列名无效
+                $column = false;
             }
         }
         return $column;
@@ -162,12 +176,8 @@ class Model{
      * @param array $tables array('简称'=>'表名')；
      * @return $this
      */
-    public function table($tables = array()){
-        if(!count($tables)){
-            $tables = $this->table;
-        } else {
-            $tables = array_merge($tables,$this->table);
-        }
+    public function table(array $tables = array()){
+        $tables = $tables == array() ? $this->var_table : array_merge($tables,$this->var_table);
         foreach($tables as $key=>$value){
             if(!$this->filterTable($value)){
                 unset($tables[$key]);
@@ -184,6 +194,36 @@ class Model{
         return $this;
     }
 
+    public function join(array $tables, $join_str = ' JOIN '){
+
+            $this->table();
+
+        foreach($tables as $key=>$value){
+            if(!$this->filterTable($key)){
+                unset($tables[$key]);
+                Log::write('SQL ERROR','form语句中出现的'.$key.'表不存在','sql');
+            } else {
+                if(is_string($key)){
+                    $table_array[] = $key.(isset($value['as']) ? ' AS '.$value['as'] : '') . ' ON ' . $value['p'];
+                }
+            }
+        }
+        $this->option['TABLE'] .= $join_str . implode('',$table_array);
+        return $this;
+    }
+
+    public function leftJoin(array $tables){
+        return $this->join($tables,' LEFT JOIN ');
+    }
+
+    public function rightJoin(array $tables){
+        return $this->join($tables,' RIGHT JOIN ');
+    }
+
+    public function innerJoin(array $tables){
+        return $this->join($tables,' INNER JOIN ');
+    }
+
     /** 获取关联表及简称
      * @return array array('表全名‘=>'表简称')
      */
@@ -197,13 +237,17 @@ class Model{
         } else {
             if(strstr($this->option['TABLE'],',')){
                 $table_list = explode(',',$this->option['TABLE']);
+            } elseif(strstr($this->option['TABLE'],' JOIN ')){
+                $table_list = explode(' JOIN ',$this->option['TABLE']);
             } else {
                 $table_list[] = $this->option['TABLE'];
             }
-            if(isset($table_list[0]) && strstr($table_list[0],' AS ')){
+            if(isset($table_list[0])){
                 foreach($table_list as $value){
-                    $i_table = explode(' AS ',$value);
-                    $table_array[$i_table[0]] = $i_table[1];
+                    if(strstr($value,' AS ')){
+                        $i_table = explode(' ',trim($value,' '));
+                        $table_array[$i_table[0]] = $i_table[2];
+                    }
                 }
             } else {
                 $table_array = $table_list;
@@ -259,7 +303,7 @@ class Model{
     }
 
     //优化--列是否有效有待确认
-    public function where($where){
+    public function where($where,$type = 'WHERE'){
         if(is_array($where)){
             $table_array = $this->getAllTable();
             $where_array = array();
@@ -289,7 +333,7 @@ class Model{
         } else {
             $where_str = $where;
         }
-        $this->option['WHERE'] = $where_str;
+        $this->option[$type] = $where_str;
         return $this;
     }
 
@@ -308,6 +352,10 @@ class Model{
         return $this;
     }
 
+    public function having($params){
+        return $this->where($params,'HAVING');
+    }
+
     public function order($params){
         $param_array = $this->replaceColumns($params);
         $table_array = $this->getAllTable();
@@ -321,6 +369,13 @@ class Model{
         }
         $group_str = implode(',',$order_array);
         $this->option['ORDER'] = $group_str;
+        return $this;
+    }
+
+    public function limit($count,$start = 0){
+        $count = intval($count);
+        $start = intval($start);
+        $this->option['LIMIT'] = ' '.($start ? $start . ',' : '') . $count . ' ';
         return $this;
     }
 
@@ -338,10 +393,12 @@ class Model{
     }
 
     public function replaceValue($value){
-        if(is_string($value)){
+        if(is_string($value) && !strstr($value,$this->column_str)){
             $value = '\''. addslashes($value) .'\'';
         } else if(is_array($value)) {
             $value = array_map(array(__CLASS__,'replaceValue'),$value);
+        } else if(strstr($value,$this->column_str)){
+            $value = str_replace($this->column_str,'',$value);
         }
         return $value;
     }

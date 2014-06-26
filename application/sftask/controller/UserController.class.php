@@ -12,6 +12,7 @@ class UserController extends Controller {
         $user = S('TASK/TaskUsers');
         foreach($user['user'] as $key=>$value){
             $data[$key]['name'] = $value;
+            $data[$key]['task'] = S('TASK_'.$key);
         }
         $this->assign('data',$data);
         $this->display();

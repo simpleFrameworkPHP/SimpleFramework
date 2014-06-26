@@ -45,6 +45,7 @@ class DBMysql extends Db {
         //sql日志位置
         if(mysql_errno($this->con)){
             //待优化显示查询中的异常及错误
+            Log::write('SQL ERROR',$str."\t[error sql]",'sql');
             Log::write('SQL ERROR',mysql_error($this->con).' ; '.mysql_errno($this->con),'sql');
         } else {
             //正常查询日志

@@ -109,22 +109,22 @@ SimpleFramework
 5. 整理function文件中的一些方法名；<br/>
 6. 创建静态页面在Controller类中添加createHtml方法；<br/>
 <br/>
-<b>2014.6.24</b>
+<b>2014.6.24</b><br/>
 1. 添加任务类，在function中添加任务运行方法单个（runTask）和全部（runAllTask）两个方法；<br/>
 2. 添加session处理，添加logout.php登出文件；<br/>
 <br/>
-<b>2014.6.25</b>
+<b>2014.6.25</b><br/>
 1. 完善S函数，当他的第三个形参为0时永不清除缓存；<br/>
 2. 改善数据字典工具；<br/>
-
 <br/>
-<b>2014.6.26</b>
+<b>2014.6.26</b><br/>
 1. 优化缓存方法；<br/>
 2. 优化生成html页面的方法；<br/>
 3. 完善个人任务模块流程；<br/>
 4. 完善Controller->display方法；<br/>
 5. 完善首页列表；<br/>
-
+6. Model类添加limit、join、having接口；<br/>
+7. 完善sql日志；<br/>
 
 
 
