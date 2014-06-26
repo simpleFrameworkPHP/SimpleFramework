@@ -14,6 +14,10 @@ class Db {
     public $table;
     public $select_db = false;
     public $select_sql = '%FIELD% %TABLE% %WHERE% %GROUP% %HAVING% %ORDER% %LIMIT%';
+
+    public function __construct($host,$user,$pass,$db_name,$port,$mode,$no=0){
+        return self::initDBCon($host,$user,$pass,$db_name,$port,$mode,$no);
+    }
     public static  function initDBCon($host,$user,$pass,$db_name,$port,$mode,$no=0){
 
         switch($mode){
@@ -32,7 +36,7 @@ class Db {
                     $this->replaceSql(empty($option['FIELD']) ? '*' : $option['FIELD'],'SELECT '),
                     $this->replaceSql(empty($option['TABLE']) ? $this->table : $option['TABLE'],' FROM '),
                     $this->replaceSql(empty($option['WHERE']) ? '' : $option['WHERE'],' WHERE '),
-                    $this->replaceSql(empty($option['GROUP']) ? '' : $option['GROUP'],' GROPU BY '),
+                    $this->replaceSql(empty($option['GROUP']) ? '' : $option['GROUP'],' GROUP BY '),
                     $this->replaceSql(empty($option['HAVING']) ? '' : $option['HAVING'],' HAVING '),
                     $this->replaceSql(empty($option['ORDER']) ? '' : $option['ORDER'],' ORDER BY '),
                     $this->replaceSql(empty($option['LIMIT']) ? '' : $option['LIMIT'],' LIMIT '),
