@@ -9,8 +9,6 @@
 class CreateHtmlController extends Controller {
 
     public function index(){
-        $url = H('tools/List/index');
-        $content = $this->createHtml();
-        file_put_contents(CACHE_PATH.'/test.txt',$content);
+        $this->createHtml('tools/List/index');
     }
 } 

@@ -30,7 +30,7 @@ class Model{
         }
         $this->db_name = $db_name;
         $this->link_ID = $no;
-        if($this->tables_info = S('DB_INFO','','DB_INFO_'.$no))
+        if($this->tables_info = S('DB_INFO_'.$no.'/DB_INFO'))
             ;
         else
             $this->initTableInfo($no);
@@ -69,7 +69,7 @@ class Model{
                 $this->getColumnInfo($value['Tables_in_'.$this->db_name]);
             }
             //存储数据结构
-            S('DB_INFO',$this->tables_info,'DB_INFO_'.$link_ID);
+            S('DB_INFO_'.$link_ID . '/DB_INFO',$this->tables_info);
         }
     }
     function getColumnInfo($table_name,$link_ID = 0){

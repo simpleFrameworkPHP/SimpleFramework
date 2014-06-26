@@ -20,6 +20,14 @@ class Controller extends View {
     public function display($fun = '',$is_create = false,$create_file = ''){
         if($fun == ''){
             $fun = $_REQUEST['fun'];
+        } else {
+            $path = explode('/',$fun);
+            $count_url = count($path);
+            $fun = (isset($path[$count_url-1]) && $path[$count_url-1] <> '') ? $path[$count_url-1] :  C('SF_DEFAULT_FUN');
+            $act = (isset($path[$count_url-2]) && $path[$count_url-2] <> '') ? $path[$count_url-2] :  C('SF_DEFAULT_ACT');
+            $app = (isset($path[$count_url-3]) && $path[$count_url-3] <> '') ? $path[$count_url-3] :  C('SF_DEFAULT_APP');
+            $this->file_dir = APP_PATH.'/'.$app.'/pages/'.$act;
+            $this->cache_file_dir = CACHE_PATH.'/pages/'.$app.'/'.$act;
         }
         if($this->cache_file_dir != ''){
             $file_path = $this->file_dir.'/'.$fun.'.html';
@@ -56,9 +64,9 @@ class Controller extends View {
         $this->rander($content,'','',$is_create,$create_file);
     }
 
-    public function createHtml($create_file = ''){
+    public function createHtml($fun, $create_file = ''){
         $create_file = $create_file == '' ? 'index.shtml' : $create_file;
-        $this->display('',true,$create_file);
+        $this->display($fun,true,$create_file);
     }
 
     public function assign($key,$value){

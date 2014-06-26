@@ -108,9 +108,16 @@ function writeUrl($path='',$params=''){
  * @param int $time     缓存过期时长
  * @return bool|mixed   返回缓存值   false为失败
  */
-function S($key,$value = '',$type='system',$time = 86400){
+function S($key,$value = '',$time = 86400){
     $cache = Cache::initCacheMode(C('SF_CACHE_MODE'));
     $result = false;
+    if(strstr($key,'/')){
+        $key = explode('/',$key);
+        $type = $key[0];
+        $key = $key[1];
+    } else {
+        $type = 'system';
+    }
     if($value == ''){
         $result = $cache->getParam($key,$type);
     } else {
@@ -176,7 +183,7 @@ function removeDir($path) {
 function getFileContent($url){
     $opts = array('http'=>array('method'=>"GET",'timeout'=>5));
     $context = stream_context_create($opts);
-    $data = file_get_contents($url, false, $context);
+    $data = @file_get_contents($url, false, $context);
     return  $data;
 }
 
@@ -228,14 +235,14 @@ function runAllTask(){
     if(!file_exists($lock_task)){
         //总任务锁
         @touch($lock_task);
-        $task_array = S('TASK_LIST','','TASK');
+        $task_array = S('TASK/TASK_LIST');
         if(!$task_array){
             $new = new Task();
             $task_array = $new->getAllTask();
-            S('TASK_LIST',$task_array,'TASK');
+            S('TASK/TASK_LIST',$task_array);
         }
         array_walk($task_array,'runTask',$lock_path);print_r($task_array);
-        S('TASK_LIST',$task_array,'TASK');
+        S('TASK/TASK_LIST',$task_array);
         @unlink($lock_task);
     }
 }
