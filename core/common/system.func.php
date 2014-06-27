@@ -62,25 +62,33 @@ function C($name,$value = ''){
 }
 //错误页面显示
 function errorPage($msg = '',$info = '',$error_code = 404,$path=''){
-    //参数默认时初始化参数
-    if($msg == ''){
-        $error = error_get_last();
-        $msg = 'ERROR';
-        $info = $error['message'] . ' in <b>' . $error['file'] . '</b> on line ' . $error['line'];
-        $error_code = 500;
+    if(function_exists('C')){
+        $show_page = C('SF_DEBUG');
+    } else {
+        $show_page = true;
     }
-    if($path == ''){ echo __THEME__;
-        $path[] = __THEME__.'/pages/errorPage.html';
-        $path[] = CORE_PATH.'/pages/errorPage.html';
-    }
-    $echo_info = true;
-    foreach($path as $i_path){
-        if(file_exists($i_path)){
-            $echo_info = false;
-            include $i_path;
+    if($show_page){
+        //参数默认时初始化参数
+        if($msg == ''){
+            $error = error_get_last();
+            $msg = 'ERROR';
+            $info = $error['message'] . ' in <b>' . $error['file'] . '</b> on line ' . $error['line'];
+            $error_code = 500;
+        }
+        if($path == ''){ echo __THEME__;
+            $path[] = __THEME__.'/pages/errorPage.html';
+            $path[] = CORE_PATH.'/pages/errorPage.html';
+        }
+        $echo_info = true;
+        foreach($path as $i_path){
+            if(file_exists($i_path)){
+                $echo_info = false;
+                include $i_path;
+            }
+        }
+        if($echo_info){
+            echo $info;
         }
     }
-    if($echo_info){
-        echo $info;
-    }
+    Log::write('PAGE ERROR',$info);
 }

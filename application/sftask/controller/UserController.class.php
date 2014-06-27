@@ -31,4 +31,13 @@ class UserController extends Controller {
         S('TASK_'.$_POST['key'].'/task',$task);
         header('Location: '.H('showUsers'));
     }
+
+    public function editTask(){
+        $task = S('TASK_'.$_POST['key'].'/task');
+        foreach($_POST['finish'] as $value){
+            $task[$value]['finish'] = true;
+        }
+        S('TASK_'.$_POST['key'].'/task',$task);
+        header('Location: '.H('showUsers'));
+    }
 } 

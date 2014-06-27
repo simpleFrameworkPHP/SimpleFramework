@@ -33,6 +33,7 @@ if(C('SF_TIME_ZONE')){
     date_default_timezone_set(C('SF_TIME_ZONE'));
 }
 defined('__THEME__') or define('__THEME__',__PUBLIC__.'/'.C('SF_THEME_DEFAULT'));
+defined('THEME_PATH') or define('THEME_PATH',__PATH__.'/public/'.C('SF_THEME_DEFAULT'));
 define('DB_PREFIX',C('SF_DB_PREFIX'));
 loadFile_once(CORE_PATH.'/common/function.func.php','loadDirFile','FUNCTION');
 session_start();

@@ -1,7 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+{:initH('header')}
     <style>
         .div_user_back{background-color: #FFFDE1}
         .mouse_hand{cursor:pointer;padding: 5px;background-color: #748A9E;color: #FFFFFF}
@@ -10,44 +7,49 @@
         ul li.user_name {list-style:disc;padding: 20px;font-size: 20px;}
         .div_form{position: absolute;top:100px;left:300px;margin: auto;width: 500px;height: 200px;background-color: #FfAB86;display: none;}
     </style>
-    <script type="text/javascript" src="__JSROOT__/jquery-2.1.1.js"></script>
+
     <script type="text/javascript">
         function addTask(user_name){
             $('.div_form').css('display','block');
             $('#user_name').val(user_name);
         }
     </script>
-    <title></title>
-</head>
-<body>
-<form action="{:H('sftask/User/addUser')}" method="post">
-    姓名：<input name="user"/>
-    简称：<input name="key"/>
-    <input type="submit" value="添加"/>
-</form><?php $i=0;?>
-<?php foreach($data as $key=>$value){ ?>
-<div class="<?php if($i++%2)echo 'div_user_back';?>">
-    <ul>
-        <li class="user_name"> {$value['name']} <span class="mouse_hand" onclick="addTask('{$key}')"> + </span> </li>
-        <?php if(is_array($value['task'])){ foreach($value['task'] as $k=>$v){ ?>
-        <li class="li_task">{$v['name']}[{:date('Y-m-d',$v['start_time'])}&nbsp;&nbsp;&nbsp;{:date('Y-m-d',$v['end_time'])}]:{$v['remark']}</li>
-        <?php } } ?>
-    </ul>
-</div>
-<?php } ?>
-<div class="div_form">
-    <form action="{:H('addTask')}" method="post">
-        <input id="user_name" type="hidden" name="key" />
-        <ul>
-            <li>任务名称：<input name="task_name"/></li>
-            <li>任务描述：<input name="task_remark"/></li>
-            <li>开始时间：<input name="start_date"/></li>
-            <li>结束时间：<input name="end_date"/></li>
-            <li><input type="submit" value="提交"/></li>
-        </ul>
+<div class="div_center">
+    <form action="{:H('sftask/User/addUser')}" method="post">
+        姓名：<input name="user"/>
+        简称：<input name="key"/>
+        <input type="submit" value="添加"/>
+    </form><?php $i=0;?>
+    <?php foreach($data as $key=>$value){ ?>
+    <div class="<?php if($i++%2)echo 'div_user_back';?>">
+        <form action="{:H('editTask')}" method="post">
+            <ul>
+                <li class="user_name"> {$value['name']} <span class="mouse_hand" onclick="addTask('{$key}')">&nbsp;+&nbsp;</span> </li>
+                <input type="hidden" name="key" value="{$key}"/>
+                <?php if(is_array($value['task'])){ foreach($value['task'] as $k=>$v){ ?>
+                <li class="li_task">
+                    <input type="checkbox" name="finish[]" value="{$k}" <?php if($v['finish']) echo 'checked = ""';?>/>
+                    {$v['name']}[{:date('Y-m-d',$v['start_time'])}&nbsp;&nbsp;&nbsp;{:date('Y-m-d',$v['end_time'])}]:{$v['remark']}
+                </li>
+                <?php } } ?>
+                <input type="submit" value="提交"/>
+            </ul>
+        </form>
+    </div>
+    <?php } ?>
+    <div class="div_form">
+        <form action="{:H('addTask')}" method="post">
+            <input id="user_name" type="hidden" name="key" />
+            <ul>
+                <li>任务名称：<input name="task_name"/></li>
+                <li>任务描述：<input name="task_remark"/></li>
+                <li>开始时间：<input name="start_date"/></li>
+                <li>结束时间：<input name="end_date"/></li>
+                <li><input type="submit" value="提交"/></li>
+            </ul>
 
 
-    </form>
+        </form>
+    </div>
 </div>
-</body>
-</html>
+{:initH('footer')}

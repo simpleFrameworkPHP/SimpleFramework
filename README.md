@@ -125,6 +125,9 @@ SimpleFramework
 5. 完善首页列表；<br/>
 6. Model类添加limit、join、having接口；<br/>
 7. 完善sql日志；<br/>
+<br/>
+<b>2014.6.26</b><br/>
+1. 完善个人任务模块流程；<br/>
 
 
 
