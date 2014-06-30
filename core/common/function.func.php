@@ -258,7 +258,7 @@ function runTask(&$value, $key, $lock_path,$last_time = -1){
         @unlink($lock_file);
     }
 }
-
+//引入其他模板的方法
 function initH($file){
     $path = THEME_PATH . '/html/' . $file . '.html';
     if(file_exists($path)){
@@ -270,4 +270,8 @@ function initH($file){
     } else {
         errorPage('no page','没有找到'.$path.'这个模板');
     }
+}
+
+function explandModel($model){
+    include CORE_PATH.'/expend/PHPExcel/Classes/PHPExcel.php';
 }
