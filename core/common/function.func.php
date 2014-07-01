@@ -273,5 +273,5 @@ function initH($file){
 }
 
 function explandModel($model){
-    include CORE_PATH.'/expend/PHPExcel/Classes/PHPExcel.php';
+    @include CORE_PATH.'/expend/'.$model.'/'.$model.'.php';
 }
