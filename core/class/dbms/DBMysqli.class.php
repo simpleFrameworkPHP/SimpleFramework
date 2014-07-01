@@ -51,4 +51,20 @@ class DBMysqli extends Db {
         }
         return $data;
     }
+
+    public function execute($str){
+        $data = array();
+        $this->sql_str = $str;
+        $result = $this->con->query($str);
+        //sql日志位置
+        if(mysqli_errno($this->con)){
+            //待优化显示查询中的异常及错误
+            Log::write('SQL',$str."\t[error sql]",'sql');
+            Log::write('SQL ERROR',mysqli_error($this->con).' : '.mysqli_errno($this->con),'sql');
+        } else {
+            //正常查询日志
+            Log::write('SQL',$str."\t[{$this->result_rows}]",'sql');
+        }
+        return $result;
+    }
 } 

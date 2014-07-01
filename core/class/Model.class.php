@@ -114,7 +114,8 @@ class Model{
      * @param array $table_list 表名数组
      * @return mixed
      */
-    public function filterColumn($column,$table_list = array()){
+    public function filterColumn($column,array $table_list){
+        $tables = array();
         if(strstr($column,'.')){
             //待优化--带表名的列名未过滤
             $table_array = $this->getAllTable();
@@ -133,21 +134,16 @@ class Model{
             return $this->filterColumn($i_column[1],$tables);
         }else{
             //获取查询的表
-            if(count($table_list)){
-                if(is_array($table_list)){
-                    foreach($table_list as $k =>$v){
-                        if(is_int($k)){
-                            $tables[$v] = $this->tables_info[$v];
-                        } else {
-                            $tables[$k] = $this->tables_info[$k];
-                        }
-                    }
-                } else {
-                    $tables = array();
-                }
-            } else {
-                $tables = $this->tables_info;
+            if(!count($table_list)){
+                $table_list = $this->getAllTable();
             }
+                foreach($table_list as $k =>$v){
+                    if(is_int($k)){
+                        $tables[$v] = $this->tables_info[$v];
+                    } else {
+                        $tables[$k] = $this->tables_info[$k];
+                    }
+                }
             foreach($tables as $table_name => $value){
                 if(array_key_exists($column,$value)){
                     //该列名有效
@@ -185,6 +181,8 @@ class Model{
             } else {
                 if(is_string($key)){
                     $table_array[] = $value.' AS '.$key;
+                } else {
+                    $table_array[] = $value;
                 }
             }
         }
@@ -247,6 +245,8 @@ class Model{
                     if(strstr($value,' AS ')){
                         $i_table = explode(' ',trim($value,' '));
                         $table_array[$i_table[0]] = $i_table[2];
+                    } else {
+                        $table_array[] = $value;
                     }
                 }
             } else {
@@ -312,17 +312,17 @@ class Model{
                     //该情况说明表达式直接写在$value中
                     $where_array[] = $value;
                 } else {
-                    if($v_field = $this->filterColumn($key,$table_array)){
+                    if($v_field = $this->filterColumn($key,$table_array)){;
                         if(is_array($value)){
                             if(in_array($value[0],array('<>','!=','<','>','<=','>='))){
                                 $where_array[] = $v_field .$value[0].$this->replaceValue($value[1]);
-                            } else if(in_array( strtoupper($value[0]),array('IN','NOT IN','NOT NULL'))) {
+                            } else if(in_array(strtoupper($value[0]),array('IN','NOT IN','NOT NULL'))) {
                                 $term = strtoupper($value[0]);
                                 unset($value[0]);
                                 $where_array[] = $v_field.' '.strtoupper($value[0]).' ('.implode(' , ',$this->replaceValue($value)).')';
                             }
                         } else {
-                            $where_array[] = $v_field.' = '.$value;
+                            $where_array[] = $v_field.' = '.$this->replaceValue($value);
                         }
                     } else {
                         Log::write('SQL ERROR','where语句中出现的'.$key.'不存在','sql');
@@ -377,6 +377,50 @@ class Model{
         $start = intval($start);
         $this->option['LIMIT'] = ' '.($start ? $start . ',' : '') . $count . ' ';
         return $this;
+    }
+
+    public function add(array $Columns){
+        $table_list = $this->getAllTable();
+        foreach($Columns as $key=>$value){
+            if($this->filterColumn($key,$table_list)){
+                $add_columns[] = $key;
+                $add_values[] = $this->replaceValue($value);
+            }
+        }
+        if(!isset($this->option['TABLE'])){
+            $this->table();
+        }
+        $insert_sql = 'INSERT INTO '.$this->option['TABLE'] . ' ('.implode(',',$add_columns) . ') VALUES ('.implode(',',$add_values).')';
+        return $this->db->execute($insert_sql);
+    }
+
+    public function set(array $Columns){
+        $edit_str = array();
+        $table_list = $this->getAllTable();
+        foreach($Columns as $key=>$value){
+            if($this->filterColumn($key,$table_list)){
+                $edit_str[] = $key.'='.$this->replaceValue($value);
+            }
+        }
+        if(!isset($this->option['TABLE'])){
+            $this->table();
+        }
+        $edit_sql = 'UPDATE '.$this->option['TABLE'] . ' SET '.implode(',',$edit_str);
+        if(isset($this->option['WHERE'])){
+            $edit_sql .= ' WHERE '.$this->option['WHERE'];
+        }
+        return $this->db->execute($edit_sql);
+    }
+
+    public function delete(){
+        if(!isset($this->option['TABLE'])){
+            $this->table();
+        }
+        $delete_sql = 'DELETE FROM '.$this->option['TABLE'];
+        if(isset($this->option['WHERE'])){
+            $delete_sql .= ' WHERE '.$this->option['WHERE'];
+        }
+        return $this->db->execute($delete_sql);
     }
 
     public function replaceColumns($params){

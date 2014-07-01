@@ -137,6 +137,7 @@ SimpleFramework
 2. 加入PHPExcel扩展模块，添加读取示例；<br/>
 3. 完善个人任务的缓存；<br/>
 4. 添加数据和上传文件夹和路径；<br/>
+5. Model添加add、set、delete接口，完善where，filterColumns等接口；<br/>
 
 
 
