@@ -6,5 +6,5 @@
  * Time: 下午3:19
  */
 define('CORE_PATH',__PATH__.'/core');
-include CORE_PATH.'/start.php';
-include CORE_PATH.'/run.php';
+include_once CORE_PATH.'/start.php';
+include_once CORE_PATH.'/run.php';

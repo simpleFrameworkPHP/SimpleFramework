@@ -7,7 +7,7 @@
  */
 //加载目录内所有文件
 function loadDirFile($path = '.'){
-    $current_dir = is_dir($path) ? opendir($path) : opendir(CORE_PATH);    //opendir()返回一个目录句柄,失败返回false
+    $current_dir = is_dir($path) ? opendir($path) : opendir(dirname($path));    //opendir()返回一个目录句柄,失败返回false
     while(($file = readdir($current_dir)) !== false) {    //readdir()返回打开目录句柄中的一个条目
         $sub_dir = $path . DIRECTORY_SEPARATOR . $file;    //构建子目录路径
         if($file == '.' || $file == '..') {
@@ -263,7 +263,6 @@ function initH($file){
     $path = THEME_PATH . '/html/' . $file . '.html';
     if(file_exists($path)){
         $content = getFileContent($path);
-        loadFile_once(CORE_PATH.'/class/View.class.php','View','CLASS');
         $view = new View();
         $content = $view->replaceContent($content);
         return $content;
@@ -273,5 +272,13 @@ function initH($file){
 }
 
 function expendModel($model){
-    @include CORE_PATH.'/expend/'.$model.'/'.$model.'.php';
+    $model = EXPEND_PATH.DIRECTORY_SEPARATOR.$model;
+    $model_path = is_dir($model) ? $model : dirname($model);
+    $o_model = opendir($model_path);
+    while($file_name = readdir($o_model)){
+        $i_path = $model_path.DIRECTORY_SEPARATOR.$file_name;
+        if(!is_dir($i_path)){
+            include $i_path;
+        }
+    }
 }

@@ -9,6 +9,8 @@
 defined('ONE_DAY') or define('ONE_DAY',86400);
 //多结果查询
 defined('CLIENT_MULTI_RESULTS') or define('CLIENT_MULTI_RESULTS',131072);
+
+defined('EXPEND_PATH') or define('EXPEND_PATH',CORE_PATH.'/expend');
 defined('APP_PATH') or define('APP_PATH',__PATH__.'/application');
 defined('CACHE_PATH') or define('CACHE_PATH',__PATH__.'/cache');
 defined('DATA_PATH') or define('DATA_PATH',__PATH__.'/data');

@@ -6,6 +6,6 @@
  * Time: 下午2:25
  */
 define("__PATH__",str_replace('\\','/',getcwd()));
-include(__PATH__.'/core/start.php');
+include_once(__PATH__.'/core/start.php');
 
 logout();

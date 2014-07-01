@@ -6,4 +6,4 @@
  * Time: 下午3:19
  */
 define("__PATH__",str_replace('\\','/',getcwd()));
-include(__PATH__.'/core/index.php');
+include_once(__PATH__.'/core/index.php');

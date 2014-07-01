@@ -138,7 +138,8 @@ SimpleFramework
 3. 完善个人任务的缓存；<br/>
 4. 添加数据和上传文件夹和路径；<br/>
 5. Model添加add、set、delete接口，完善where，filterColumns等接口；<br/>
-
+6. 优化扩展接口，添加扩展路径常量；<br/>
+7. 提出Excel读取方法；<br/>
 
 
 1. 创建建表语句和示例，写出建表的表单页；
