@@ -272,6 +272,6 @@ function initH($file){
     }
 }
 
-function explandModel($model){
+function expendModel($model){
     @include CORE_PATH.'/expend/'.$model.'/'.$model.'.php';
 }
