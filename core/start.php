@@ -6,7 +6,6 @@
  * Time: 下午5:27
  */
 error_reporting(E_ALL ^ E_NOTICE);
-register_shutdown_function('erroPage');
 define('CORE_PATH',__PATH__.'/core');
 /** 自动加载一次文件的方法
  * @param $path
@@ -25,6 +24,7 @@ function loadFile_once($path,$param,$type){
 }
 loadFile_once(CORE_PATH.'/common/define.inc.php','ONE_DAY','CONSTANT');
 loadFile_once(CORE_PATH.'/common/system.func.php','loadConfig','FUNCTION');
+register_shutdown_function('erroPage');
 if(C('SF_DEBUG')){
     //调试模式
     ini_set("display_errors",1);
