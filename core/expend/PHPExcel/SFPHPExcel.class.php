@@ -5,7 +5,7 @@
  * Date: 14-7-1
  * Time: 下午12:54
  */
-//class_exists('PHPExcel') or expendModel('Excel');
+
 class SFPHPExcel {
 
     /**
