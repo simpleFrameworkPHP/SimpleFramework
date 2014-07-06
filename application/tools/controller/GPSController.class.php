@@ -16,4 +16,8 @@ class GPSController extends Controller {
         print_r('百度地图示例');
         print_r($content);
     }
+
+    public function thumb(){
+        echo '<img src="'.thumb(DATA_ROOT.'/test/seaStartNO.png','',300,225,0).'"/>';
+    }
 } 
