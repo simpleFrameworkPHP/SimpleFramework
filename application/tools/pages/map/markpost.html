@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            #mapobj{width: 800px;height: 600px;float: left;}
+        </style>
+    </head>
+    <body>
+        <div id="mapobj"></div>
+        <div class="form">
+            <form id="mapsubmit">
+            </form>
+        </div>
+        {$pointjson}
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=13633ae8e4d58d659f2d06f14f81ac0c"></script>
+    <script>
+        var map = new BMap.Map('mapobj');
+        map.centerAndZoom('北京');
+        map.disableDoubleClickZoom();
+        var markid= 0;
+        var markArr = [];
+        map.addEventListener('click', function(e){
+            showmarker(markid,e);
+            markid++;
+        });
+        
+        function showmarker(id, e){
+            markArr[id] = new BMap.Marker(e.point);
+            markArr[id].enableDragging();
+            var input = document.createElement('input');
+            input.id = id;
+            document.getElementById('mapsubmit').appendChild(input);
+            markArr[id].addEventListener('dragend', function(e){
+                input.value = e.point.lng + ',' + e.point.lat;
+            });
+            map.addOverlay(markArr[id]); 
+        }
+        
+        (function(){
+            var pointArr = [];
+            for(var i = 0, l = pointArr.length; i < l; i++){
+                var point = new BMap.point(pointArr[i]['x'],pointArr[i]['y']);
+                mark = new BMap.Marker(point);
+                map.addOverlay(mark); 
+            }
+        })();
+    </script>
+    </body>
+</html>
