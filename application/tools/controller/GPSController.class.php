@@ -18,6 +18,6 @@ class GPSController extends Controller {
     }
 
     public function thumb(){
-        echo '<img src="'.thumb(DATA_ROOT.'/test/seaStartNO.png','',300,225,0).'"/>';
+        echo '<img src="'.thumb(DATA_PATH.'/test/seaStartNO.png','',800,300,1,1).'"/>';
     }
 } 
