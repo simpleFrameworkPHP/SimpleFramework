@@ -8,7 +8,7 @@
 return array(
     //默认参数设置
     'SF_DEFAULT_APP'=>'home',
-    'SF_DEFAULT_ACT'=>'index',
+    'SF_DEFAULT_CON'=>'index',
     'SF_DEFAULT_FUN'=>'index',
 
     //缓存页面实时更新(建议关闭)

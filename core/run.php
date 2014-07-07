@@ -7,10 +7,10 @@
  */
 
 
-$controller = runController($_REQUEST['app'],$_REQUEST['act']);
-if(method_exists($controller,$_REQUEST['fun'])){
-    $controller->$_REQUEST['fun']();
+$controller = runController($_REQUEST['a'],$_REQUEST['c']);
+if(method_exists($controller,$_REQUEST['f'])){
+    $controller->$_REQUEST['f']();
 } else {
-    errorPage('先创建好方法，我们再来一起玩耍吧！',$_REQUEST['app'].'/'.$_REQUEST['act'].'下----'.$_REQUEST['fun'].'方法不存在',500);
-    Log::write('ATC ERROR',$_REQUEST['app'].'/'.$_REQUEST['act'].'下----'.$_REQUEST['fun'].'方法不存在');
+    errorPage('先创建好方法，我们再来一起玩耍吧！',$_REQUEST['a'].'/'.$_REQUEST['c'].'下----'.$_REQUEST['f'].'方法不存在',500);
+    Log::write('ATC ERROR',$_REQUEST['a'].'/'.$_REQUEST['c'].'下----'.$_REQUEST['f'].'方法不存在');
 }

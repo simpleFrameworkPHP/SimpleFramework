@@ -13,21 +13,21 @@ class Controller extends View {
     var $params = array();
 
     public function __construct(){
-        $this->file_dir = APP_PATH.'/'.$_REQUEST['app'].'/pages/'.$_REQUEST['act'];
-        $this->cache_file_dir = CACHE_PATH.'/pages/'.$_REQUEST['app'].'/'.$_REQUEST['act'];
+        $this->file_dir = APP_PATH.'/'.$_REQUEST['a'].'/pages/'.$_REQUEST['c'];
+        $this->cache_file_dir = CACHE_PATH.'/pages/'.$_REQUEST['a'].'/'.$_REQUEST['c'];
     }
 
     public function display($fun = '',$is_create = false,$create_file = ''){
         if($fun == ''){
-            $fun = $_REQUEST['fun'];
+            $fun = $_REQUEST['f'];
         } else {
             $path = explode('/',$fun);
             $count_url = count($path);
             $fun = (isset($path[$count_url-1]) && $path[$count_url-1] <> '') ? $path[$count_url-1] :  C('SF_DEFAULT_FUN');
-            $act = (isset($path[$count_url-2]) && $path[$count_url-2] <> '') ? $path[$count_url-2] :  C('SF_DEFAULT_ACT');
+            $con = (isset($path[$count_url-2]) && $path[$count_url-2] <> '') ? $path[$count_url-2] :  C('SF_DEFAULT_CON');
             $app = (isset($path[$count_url-3]) && $path[$count_url-3] <> '') ? $path[$count_url-3] :  C('SF_DEFAULT_APP');
-            $this->file_dir = APP_PATH.'/'.$app.'/pages/'.$act;
-            $this->cache_file_dir = CACHE_PATH.'/pages/'.$app.'/'.$act;
+            $this->file_dir = APP_PATH.'/'.$app.'/pages/'.$con;
+            $this->cache_file_dir = CACHE_PATH.'/pages/'.$app.'/'.$con;
         }
         if($this->cache_file_dir != ''){
             $file_path = $this->file_dir.'/'.$fun.'.html';
@@ -40,11 +40,11 @@ class Controller extends View {
                 //可以实现字符替换以达到函数改写
                 $contentStr = $this->replaceContent($contentStr);
                 addDir($cache_file_path);
-                file_put_contents($cache_file_path,$contentStr) or Log::write('ACT ERROR',$cache_file_path.'文件写入出错');
+                file_put_contents($cache_file_path,$contentStr) or Log::write('CON ERROR',$cache_file_path.'文件写入出错');
             } else {
                 //打开文件异常
                 $this->errorPage('这个页面还没做呢，做了再找我！',$file_path.'这个文件还没创建');
-                $log_title = ' ACT ERROR ';
+                $log_title = ' CON ERROR ';
                 $log_info = '访问'.$file_path.'文件出错，请检查';
             }
         } else {

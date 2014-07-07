@@ -15,17 +15,17 @@ function loadConfig(){
     if(file_exists(__PATH__.'/conf')){
         $config = loadConfigFile(__PATH__.'/conf',$config);
     }
-    if(!isset($_REQUEST['app'])){
-        $_REQUEST['app'] = $config['SF_DEFAULT_APP'];
+    if(!isset($_REQUEST['a'])){
+        $_REQUEST['a'] = $config['SF_DEFAULT_APP'];
     }
-    if(!isset($_REQUEST['act'])){
-        $_REQUEST['act'] = $config['SF_DEFAULT_ACT'];
+    if(!isset($_REQUEST['c'])){
+        $_REQUEST['c'] = $config['SF_DEFAULT_CON'];
     }
-    if(!isset($_REQUEST['fun'])){
-        $_REQUEST['fun'] = $config['SF_DEFAULT_FUN'];
+    if(!isset($_REQUEST['f'])){
+        $_REQUEST['f'] = $config['SF_DEFAULT_FUN'];
     }
-    if(file_exists(__PATH__.'/application/'.$_REQUEST['app'].'/conf')){
-        $config = loadConfigFile(__PATH__.'/application/'.$_REQUEST['app'].'/conf',$config);
+    if(file_exists(__PATH__.'/application/'.$_REQUEST['a'].'/conf')){
+        $config = loadConfigFile(__PATH__.'/application/'.$_REQUEST['a'].'/conf',$config);
     }
     return $config;
 }

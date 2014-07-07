@@ -39,7 +39,7 @@ function runController($application,$controller){
         $str = require $file_path;// errorPage('又错了，下次认真点！',$application.'/'.$controller.'类文件错误',500);
     } else {
         errorPage('又错了，下次认真点！',$application.'/'.$controller.'类文件不存在',404);
-        Log::write('ACT ERROR',$application.'/'.$controller.'类文件不存在');
+        Log::write('CON ERROR',$application.'/'.$controller.'类文件不存在');
     }
     $controller .= 'Controller';
     $result = new $controller();
@@ -57,7 +57,7 @@ function M($path='',$link_ID = 0){
             $app = $path[0];
             $model = $path[1].'Model';
         } else {
-            $app = $_REQUEST['app'];
+            $app = $_REQUEST['a'];
             $model = $path.'Model';
         }
         loadFile_once(APP_PATH.'/'.$app.'/model/'.$model.'.class.php', $model, 'CLASS');
@@ -79,10 +79,10 @@ function H($path='',$params='',$redirect = false){
         $url =  __ROOT__ . '/index.php?';
         $path = explode('/',$path);
         $count_url = count($path);
-        $fun = (isset($path[$count_url-1]) && $path[$count_url-1] <> '') ? $path[$count_url-1] : $_REQUEST['fun'];
-        $act = (isset($path[$count_url-2]) && $path[$count_url-2] <> '') ? $path[$count_url-2] : $_REQUEST['act'];
-        $app = (isset($path[$count_url-3]) && $path[$count_url-3] <> '') ? $path[$count_url-3] : $_REQUEST['app'];
-        $url .='app='.$app.'&act='.$act.'&fun='.$fun;
+        $fun = (isset($path[$count_url-1]) && $path[$count_url-1] <> '') ? $path[$count_url-1] : $_REQUEST['f'];
+        $con = (isset($path[$count_url-2]) && $path[$count_url-2] <> '') ? $path[$count_url-2] : $_REQUEST['c'];
+        $app = (isset($path[$count_url-3]) && $path[$count_url-3] <> '') ? $path[$count_url-3] : $_REQUEST['a'];
+        $url .='a='.$app.'&c='.$con.'&f='.$fun;
     }
     if(is_array($params)){
         foreach($params as $key =>$value){
