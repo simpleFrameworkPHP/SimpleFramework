@@ -12,6 +12,8 @@ class Image {
     var $new_path;//处理后的目标地址
     var $width;//图片原宽
     var $height;//图片原高
+    var $p_width;//显示比例高
+    var $p_height;//显示比例宽
     var $aim_width;//图片目标宽
     var $aim_height;//图片目标高
     var $aim_x;//图片目标水平标
@@ -35,11 +37,13 @@ class Image {
         $this->alpha = $alpha;
     }
 
-    public function thumbImage($width = '',$height = '',$cut = 0,$proportion = 1,$x = '',$y = ''){
+    public function thumbImage($width = '',$height = '',$cut = 0,$proportion = '',$x = '',$y = ''){
         $result = false;
         if(!strstr($this->img_path,array('http://','https://')) && file_exists($this->img_path)){
-            $this->initImageInfo($proportion);
-            $this->initNewImageInfo($width,$height,$cut,$x,$y);
+            $this->aim_height = $height;
+            $this->aim_width = $width;
+            $proportion = $this->initImageInfo($cut,$proportion);
+            if(!$this->initNewImageInfo($cut,$x,$y)) return $result;
             if($this->new_path == ''){
                 $extend  =  pathinfo ( $this->img_path );
                 $this->new_path = $extend['dirname'].'/thumb_'.$cut.'_'.$this->aim_width.'_'.$this->aim_height.'_'.$proportion.'_'.$this->aim_x.'_'.$this->aim_y.'_'.$extend [ "basename" ];
@@ -49,9 +53,9 @@ class Image {
                 $src = $create($this->img_path);
                 $dst = $this->fillColor($this->red,$this->green,$this->blue,$this->alpha);
                 if(function_exists('imagecopyresampled'))
-                    imagecopyresampled($dst, $src, $this->aim_x, $this->aim_y, 0, 0, $this->aim_width, $this->aim_height, $this->width, $this->height);
+                    imagecopyresampled($dst, $src, $this->aim_x, $this->aim_y, $this->x, $this->y, $this->p_width, $this->p_height, $this->width, $this->height);
                 else
-                    imagecopyresized($dst, $src, $this->aim_x, $this->aim_y, 0, 0, $this->aim_width, $this->aim_height, $this->width, $this->height);
+                    imagecopyresized($dst, $src, $this->aim_x, $this->aim_y, $this->x, $this->y, $this->p_width, $this->p_height, $this->width, $this->height);
                 $out = $this->out_func;
                 $out($dst, $this->new_path);
                 if(imagedestroy($dst) && imagedestroy($src))
@@ -66,41 +70,66 @@ class Image {
     }
 
     //初始化图片信息
-    public function initImageInfo($proportion){
+    public function initImageInfo($cut,$proportion){
         $img_info = getimagesize($this->img_path);
         $this->width = $img_info[0];
         $this->height = $img_info[1];
         $type  = strtolower(substr(image_type_to_extension($img_info[2]), 1));
         $this->create_func = 'imagecreatefrom' . ($type == 'jpg' ? 'jpeg' : $type);
-        if($proportion <> 1){
-            $this->width = $this->width * $proportion;
-            $this->height = $this->height * $proportion;
+        if($proportion == ''){
+            //自动比例
+            if(!$cut){
+                //自动赋值比例
+                $ph = $this->aim_width/$this->width;
+                $pw = $this->aim_height/$this->height;
+                if($ph > $pw){
+                    $r_width = $this->width * $ph;
+                    $proportion = $ph;
+                } else {
+                    $r_height = $this->height * $pw;
+                    $proportion = $pw;
+                }
+                $this->p_width = isset($r_width) ? $r_width : $this->aim_width;
+                $this->p_height = isset($r_height) ? $r_height : $this->aim_height;
+            } else {
+                $this->p_width = $this->width;
+                $this->p_height = $this->height;
+                $proportion = $proportion;
+            }
+        } else {
+            $this->p_width = $this->width * $proportion;
+            $this->p_height = $this->height * $proportion;
         }
+        return $proportion;
     }
 
     //初始化目标图片信息
-    public function initNewImageInfo($width,$height,$cut,$x,$y){
-        if($width == 0 && $height == 0){
-            //不生成该图片
-            return false;
-        }
+    public function initNewImageInfo($cut,$x,$y){
         $path = $this->new_path <> '' ? $this->new_path : $this->img_path;
         $ot = pathinfo($path, PATHINFO_EXTENSION);
         $this->out_func = 'image' . ($ot == 'jpg' ? 'jpeg' : $ot);
-        $this->aim_height = $height;
-        $this->aim_width = $width;
+        $this->initWidth();
+        $this->initHeight();
+        if($this->aim_width == '' && $this->aim_height == ''){
+            return false;
+        }
         $this->initX($x,$cut);
         $this->initY($y,$cut);
-        $this->initWidth($width);
-        $this->initHeight($height);
+        return true;
     }
 
     public function initX($x,$cut){
-        if($x == ''){
+        if($x == '' && !is_int($x)){
             //水平居中处理
-            $this->aim_x = 0 - ($this->width - $this->aim_width) / 2;
-            if($cut){
+            if(!$cut){
                 $this->aim_x = 0;
+            } else {
+                $this->aim_x = ($this->aim_width - $this->p_width) / 2;
+                if($this->aim_x > 0){
+                    $this->x = ($this->aim_width - $this->p_width) / 2;
+                    $this->aim_x = 0;
+                }
+
             }
         } else {
             $this->aim_x = $x;
@@ -108,30 +137,31 @@ class Image {
     }
 
     public function initY($y,$cut){
-        if($y == ''){
+        if($y == '' && !is_int($y)){
             //垂直居中处理
-            $this->aim_y = 0 - ($this->height - $this->aim_height) / 2;
-            if($cut){
+            if(!$cut){
                 $this->aim_y = 0;
+            } else {
+                $this->aim_y = ($this->aim_height - $this->p_height) / 2;
+                if($this->aim_y > 0){
+                    $this->y = ($this->aim_height - $this->p_height) / 2;
+                    $this->aim_y = 0;
+                }
             }
         } else {
             $this->aim_y = $y;
         }
     }
 
-    public function initWidth($aim_size = ''){
-        if($aim_size == ''){
-            $this->aim_width = $this->width;
-        } else {
-            $this->aim_width = $aim_size;
+    public function initWidth(){
+        if($this->aim_width == '' && $this->aim_height <> ''){
+            $this->aim_width = ($this->aim_height / $this->height) * $this->width;
         }
     }
 
-    public function initHeight($aim_size = ''){
-        if($aim_size == ''){
-            $this->aim_height = $this->height;
-        } else {
-            $this->aim_height = $aim_size;
+    public function initHeight(){
+        if($this->aim_height == '' && $this->aim_width <> ''){
+            $this->aim_height = ($this->aim_width / $this->width) * $this->height;
         }
     }
 

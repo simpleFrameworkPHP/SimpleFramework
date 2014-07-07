@@ -281,9 +281,9 @@ function initH($file){
  * @param int/float  缩放{0:不缩放, 0<this<1:缩放到相应比例(此时宽高限制和裁切均失效)}
  * @return boolean
  */
-function thumb($src_img, $dst_img = '', $width = 120, $height = 90, $cut, $proportion = 1,$x = '', $y = '')
+function thumb($src_img, $dst_img = '', $width = 120, $height = 90, $cut, $proportion = '',$x = '', $y = '')
 {
-    $img = new Image($src_img,$dst_img,true);
+    $img = new Image($src_img,$dst_img);//cut == 1 时可以自动居中处理
     return $img->thumbImage($width,$height,$cut,$proportion,$x,$y);
 }
 
