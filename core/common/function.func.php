@@ -283,7 +283,7 @@ function initH($file){
  */
 function thumb($src_img, $dst_img = '', $width = 120, $height = 90, $cut, $proportion = '',$x = '', $y = '')
 {
-    $img = new Image($src_img,$dst_img);//cut == 1 时可以自动居中处理
+    $img = new Image($src_img,$dst_img,true);//cut == 1 时可以自动居中处理
     return $img->thumbImage($width,$height,$cut,$proportion,$x,$y);
 }
 
