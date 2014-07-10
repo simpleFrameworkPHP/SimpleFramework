@@ -18,7 +18,7 @@ class SFPHPExcel {
      * @return mixed    返回数据
      */
     public function read($file,$sheet = 0,$start_column = 'A',$start_row = 1,$end_column = '',$end_row = 0){
-        $PHPExcel = $this->createPHPExcel($file);
+        $PHPExcel = $this->PHPReader($file);
         /**读取excel文件中的第一个工作表*/
         $currentSheet = $PHPExcel->getSheet($sheet);
 
@@ -63,7 +63,7 @@ class SFPHPExcel {
         return $data;
     }
 
-    function createPHPExcel($file){
+    function PHPReader($file){
         $PHPExcel = false;
         if(file_exists($file)){
             /**默认用excel2007读取excel，若格式不对，则用之前的版本进行读取*/
@@ -79,4 +79,75 @@ class SFPHPExcel {
         }
         return $PHPExcel;
     }
-} 
+
+    function initExcel(){
+        $PHPExcel = new PHPExcel();
+        //Set properties 设置文件属性
+        $objProperties = $PHPExcel->getProperties();
+        $objProperties->setCreator("Maarten Balliauw");
+        $objProperties->setLastModifiedBy("Maarten Balliauw");
+        $objProperties->setTitle("Office 2007 XLSX Test Document");
+        $objProperties->setSubject("Office 2007 XLSX Test Document");
+        $objProperties->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.");
+        $objProperties->setKeywords("office 2007 openxml php");
+        $objProperties->setCategory("Test result file");
+        return $PHPExcel;
+    }
+
+    function writer($PHPExcel,array $data,$path,array $param = array()){
+        //设置和获取工作单
+        $PHPExcel->setActiveSheetIndex(0);
+        $objActSheet = $PHPExcel->getActiveSheet();
+        //写入内容
+        foreach($data as $i_row=>$row){
+            foreach($row as $i_col=>$call){
+                $objActSheet->setCellValue($i_col.$i_row,$call);
+            }
+        }
+
+        if(count($param)){
+            $this->dataValidation($objActSheet,$param);
+        }
+
+        //将生成的excel数据输出或保存到某个文件中。
+        $objWriter = new PHPExcel_Writer_Excel2007($PHPExcel);
+        $objWriter->setOffice2003Compatibility(true);
+        if($path == 'download'){
+            header("Content-Type:application/vnd.ms-excel");
+            header("Content-Disposition:attachment;filename=sample.xls");
+            header("Pragma:no-cache");
+            header("Expires:0");
+            $objWriter->save('php://output');
+        } else {
+            addDir($path);
+            $objWriter->save($path);
+        }
+    }
+
+    /** 添加数据有效性
+     * @param $objActSheet  工作单对象
+     * @param $param array(array('con'=>'c1:c300','type'=>PHPExcel_Cell_DataValidation::TYPE_[LIST],'data'=>'绑定的数据'))
+     */
+
+    function dataValidation($objActSheet,$param){
+        foreach($param as $key=>$value){
+            $p = explode(':',$value['con']);
+            $start = substr($p[0],1);
+            $end = substr($p[1],1);
+            $con = substr($p[0],0,1);
+            for($i = $start;$i<$end;$i++){
+                $objValidation = $objActSheet->getCell($con.$i)->getDataValidation(); //这一句为要设置数据有效性的单元格
+                $objValidation -> setType($value['type'])
+                    -> setErrorStyle(PHPExcel_Cell_DataValidation::STYLE_INFORMATION)
+                    -> setAllowBlank(false)
+                    -> setShowInputMessage(true)
+                    -> setShowErrorMessage(true)
+                    -> setShowDropDown(true)
+                    -> setErrorTitle('输入的值有误')
+                    -> setError('您输入的值不在下拉框列表内.')
+                    -> setPromptTitle('设备类型')
+                    -> setFormula1($value['data']);
+            }
+        }
+    }
+}
