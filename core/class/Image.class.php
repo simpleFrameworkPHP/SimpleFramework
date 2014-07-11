@@ -87,22 +87,22 @@ class Image {
                 $ph = $this->aim_width <> '' ? $this->aim_width/$this->width : 0;
                 $pw = $this->aim_height <> '' ? $this->aim_height/$this->height : 0;
                 if($ph > $pw && $ph <> 0){
-                    $r_width = $this->width * $ph;echo $r_width;
+                    $r_width = intval($this->width * $ph);
                     $proportion = $ph;
                 } else {
-                    $r_height = $this->height * $pw;echo $r_height;
+                    $r_height = intval($this->height * $pw);
                     $proportion = $pw;
                 }
-                $this->p_width = isset($r_width) ? $r_width : $this->width * $proportion;
-                $this->p_height = isset($r_height) ? $r_height : $this->height * $proportion;
+                $this->p_width = isset($r_width) ? $r_width : intval($this->width * $proportion);
+                $this->p_height = isset($r_height) ? $r_height : intval($this->height * $proportion);
             } else {
                 $this->p_height = $p_height;
                 $this->p_width = $p_width;
                 $proportion = $proportion;
             }
         } else {
-            $this->p_width = $this->width * $proportion;
-            $this->p_height = $this->height * $proportion;
+            $this->p_width = intval($this->width * $proportion);
+            $this->p_height = intval($this->height * $proportion);
         }
         return $proportion;
     }
@@ -146,13 +146,13 @@ class Image {
 
     public function initWidth(){
         if($this->aim_width == '' && $this->aim_height <> ''){
-            $this->aim_width = ($this->aim_height / $this->height) * $this->width;
+            $this->aim_width = intval(($this->aim_height / $this->height) * $this->width);
         }
     }
 
     public function initHeight(){
         if($this->aim_height == '' && $this->aim_width <> ''){
-            $this->aim_height = ($this->aim_width / $this->width) * $this->height;
+            $this->aim_height = intval(($this->aim_width / $this->width) * $this->height);
         }
     }
 
