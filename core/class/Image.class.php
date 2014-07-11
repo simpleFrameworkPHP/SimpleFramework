@@ -86,7 +86,7 @@ class Image {
                 //自动赋值比例
                 $ph = $this->aim_width <> '' ? $this->aim_width/$this->width : 0;
                 $pw = $this->aim_height <> '' ? $this->aim_height/$this->height : 0;
-                if($ph < $pw && $ph <> 0){
+                if($ph > $pw && $ph <> 0){
                     $r_width = $this->width * $ph;echo $r_width;
                     $proportion = $ph;
                 } else {
