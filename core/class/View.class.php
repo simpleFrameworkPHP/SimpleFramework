@@ -11,7 +11,7 @@ class View {
     function replaceContent($content){
         $content = preg_replace(array('/{\$(\w+[^\{\}]*)}/','/{:(\w+)(\([^\{\}]*\))}/'),array('<?php echo $\1;?>','<?php echo \1\2;?>'),$content);
         //待优化---扩展常量数组
-        $content = str_replace(array('__ROOT__','__JSROOT__','__THEME__','__PUBLIC__'),array(__ROOT__,__JSROOT__,__THEME__,__PUBLIC__),$content);
+        $content = str_replace(array('__ROOT__','__JSROOT__','__THEME__','__PUBLIC__','__PLROOT__','UPLOAD_ROOT'),array(__ROOT__,__JSROOT__,__THEME__,__PUBLIC__,__PLROOT__,UPLOAD_ROOT),$content);
         return $content;
     }
 
