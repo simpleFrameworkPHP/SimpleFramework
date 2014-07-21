@@ -21,7 +21,16 @@ class DbTestController extends Controller {
 //        print_r($model1->db->sql_str.'<br/>');
 //        $this->assign('data',$data);
         $model = M('',1);
-        $data = array("adids"=>123,'placename'=>'nihao');
+//        $data = $model->select('SELECT placeid,placename,width,height,adids,expend FROM cms_ads_place');
+        $data = $model->table(array('aa'=>'cms_ads_place'))->fields('placeid,placename,width,height,adids,expend')->select();
+//        print_r($model);
+//        $file = fopen('ads_place.csv',"a");
+//        fwrite($file,'placeid,placename,width,height,adids,expend'."\r\n");
+//        foreach($data as $row){
+//                fwrite($file,implode('##',$row)."\r\n");
+//        }
+//        fclose($file);
+//        $data = array("adids"=>123,'placename'=>'nihao');
 //        echo $model->table(array("cms_ads_place"))->add($data);
 //        $model->table(array("cms_ads_place"))->where($data)->set(array('adids'=>12344));
 //        $model->table(array("cms_ads_place"))->where($data)->delete();

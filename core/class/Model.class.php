@@ -289,11 +289,15 @@ class Model{
                     if($field_v = $this->filterColumn($value,$table_array)){
                         if(is_string($key)){
                             $field_array[] = $field_v . ' AS ' . $key;
+                        } else {
+                            $field_array[] = $field_v;
                         }
                     }
                 }
                 if(count($field_array)){
                     $this->option['FIELD'] = implode(',',$field_array);
+                } else {
+                    return false;
                 }
             }
         } else {

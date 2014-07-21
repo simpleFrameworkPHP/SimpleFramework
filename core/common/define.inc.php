@@ -19,5 +19,7 @@ $self =explode('/',$_SERVER['PHP_SELF']);
 defined('__ROOT__') or define('__ROOT__',count($self) == 3 ? 'http://'.$_SERVER['SERVER_NAME'] . '/' . $self[1] : 'http://'.$_SERVER['SERVER_NAME']);
 defined('__PUBLIC__') or define('__PUBLIC__',__ROOT__.'/public');
 defined('__JSROOT__') or define('__JSROOT__',__PUBLIC__.'/js');
+defined('__PLROOT__') or define('__PLROOT__',__PUBLIC__.'/plugn');
+defined('PL_PATH') or define('PL_PATH',__PATH__.'/plugn');
 defined('DATA_ROOT') or define('DATA_ROOT',__ROOT__.'/data');
 defined('UPLOAD_ROOT') or define('UPLOAD_ROOT',DATA_ROOT.'/upload');

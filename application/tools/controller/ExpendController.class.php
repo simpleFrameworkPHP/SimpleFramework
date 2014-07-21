@@ -17,6 +17,10 @@ class ExpendController extends Controller {
         print_r($data);
     }
 
+    public function useUeditor(){
+        $this->display();
+    }
+
     public function phpExcelWrite(){
         expendModel('PHPExcel');
         $excel = new SFPHPExcel();
