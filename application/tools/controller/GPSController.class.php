@@ -10,19 +10,14 @@ class GPSController extends Controller {
 
     public function getClient(){
 //        $client_ip = getClientIp();print_r($client_ip);
-        $client_ip = '123.123.123.123';
+        $client_ip = '203.208.49.180';
         $url = 'http://api.map.baidu.com/location/ip?ak=omi69HPHpl5luMtrjFzXn9df&ip='.$client_ip.'&coor=bd09ll';
         $content = CURL::get($url);
         print_r('百度地图示例');
-        print_r($content);
+        print_r(json_decode($content,true));
     }
 
     public function thumb(){
-        echo '<img src="'.thumb(DATA_PATH.'/test/53seaStartNO.png','',600,400,0).'"/>';
-        echo '<img src="'.thumb(DATA_PATH.'/test/53seaStartNO.png','',600,400,1).'"/>';
-        echo '<img src="'.thumb(DATA_PATH.'/test/53seaStartNO.png','',600,'',0).'"/>';
-        echo '<img src="'.thumb(DATA_PATH.'/test/53seaStartNO.png','',600,'',1).'"/>';
-        echo '<img src="'.thumb(DATA_PATH.'/test/53seaStartNO.png','','',400,0).'"/>';
-        echo '<img src="'.thumb(DATA_PATH.'/test/53seaStartNO.png','','',400,1).'"/>';
+        $this->display();
     }
 } 

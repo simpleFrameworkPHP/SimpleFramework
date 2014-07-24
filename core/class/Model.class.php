@@ -172,7 +172,10 @@ class Model{
      * @param array $tables array('简称'=>'表名')；
      * @return $this
      */
-    public function table(array $tables = array()){
+    public function table($tables = array()){
+        if(!is_array($tables)){
+            $tables = explode(',',$tables);
+        }
         $tables = $tables == array() ? $this->var_table : array_merge($tables,$this->var_table);
         foreach($tables as $key=>$value){
             if(!$this->filterTable($value)){
