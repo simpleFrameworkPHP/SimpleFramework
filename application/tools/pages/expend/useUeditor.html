@@ -1,0 +1,43 @@
+{:initH('header')}
+<script type="text/javascript" charset="utf-8" src="__PLROOT__/ueditor1_4_3/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="__PLROOT__/ueditor1_4_3/ueditor.all.min.js"> </script>
+<div class="div_content">
+    <form method="post" action="">
+        <textarea id="editor" name="content"></textarea>
+        <input type="submit" value="提交" onclick=""/>
+    </form>
+
+</div>
+<script>
+//    var URL = window.UEDITOR_HOME_URL || getUEBasePath();
+
+    /**
+     * 配置项主体。注意，此处所有涉及到路径的配置别遗漏URL变量。
+     */
+    var editorConfig = {
+        initialFrameHeight:300,initialFrameWidth:1000,
+        //为编辑器实例添加一个路径，这个不能被注释
+        UEDITOR_HOME_URL: '__PLROOT__/ueditor1_4_3/',
+
+        // 服务器统一请求接口路径
+         serverUrl:  "__ROOT__/core/expend/ueditor/php/controller.php",
+
+        //工具栏上的所有的功能按钮和下拉框，可以在new编辑器的实例时选择自己需要的从新定义
+         toolbars: [['Mycard','|',
+            'fullscreen', 'source', '|', 'undo', 'redo', '|',
+            'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', '|',
+            'customstyle', 'paragraph', 'fontfamily', 'fontsize', '|',
+             'link', 'unlink', 'anchor', '|',
+             'rowspacingtop', 'rowspacingbottom', 'lineheight', '|', 'indent', '|',
+            'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|',
+             'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
+            'simpleupload', 'insertimage', 'emotion', 'attachment', 'map', 'insertcode',  'pagebreak', 'template', 'background', '|',
+            'horizontal', 'date', 'time', 'spechars', 'snapscreen', 'wordimage', '|',
+            'inserttable', 'deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow', 'insertcol', 'deletecol', 'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols', 'charts'
+        ]],
+        pageBreakTag:"[page]"
+    };
+    var editor = new UE.ui.Editor(editorConfig);
+    editor.render("editor");
+</script>
+{:initH('footer')}
