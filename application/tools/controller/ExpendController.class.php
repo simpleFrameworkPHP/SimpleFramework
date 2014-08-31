@@ -18,6 +18,9 @@ class ExpendController extends Controller {
     }
 
     public function useUeditor(){
+        if($_POST['content']){
+            print_r($_POST);
+        }
         $this->display();
     }
 
