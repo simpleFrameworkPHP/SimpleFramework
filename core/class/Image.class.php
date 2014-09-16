@@ -35,6 +35,7 @@ class Image {
         $this->green = $green;
         $this->blue = $blue;
         $this->alpha = $alpha;
+        $this->info = exif_read_data($this->img_path,0,true);
     }
 
     public function thumbImage($width = '',$height = '',$cut = 0,$proportion = '',$x = '',$y = ''){
@@ -166,19 +167,23 @@ class Image {
     }
     //获取图片gps信息
     public function getGPSInfo(){
-        $info = exif_read_data($this->img_path,0,true);
-        $gps = $info['GPS'];
-        //纬度计算
-        $latitude = $this->getGps($gps['GPSLatitude']);
-        if($gps['GPSLatitudeRef'] <> "N"){
-            $latitude = -$latitude;
+        if(isset($this->info['GPS'])){
+            $gps = $this->info['GPS'];
+            //纬度计算
+            $latitude = $this->getGps($gps['GPSLatitude']);
+            if($gps['GPSLatitudeRef'] <> "N"){
+                $latitude = -$latitude;
+            }
+            //经度计算
+            $longitude = $this->getGps($gps['GPSLongitude']);
+            if($gps['GPSLongitudeRef'] <> "E"){
+                $longitude = -$longitude;
+            }
+            $data = array('y'=>$latitude,'x'=>$longitude);
+        } else {
+            $data = false;
         }
-        //经度计算
-        $longitude = $this->getGps($gps['GPSLongitude']);
-        if($gps['GPSLongitudeRef'] <> "E"){
-            $longitude = -$longitude;
-        }
-        return array('y'=>$latitude,'x'=>$longitude);
+        return $data;
     }
     //gps信息转化
     function floatGps($degrees = 0,$minutes = 0,$seconds = 0){

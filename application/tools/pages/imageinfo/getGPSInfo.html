@@ -36,7 +36,7 @@
     }
     for(var i in points){
         BMappoint.push(new BMap.Point(points[i].x,points[i].y));
-        sContent.push("<h4 style='margin:0 0 5px 0;padding:0.2em 0'>图片</h4>" +
+        sContent.push("<h4 style='margin:0 0 5px 0;padding:0.2em 0'>图片"+i+"</h4>" +
                 "<img style='float:right;margin:4px' id='imgDemo' width='100px' height='100px' src='"+points[i].path+"'/>" +
                 "</div>");
     }

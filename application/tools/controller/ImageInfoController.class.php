@@ -17,7 +17,17 @@ class ImageInfoController extends Controller {
                 $image = new Image($path.$file);
                 $ipoint = $image->getGPSInfo();
                 $ipoint['path'] = $url.$file;
+                $ipoint['time'] = $image->info['FileDateTime'];
                 $point[] = $ipoint;
+            }
+        }
+        foreach($point as $key=>$value){
+            foreach($point as $key1=>$value1){
+                if($value['time'] > $value1['time']){
+                    $i = $point[$key];
+                    $point[$key] = $point[$key1];
+                    $point[$key1] = $i;
+                }
             }
         }
         $this->assign('point',$point);
