@@ -1,0 +1,60 @@
+{:initH('header')}
+
+<!-- webuploader -->
+<script src="__PLROOT__/ueditor1_4_3/third-party/webuploader/webuploader.min.js"></script>
+<link rel="stylesheet" type="text/css" href="__PLROOT__/ueditor1_4_3/third-party/webuploader/webuploader.css">
+<!-- image dialog -->
+<link rel="stylesheet" href="__THEME__/css/uploadimage.css" type="text/css" />
+        <script>
+            $(function(){
+                var url = '{:H("tools/Upload/doWebUploadFile")}';
+                var uploader = WebUploader.create({
+                    pick: {
+                        id: '#filePickerReady',
+                        label: '上传图片'
+                    },
+                    accept: {
+                        title: 'Images',
+                        extensions: [".png", ".jpg", ".jpeg", ".gif", ".bmp"],
+                        mimeTypes: 'image/*'
+                    },
+                    swf: '../../third-party/webuploader/Uploader.swf',
+                    server: url,
+                    fileVal: 'upload',
+                    duplicate: true,
+                    fileSingleSizeLimit: '5M',    // Ĭ�� 2 M
+                    compress: false
+                });
+                uploader.addButton({
+                    id: '#filePickerBlock'
+                });
+                uploader.addButton({
+                    id: '#filePickerBtn',
+                    label: '上传按钮'
+                });
+            });
+        </script>
+<!--上传图片-->
+<div id="upload" class="panel focus">
+    <div id="queueList" class="queueList">
+        <div class="statusBar element-invisible">
+            <div class="progress">
+                <span class="text">0%</span>
+                <span class="percentage"></span>
+            </div><div class="info"></div>
+            <div class="btns">
+                <div id="filePickerBtn"></div>
+                <div class="uploadBtn"><var id="lang_start_upload"></var></div>
+            </div>
+        </div>
+        <div id="dndArea" class="placeholder">
+            <div class="filePickerContainer">
+                <div id="filePickerReady"></div>
+            </div>
+        </div>
+        <ul class="filelist element-invisible">
+            <li id="filePickerBlock" class="filePickerBlock"></li>
+        </ul>
+    </div>
+</div>
+{:initH('footer')}

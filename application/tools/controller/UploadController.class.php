@@ -8,7 +8,7 @@
 
 class UploadController extends Controller {
 
-    public function swfUploadFile(){
+    public function webUploadFile(){
 
         $this->display();
     }
