@@ -28,7 +28,7 @@ class Db {
         return $db;
     }
 
-    public function select($option){
+    public function select($option,$one = 0){
         $data = array();
         if(is_array($option)){
             $sql = str_replace(array('%FIELD%','%TABLE%','%WHERE%','%GROUP%','%HAVING%','%ORDER%','%LIMIT%'),
@@ -41,9 +41,13 @@ class Db {
                     $this->replaceSql(empty($option['ORDER']) ? '' : $option['ORDER'],' ORDER BY '),
                     $this->replaceSql(empty($option['LIMIT']) ? '' : $option['LIMIT'],' LIMIT '),
             ),$this->select_sql);
+        } else {
+            $sql = $option;
+        }
+        if(!$one){
             $data = $this->query($sql);
         } else {
-            $data = $this->query($option);
+            $data = $this->get_one($sql);
         }
         return $data;
     }
