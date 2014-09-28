@@ -16,7 +16,7 @@ class CURL {
 
     static  $_timeout = 5;
 
-    static function init($url, $port, $proxy){
+    static function init($url, $port, $proxy,$timeout){
         $ch = curl_init();
         curl_setopt($ch,CURLOPT_URL,$url);
         curl_setopt($ch,CURLOPT_PORT ,$port);
@@ -43,8 +43,8 @@ class CURL {
      * @param string $proxy 代理参数 结构如本类中$proxy_opt
      * @return mixed        数据
      */
-    public static function get($url, $port = 80, $proxy =''){
-        $ch = self::init($url,$port,$proxy);
+    public static function get($url, $port = 80, $proxy ='',$timeout = 5){
+        $ch = self::init($url,$port,$proxy,$timeout);
         return self::runCURL($ch);
     }
 
@@ -55,8 +55,8 @@ class CURL {
      * @param string $proxy 代理参数 结构如本类中$proxy_opt
      * @return mixed        数据
      */
-    public static function post($url, $param, $port = 80, $proxy = ''){
-        $ch = self::init($url,$port,$proxy);
+    public static function post($url, $param, $port = 80, $proxy = '',$timeout = 5){
+        $ch = self::init($url,$port,$proxy,$timeout);
         curl_setopt($ch,CURLOPT_POST,true);
         $param_str = '';
         if(is_array($param) && count($param)){

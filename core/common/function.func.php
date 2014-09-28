@@ -215,8 +215,11 @@ function getClientIp($type = 0,$adv=false) {
 }
 //消除session
 function logout(){
-    session_unset();
-    session_destroy();
+    session_unset();			//清空session
+    session_destroy();			//删除session文件
+    if (isset($_SESSION)) {
+        unset($_SESSIONI);	//注销$_SESSION
+    }
     //预留--换成页面来优化一下
     echo '您已经退出登录';
 }
