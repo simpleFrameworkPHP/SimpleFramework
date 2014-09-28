@@ -8,8 +8,9 @@
 
 class UploadController extends Controller {
 
-    public function upFile(){
+    public function swfUploadFile(){
 
+        $this->display();
     }
 
 } 
