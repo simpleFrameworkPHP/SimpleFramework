@@ -13,7 +13,7 @@ class Log {
         if(!is_dir($path)){
             addDir($path);
         }
-        $content = '['.date('Y-m-d H:n:s',nowTime()).'] '.$title.' LOG : '.$info . ".\r\n";
+        $content = '['.date('Y-m-d H:i:s',nowTime()).'] '.$title.' LOG : '.$info . ".\r\n";
         file_put_contents($path,$content,FILE_APPEND);
     }
 } 
