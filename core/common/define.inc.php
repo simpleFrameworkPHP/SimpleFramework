@@ -16,7 +16,7 @@ defined('CACHE_PATH') or define('CACHE_PATH',__PATH__.'/cache');
 defined('DATA_PATH') or define('DATA_PATH',__PATH__.'/data');
 defined('UPLOAD_PATH') or define('UPLOAD_PATH',DATA_PATH.'/upload');
 $self =explode('/',$_SERVER['PHP_SELF']);
-$root = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['SERVER_NAME'];
+$root = ($_SERVER['REQUEST_SCHEME']?$_SERVER['REQUEST_SCHEME']:'http').'://'.$_SERVER['SERVER_NAME'];
 $root .= $_SERVER['SERVER_PORT'] <> 80 ? ':'.$_SERVER['SERVER_PORT']:'';
 if(count($self) == 3){
     $root .= '/' . $self[1];
