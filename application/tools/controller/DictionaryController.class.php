@@ -57,6 +57,7 @@ class DictionaryController extends Controller {
             $table['rule'] = array('数据行数'=>array('>','10000','red'),'Update_time'=>array('<',nowTime()-ONE_DAY*31,'yellow'));
             $table_data[] = $table;
         }
+        $table_data['test'] = '<table style="float: right;position: fixed;right: 150px;top: 300px;"><tr><th>图例</th></tr><tr class="red"><td>数据行数>10000</td></tr><tr class="yellow"><td>最后更新时间大于31天</td></tr><tr><td>正常使用表格</td></tr></table>';
         $this->assign('start',1);
         return $table_data;
     }

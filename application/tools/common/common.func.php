@@ -11,6 +11,9 @@ function addSelectType($type,$t){
     return $data;
 }
 function getSqlInfo($data_list,$column_start = 0){
+    if($data_list['test']){
+        echo $data_list['test'];
+    }
     if(count($data_list)){
         foreach($data_list as $value){
             $value['columns'] = isset($value['columns']) ? $value['columns'] : array();
