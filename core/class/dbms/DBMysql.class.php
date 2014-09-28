@@ -54,6 +54,30 @@ class DBMysql extends Db {
         return $data;
     }
 
+    public function get_one($str){
+        $data = array();
+        $this->sql_str = $str;
+        $result = mysql_query($str,$this->con);
+        if($result){
+            $this->result_rows = mysql_num_rows($result);
+            if($this->result_rows){
+                $data = mysql_fetch_assoc($result);
+                $this->columns = array_keys($data);
+            }
+            mysql_free_result($result);
+        }
+        //sql日志位置
+        if(mysql_errno($this->con)){
+            //待优化显示查询中的异常及错误
+            Log::write('SQL ERROR',$str."\t[error sql]",'sql');
+            Log::write('SQL ERROR',mysql_error($this->con).' ; '.mysql_errno($this->con),'sql');
+        } else {
+            //正常查询日志
+            Log::write('SQL',$str."\t[{$this->result_rows}]",'sql');
+        }
+        return $data;
+    }
+
     public function execute($str){
         $data = array();
         $this->sql_str = $str;

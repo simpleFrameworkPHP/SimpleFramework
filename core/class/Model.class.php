@@ -73,6 +73,15 @@ class Model{
         return $data;
     }
 
+    public function find($sql = ''){
+        $data = array();
+        if($sql == ''){
+            $sql = $this->option;
+        }
+        $data = $this->db->select($sql,1);
+        return $data;
+    }
+
 
     function initTableInfo($link_ID = 0){
         $sql = 'SHOW TABLES';
