@@ -7,18 +7,17 @@
  */
 //加载目录内所有文件
 function loadDirFile($path = '.'){
-    $current_dir = is_dir($path) ? opendir($path) : opendir(dirname($path));    //opendir()返回一个目录句柄,失败返回false
-    while(($file = readdir($current_dir)) !== false) {    //readdir()返回打开目录句柄中的一个条目
-        $sub_dir = $path . DIRECTORY_SEPARATOR . $file;    //构建子目录路径
-        if($file == '.' || $file == '..') {
-            continue;
-        } else if(is_dir($sub_dir)) {    //如果是目录,进行递归
+    $current_dir = is_dir($path) ? $path : dirname($path);    //opendir()返回一个目录句柄,失败返回false
+    $files = glob($current_dir.'/*');
+    foreach($files as $file) {
+        $sub_dir =  $file;    //构建子目录路径
+        if(!is_file($sub_dir)) {    //如果是目录,进行递归
             loadDirFile($sub_dir);
         } else {    //如果是文件,直接输出
             $file_type = explode('.',$file);
             if(isset($file_type[2]) && strtolower($file_type[2]) == 'php'){
                 if(isset($file_type[1]) && strtolower($file_type[1]) == 'class'){
-                    $result[] = loadFile_once($sub_dir,$file_type[0],'CLASS');
+                    $result[] = loadFile_once($sub_dir,basename($file_type[0]),'CLASS');
                 } else {
                     $result[] = require $sub_dir;
                 }
@@ -273,7 +272,9 @@ function initH($file){
     }
 
     if(file_exists($path)){
-        $content = getFileContent($path);
+        ob_start();
+        include $path;
+        $content = ob_get_clean();
         $view = new View();
         $content = $view->replaceContent($content);
         return $content;

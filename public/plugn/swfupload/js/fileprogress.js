@@ -117,43 +117,43 @@ FileProgress.prototype.toggleCancel = function (show, swfUploadInstance) {
 // Fades out and clips away the FileProgress box.
 FileProgress.prototype.disappear = function () {
 
-    var reduceOpacityBy = 15;
-    var reduceHeightBy = 4;
-    var rate = 30;	// 15 fps
-
-    if (this.opacity > 0) {
-        this.opacity -= reduceOpacityBy;
-        if (this.opacity < 0) {
-            this.opacity = 0;
-        }
-
-        if (this.fileProgressWrapper.filters) {
-            try {
-                this.fileProgressWrapper.filters.item("DXImageTransform.Microsoft.Alpha").opacity = this.opacity;
-            } catch (e) {
-                // If it is not set initially, the browser will throw an error.  This will set it if it is not set yet.
-                this.fileProgressWrapper.style.filter = "progid:DXImageTransform.Microsoft.Alpha(opacity=" + this.opacity + ")";
-            }
-        } else {
-            this.fileProgressWrapper.style.opacity = this.opacity / 100;
-        }
-    }
-
-    if (this.height > 0) {
-        this.height -= reduceHeightBy;
-        if (this.height < 0) {
-            this.height = 0;
-        }
-
-        this.fileProgressWrapper.style.height = this.height + "px";
-    }
-
-    if (this.height > 0 || this.opacity > 0) {
-        var oSelf = this;
-        setTimeout(function () {
-            oSelf.disappear();
-        }, rate);
-    } else {
-        this.fileProgressWrapper.style.display = "none";
-    }
+//    var reduceOpacityBy = 15;
+//    var reduceHeightBy = 4;
+//    var rate = 30;	// 15 fps
+//
+//    if (this.opacity > 0) {
+//        this.opacity -= reduceOpacityBy;
+//        if (this.opacity < 0) {
+//            this.opacity = 0;
+//        }
+//
+//        if (this.fileProgressWrapper.filters) {
+//            try {
+//                this.fileProgressWrapper.filters.item("DXImageTransform.Microsoft.Alpha").opacity = this.opacity;
+//            } catch (e) {
+//                // If it is not set initially, the browser will throw an error.  This will set it if it is not set yet.
+//                this.fileProgressWrapper.style.filter = "progid:DXImageTransform.Microsoft.Alpha(opacity=" + this.opacity + ")";
+//            }
+//        } else {
+//            this.fileProgressWrapper.style.opacity = this.opacity / 100;
+//        }
+//    }
+//
+//    if (this.height > 0) {
+//        this.height -= reduceHeightBy;
+//        if (this.height < 0) {
+//            this.height = 0;
+//        }
+//
+//        this.fileProgressWrapper.style.height = this.height + "px";
+//    }
+//
+//    if (this.height > 0 || this.opacity > 0) {
+//        var oSelf = this;
+//        setTimeout(function () {
+//            oSelf.disappear();
+//        }, rate);
+//    } else {
+//        this.fileProgressWrapper.style.display = "none";
+//    }
 };

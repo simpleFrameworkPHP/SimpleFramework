@@ -9,7 +9,7 @@
 		window.onload = function() {
 			var settings = {
 				flash_url : "__PLROOT__/swfupload/swfupload/swfupload.swf",
-				upload_url: "__PLROOT__/swfupload/upload.php",
+				upload_url: "__PLROOT__/swfupload/upload.php?<?php foreach($_GET as $key=>$value){ echo $key.'='.$value.'&';}?>",
 				post_params: {"PHPSESSID" : "<?php echo session_id(); ?>"},
 				file_size_limit : "100 MB",
 				file_types : "*.*",
@@ -28,7 +28,7 @@
 				button_height: "29",
 				button_placeholder_id: "spanButtonPlaceHolder",
 				button_text: '<span class="theFont">浏览</span>',
-				button_text_style: ".theFont { font-size: 16; }",
+				button_text_style: ".theFont { font-size: 16;}",
 				button_text_left_padding: 12,
 				button_text_top_padding: 3,
 				
