@@ -128,7 +128,7 @@ function S($key,$value = '',$time = 86400){
  * @return bool
  */
 function addDir($file){
-    $dir = is_dir($file) ? $file : dirname($file);
+    $dir = substr($file,-1) == '/' ? $file : dirname($file);
     $dir_array = array();
     $dir_array = explode('/',$dir);
     $count = count($dir_array);
@@ -263,7 +263,15 @@ function runTask(&$value, $key, $lock_path,$last_time = -1){
 }
 //引入其他模板的方法
 function initH($file){
-    $path = THEME_PATH . '/html/' . $file . '.html';
+    if(!in_array($file,array('swfupload'))){
+        $path = THEME_PATH . '/html/' . $file . '.html';
+    } else {
+        switch($file){
+            case 'swfupload':
+                $path = PL_PATH.'/swfupload/index.php';
+        }
+    }
+
     if(file_exists($path)){
         $content = getFileContent($path);
         $view = new View();

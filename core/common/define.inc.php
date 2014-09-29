@@ -12,6 +12,8 @@ defined('CLIENT_MULTI_RESULTS') or define('CLIENT_MULTI_RESULTS',131072);
 
 defined('EXPEND_PATH') or define('EXPEND_PATH',CORE_PATH.'/expend');
 defined('APP_PATH') or define('APP_PATH',__PATH__.'/application');
+defined('PUB_PATH') or define('PUB_PATH',__PATH__.'/public');
+defined('PL_PATH') or define('PL_PATH',PUB_PATH.'/plugn');
 defined('CACHE_PATH') or define('CACHE_PATH',__PATH__.'/cache');
 defined('DATA_PATH') or define('DATA_PATH',__PATH__.'/data');
 defined('UPLOAD_PATH') or define('UPLOAD_PATH',DATA_PATH.'/upload');
@@ -25,6 +27,5 @@ defined('__ROOT__') or define('__ROOT__',$root);
 defined('__PUBLIC__') or define('__PUBLIC__',__ROOT__.'/public');
 defined('__JSROOT__') or define('__JSROOT__',__PUBLIC__.'/js');
 defined('__PLROOT__') or define('__PLROOT__',__PUBLIC__.'/plugn');
-defined('PL_PATH') or define('PL_PATH',__PATH__.'/plugn');
 defined('DATA_ROOT') or define('DATA_ROOT',__ROOT__.'/data');
 defined('UPLOAD_ROOT') or define('UPLOAD_ROOT',DATA_ROOT.'/upload');
