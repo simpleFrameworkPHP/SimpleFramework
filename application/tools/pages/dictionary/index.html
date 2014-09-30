@@ -1,25 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+{:initH('header')}
     <style>
-        div {padding: 50px 200px 200px 200px;}
-        table.tcenter {margin: auto;}
-        table tr th.column {background-color: #99ff99;}
-        table tr td {min-width: 80px;background-color: #88afff;}
-        table tr.yellow  td{background-color: #fffa88;}
-        table tr.red td{background-color: #ff3388;}
-        ul{list-style: none;padding: 0px;}
-        ul li{display: inline;padding: 8px;}
-        ul#tags{margin-bottom: 0px;padding: 20px 20px 8px 20px;}
-        ul#tags:hover{cursor:pointer}
-        ul li div.div_content{padding: 10px;}
-        .selectTag{background-color: #999999}
-        .div_hline{display: block;height: 3px;background-color: #999999;padding: 0px;}
+        .div_content table.tcenter {margin: auto;}
+        .div_content table tr th.column {background-color: #99ff99;}
+        .div_content table tr td {min-width: 80px;background-color: #88afff;}
+        .div_content table tr.yellow  td{background-color: #fffa88;}
+        .div_content table tr.red td{background-color: #ff3388;}
+        .div_content ul{list-style: none;padding: 0px;}
+        .div_content ul li{display: inline;padding: 8px;}
+        .div_content ul#tags{margin-bottom: 0px;padding: 20px 20px 8px 20px;}
+        .div_content ul#tags:hover{cursor:pointer}
+        .div_content ul li div.div_content{padding: 10px;}
+        .div_content .selectTag{background-color: #999999}
+        .div_content .div_hline{display: block;height: 3px;background-color: #999999;padding: 0px;}
     </style>
     <script type="text/javascript">
-        function selectType(t){
-            window.location.href = "{:H('tools/Dictionary/index')}&t="+ t.value;
+        function select(){
+            var t = $("select[name=t]").val();
+            var db = $("select[name=db]").val();
+            window.location.href = "{:H('tools/Dictionary/index')}&t="+ t + "&db=" + db;
         }
         function selectTag(showContent,selfObj){
             // 操作标签
@@ -36,9 +34,7 @@
             document.getElementById(showContent).style.display = "block";
         }
     </script>
-</head>
-<body>
-<div>
+<div class="div_content">
     <?php
 /**
  * Created by PhpStorm.
@@ -47,10 +43,13 @@
  * Time: 下午4:05
  */
 
-global $config;
 //显示模式
-   $select =  '<select onchange="selectType(this)">';
-    $select .= addSelectType($config['type'],$_REQUEST['t']);
+   $select =  '<select name="t" onchange="select()">';
+    $select .= addSelectType(C('type'),$_REQUEST['t']);
+    $select .= '</select>';
+    echo $select;
+    $select =  '<select name="db" onchange="select()">';
+    $select .= addSelectType(c('db'),$_REQUEST['db']);
     $select .= '</select>';
     echo $select;
     ?>
@@ -80,5 +79,4 @@ global $config;
         </li>
     </ul>
 </div>
-</body>
-</html>
+{:initH('footer')}

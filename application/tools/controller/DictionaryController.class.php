@@ -12,8 +12,16 @@ class DictionaryController extends Controller {
         if(!isset($_REQUEST['t'])){
             $_REQUEST['t'] =  'all';
         }
+        if(!isset($_REQUEST['db'])){
+            $_REQUEST['db'] =  1;
+        }
+        $datalist = C('SF_DB_CONNECT');
+        foreach($datalist as $k=>$v){
+            $database[] = array('name'=>$v['DB_NAME'],'value'=>$k);
+        }
+        C('db',$database);
         $remark = C('remark');
-        $con1 = M('',1);
+        $con1 = M('',$_REQUEST['db']);
         $data = array();
         if($_REQUEST['t'] == 'table'){
             $data = $this->getAllTable($con1, $remark);
