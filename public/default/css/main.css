@@ -1,10 +1,10 @@
 body{margin: 0px;}
 div.div_page {width: 1000px;display: block;margin: auto;}
 div.div_page div.div_header {display: block;height: 280px;background:url(../images/MapMark.png) 10px no-repeat;background-color: #88afff;margin-bottom: 20px;}
-div.div_page div.div_header ul li{list-style: none}
-div.div_page div.div_header ul li#li_logo {width: 120px;height: 80px;float: right;padding-right: 30px;padding-top: 20px;}
-div.div_page div.div_header ul li#li_logo img {width: 100%;height: 100%;}
+div.div_page div.div_header ul li{list-style: none;display: block;width: 100%;}
+div.div_page div.div_header ul li#li_logo {height: 80px;}
+div.div_page div.div_header ul li#li_logo img {width: 120px;height: 80px;float: right;padding-right: 30px;margin-top: 20px;}
 div.div_page div.div_header ul li#li_title {font-size:60pt;color: #ccffaa;padding: 50px;margin-left: 60px;}
-div.div_page div.div_header ul li#li_s_title {font-size: 14pt;color: #fffa88;float: right;padding: 30px;margin-top: 50px;}
+div.div_page div.div_header ul li#li_s_title {text-align:right;font-size: 14pt;color: #fffa88;float: right;padding: 30px;margin-top: 20px;}
 div.div_page div.div_content {min-height: 400px;}
 div.div_page div.div_footer {min-height: 200px;background-color: #88afff;margin-bottom: 20px;padding-top: 20px;}
