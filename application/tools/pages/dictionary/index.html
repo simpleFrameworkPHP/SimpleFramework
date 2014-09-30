@@ -44,12 +44,12 @@
  */
 
 //显示模式
-   $select =  '<select name="t" onchange="select()">';
-    $select .= addSelectType(C('type'),$_REQUEST['t']);
+    $select =  '数据库：<select name="db" onchange="select()">';
+    $select .= addSelectType(c('db'),$_REQUEST['db']);
     $select .= '</select>';
     echo $select;
-    $select =  '<select name="db" onchange="select()">';
-    $select .= addSelectType(c('db'),$_REQUEST['db']);
+   $select =  '显示类型：<select name="t" onchange="select()">';
+    $select .= addSelectType(C('type'),$_REQUEST['t']);
     $select .= '</select>';
     echo $select;
     ?>
