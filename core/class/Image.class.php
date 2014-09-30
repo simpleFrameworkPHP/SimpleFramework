@@ -35,7 +35,7 @@ class Image {
         $this->green = $green;
         $this->blue = $blue;
         $this->alpha = $alpha;
-        $this->info = exif_read_data($this->img_path,0,true);
+        $this->info = exif_read_data($this->img_path,0,true);var_dump($this->info);exit;
     }
 
     public function thumbImage($width = '',$height = '',$cut = 0,$proportion = '',$x = '',$y = ''){
