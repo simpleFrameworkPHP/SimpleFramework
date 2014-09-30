@@ -20,7 +20,7 @@ class DictionaryController extends Controller {
             $database[] = array('name'=>$v['DB_NAME'],'value'=>$k);
         }
         C('db',$database);
-        $remark = C('remark');
+        $remark = C('remark')[$_REQUEST['db']];
         $con1 = M('',$_REQUEST['db']);
         $data = array();
         if($_REQUEST['t'] == 'table'){
