@@ -9,8 +9,8 @@
 class ImageInfoController extends Controller {
 
     public function getGPSInfo(){
-        $path = DATA_PATH.'/image/2014/08/31/';
-        $url = './data/image/2014/08/31/';
+        $path = DATA_PATH.'/image/2014/10/08/';
+        $url = './data/image/2014/10/08/';
         $dir = opendir($path);
         while($file = readdir($dir)){
             if(!in_array($file,array('.','..'))){

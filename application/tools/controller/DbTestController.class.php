@@ -20,7 +20,7 @@ class DbTestController extends Controller {
 //        $data = $model1->join(array('GLOBAL_STATUS'=>array('as'=>'bbb','p'=>'bbb.VARIABLE_NAME=abc.ENGINE')))->fields(array('VARIABLE_NAME AS a'))->group('VARIABLE_NAME')->having(array('VARIABLE_NAME'=>0))->limit(1)->select();
 //        print_r($model1->db->sql_str.'<br/>');
 //        $this->assign('data',$data);
-        $model = M('',1);
+        $model = M('',3);
 //        $data = $model->select('SELECT placeid,placename,width,height,adids,expend FROM cms_ads_place');
         $data = $model->table(array('aa'=>'cms_ads_place'))->fields('placeid,placename,width,height,adids,expend')->select();
 //        print_r($model);
