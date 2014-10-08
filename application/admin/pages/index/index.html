@@ -2,8 +2,37 @@
 <html>
 <head>
     <title></title>
+    <style>
+        body,ul,iframe{margin:0;border: 0px;}
+        ul{list-style: none;}
+        .div_top{display: block;width: 100%;height: 100px;background-color: #6cf;}
+        .div_menu{display: block;width: 100%;height: 30px;background-color: #0cf;}
+        .div_main{display: block;width: 100%;background-color: lightgoldenrodyellow;}
+        .div_main div{min-height: 750px;}
+        .div_main iframe{min-height: 750px;}
+        .div_main .div_left{background: none repeat scroll 0 0 #9ff;
+            float: left;
+            width: 200px;}
+        .div_main .div_right{background: none repeat scroll 0 0 #cff;
+            height: auto !important;
+            margin-left: 200px !important;}
+        .div_main .div_right iframe{width: 100%;height: auto !important;}
+        .div_foot{display: block;width: 100%;height: 80px;background-color: #6cf;}
+    </style>
 </head>
 <body>
-adminindex
+<div class="div_top"></div>
+<div class="div_menu">
+    <ul class="ul_main_menu">
+        <li><a href="http://www.baidu.com" target="main">百度</a></li>
+    </ul>
+</div>
+<div class="div_main">
+    <div class="div_left">
+        <span></span>
+    </div>
+    <div class="div_right"><iframe name="main"></iframe></div>
+</div>
+<div class="div_foot"></div>
 </body>
 </html>
