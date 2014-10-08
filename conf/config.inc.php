@@ -15,10 +15,10 @@ return array(
     'SF_DB_CONNECT'=>array(
         0 => array(
             'DB_HOST'=>'127.0.0.1',
-            'DB_NAME'=>'information_schema',
+            'DB_NAME'=>'test',
             'DB_PORT'=>3306,
             'DB_USER'=>'root',
-            'DB_PASS'=>'root',
+            'DB_PASS'=>'',
             'DB_MODE'=>'mysqli',
         ),
         1 => array(
@@ -26,7 +26,7 @@ return array(
             'DB_NAME'=>'zl_blog',
             'DB_PORT'=>3306,
             'DB_USER'=>'root',
-            'DB_PASS'=>'root',
+            'DB_PASS'=>'',
             'DB_MODE'=>'mysqli',
         ),
     ),

@@ -1,7 +1,13 @@
 *{margin:0;border: 0px;}
 ul{list-style: none;}
 .div_top{display: block;width: 100%;height: 100px;background-color: #6cf;}
-.div_menu{display: block;width: 100%;height: 30px;background-color: #0cf;}
+.div_menu{display: block;width: 100%;height: 30px;background-color: #0cf;border-bottom: #0055aa solid 3px;}
+.div_menu ul{padding-left: 40px;}
+.div_menu ul li{float: left;}
+.div_menu ul li a{padding: 5px;font-size: x-large;}
+.div_menu ul li a:hover{background-color: #55ccff;color: #000000;}
+.div_menu ul li .selected{background-color: #0055aa;color: #00ccff;}
+
 .div_main{display: block;width: 100%;background-color:  #9ff;}
 .div_main div{min-height: 750px;}
 .div_main iframe{min-height: 750px;}

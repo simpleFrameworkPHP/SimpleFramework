@@ -19,8 +19,6 @@ class HomeController extends Controller {
             } else {
                 echo '用户名或密码错误';
             }
-        } else {
-            echo 'login';
         }
         $this->display();
     }

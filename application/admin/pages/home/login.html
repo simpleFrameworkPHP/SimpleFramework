@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title></title>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
     <style>
-        .div_login{margin: 100px auto;width: 500px;}
+        .div_center{height: 250px;margin-top: 150px;background-color: lightskyblue;padding-right: 100px;}
+        .div_login{width: 400px;height:220px;float: right;margin-top: -10px;padding-top: 50px;padding-left:30px;background-color: #0066cc;}
     </style>
 </head>
 <body>
+<div class="div_center">
     <div class="div_login">
         <form action="admin.php?a=admin&c=home&f=login" method="post">
             <table>
+                <tr><th colspan="2">管理员登陆</th></tr>
                 <tbody>
                 <tr><th>用户名</th><td><input name="username"></td></tr>
                 <tr><th>密  码</th><td><input name="password" type="password"></td></tr>
@@ -18,5 +21,6 @@
             </table>
         </form>
     </div>
+</div>
 </body>
 </html>

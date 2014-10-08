@@ -11,4 +11,17 @@
     </div>
     <div class="div_right"><iframe name="main"></iframe></div>
 </div>
+        <script>
+            function clickMenu(type,dom){
+                $('li a').removeClass("selected");
+                $(dom).addClass("selected");
+                var json = eval('(<?php echo getMenu("admin","main");?>)');
+                var html = "<ul>";
+                for(var i=0;i<json[type].length;i++){
+                    html += "<li><a href='"+json[type][i].url+"' target='main'>"+json[type][i].name+"</a></li>";
+                }
+                html += "</ul>";
+                $('.div_left').html(html);
+            }
+        </script>
 {:initH('admin_footer')}
