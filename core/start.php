@@ -36,7 +36,7 @@ defined('__THEME__') or define('__THEME__',__PUBLIC__.'/'.C('SF_THEME_DEFAULT'))
 defined('THEME_PATH') or define('THEME_PATH',__PATH__.'/public/'.C('SF_THEME_DEFAULT'));
 define('DB_PREFIX',C('SF_DB_PREFIX'));
 loadFile_once(CORE_PATH.'/common/function.func.php','loadDirFile','FUNCTION');
-loadFile_once(__PATH__.'/common/function.func.php','getMenu','FUNCTION');
+loadDirFile(__PATH__.'/common/');
 @session_start();
 
 //自动加载基础类
