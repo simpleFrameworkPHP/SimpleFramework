@@ -55,7 +55,11 @@
 		<div id="divStatus">0 个文件已上传</div>
 			<div>
 				<span id="spanButtonPlaceHolder"></span>
+                <?php if($_REQUEST['url']){ ?>
+                    <input type="button" value="下一步" onclick="window.location='<?php echo $_REQUEST['url'];?>';" style="margin-left: 2px; font-size: 8pt; height: 29px;" />
+                <?php } else { ?>
 				<input id="btnCancel" type="button" value="取消所有上传" onclick="swfu.cancelQueue();" disabled="disabled" style="margin-left: 2px; font-size: 8pt; height: 29px;" />
+                <?php } ?>
 			</div>
 </div>
 

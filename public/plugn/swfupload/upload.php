@@ -24,6 +24,8 @@ $upload = new Upload();
 $data = $upload->uploadFile('swfload');
 if($data['status'] == 200){
     echo 'File Received';
+    //存储文件(流程待修改)
+    M('home/Attach')->addFile($data['data']['save_path'],$data['data']['file_name'],'swfuploader');
 } else {
     HandleError($data);
 }

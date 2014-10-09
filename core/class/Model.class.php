@@ -406,7 +406,8 @@ class Model{
         if(!isset($this->option['TABLE'])){
             $this->table();
         }
-        $insert_sql = 'INSERT INTO '.$this->option['TABLE'] . ' ('.implode(',',$add_columns) . ') VALUES ('.implode(',',$add_values).')';
+        $table = preg_replace('/ AS .*/','',$this->option['TABLE']);
+        $insert_sql = 'INSERT INTO '.$table . ' ('.implode(',',$add_columns) . ') VALUES ('.implode(',',$add_values).')';
         return $this->db->execute($insert_sql);
     }
 
