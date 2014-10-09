@@ -12,7 +12,9 @@
     <div class="div_right"><iframe name="main"></iframe></div>
 </div>
         <script>
-            function clickMenu(type,dom){
+            clickMenu('{$_REQUEST["c"]}');
+            function clickMenu(type){
+                var dom = '#'+type;
                 $('li a').removeClass("selected");
                 $(dom).addClass("selected");
                 var json = eval('(<?php echo getMenu("admin","main");?>)');

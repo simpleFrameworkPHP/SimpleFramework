@@ -1,5 +1,6 @@
 *{margin:0;border: 0px;}
 ul{list-style: none;}
+a{text-decoration: none;}
 .div_top{display: block;width: 100%;height: 100px;background-color: #6cf;}
 .div_menu{display: block;width: 100%;height: 30px;background-color: #0cf;border-bottom: #0055aa solid 3px;}
 .div_menu ul{padding-left: 40px;}
