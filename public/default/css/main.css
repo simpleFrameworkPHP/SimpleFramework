@@ -8,3 +8,5 @@ div.div_page div.div_header ul li#li_title {font-size:60pt;color: #ccffaa;paddin
 div.div_page div.div_header ul li#li_s_title {text-align:right;font-size: 14pt;color: #fffa88;float: right;padding: 30px;margin-top: 20px;}
 div.div_page div.div_content {min-height: 400px;}
 div.div_page div.div_footer {min-height: 200px;background-color: #88afff;margin-bottom: 20px;padding-top: 20px;}
+/*图片标签毛玻璃效果*/
+.blue{filter: url(blur.svg#blur); /* FireFox, Chrome, Opera */     -webkit-filter: blur(5px); /* Chrome, Opera */        -moz-filter: blur(5px);         -ms-filter: blur(5px);                filter: blur(5px);     filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=5, MakeShadow=false); /* IE6~IE9 */}
