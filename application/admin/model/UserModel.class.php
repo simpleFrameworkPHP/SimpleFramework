@@ -9,7 +9,7 @@
 class UserModel extends Model {
 
     public function addUser(){
-        echo 'add';
+//        echo 'add';
     }
 
     public function setUser(){
