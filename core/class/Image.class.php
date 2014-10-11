@@ -35,12 +35,14 @@ class Image {
         $this->green = $green;
         $this->blue = $blue;
         $this->alpha = $alpha;
-        $this->info = exif_read_data($this->img_path,0,true);
+        if(in_array(strtolower(pathinfo($img_path)['extension']),array('jpg','jpeg','tiff'))){
+            $this->info = exif_read_data($this->img_path,0,true);
+        }
     }
 
     public function thumbImage($width = '',$height = '',$cut = 0,$proportion = '',$x = '',$y = ''){
         $result = false;
-        if(!strstr($this->img_path,array('http://','https://')) && file_exists($this->img_path) && ($height <> '' || $width <> '')){
+        if((!strstr($this->img_path,'http://') || !strstr($this->img_path,'https://')) && file_exists($this->img_path) && ($height <> '' || $width <> '')){
             $this->aim_height = $height;
             $this->aim_width = $width;
             $proportion = $this->initImageInfo($cut,$proportion);
@@ -67,7 +69,7 @@ class Image {
         } else {
             $result =  $this->img_path;
         }
-        return str_replace(__PATH__,'',$result);
+        return str_replace(__PATH__,__ROOT__,$result);
     }
 
     //初始化图片信息
