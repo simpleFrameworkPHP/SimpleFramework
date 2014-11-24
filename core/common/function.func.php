@@ -134,7 +134,7 @@ function addDir($file){
     $idir = '';
     foreach($dir_array as $value){
         $idir .= $value . '/';
-        if(!is_dir($idir)){echo $idir;
+        if(!is_dir($idir)){
             @mkdir($idir,0777);
         }
     }
