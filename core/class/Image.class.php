@@ -35,7 +35,8 @@ class Image {
         $this->green = $green;
         $this->blue = $blue;
         $this->alpha = $alpha;
-        if(in_array(strtolower(pathinfo($img_path)['extension']),array('jpg','jpeg','tiff'))){
+        $pathinfo = pathinfo($img_path);
+        if(in_array(strtolower($pathinfo['extension']),array('jpg','jpeg','tiff'))){
             $this->info = exif_read_data($this->img_path,0,true);
         }
     }
