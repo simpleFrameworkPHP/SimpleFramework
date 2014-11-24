@@ -32,7 +32,7 @@ class Controller extends View {
         if($this->cache_file_dir != ''){
             $file_path = $this->file_dir.'/'.$fun.'.html';
             $cache_file_path = $this->cache_file_dir.'/'.$fun.'.phtml';
-            $file = fopen($cache_file_path,'a+');
+            $file = fopen($cache_file_path,'w+');
             if(C('SF_REFRESH_PAGES') || !file_exists($cache_file_path) || filemtime($file_path)>=filemtime($cache_file_path) || !file_exists($file_path)){
                 // 模板阵列变量分解成为独立变量
                 extract($this->params, EXTR_OVERWRITE);
