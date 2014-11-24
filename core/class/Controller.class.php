@@ -32,6 +32,7 @@ class Controller extends View {
         if($this->cache_file_dir != ''){
             $file_path = $this->file_dir.'/'.$fun.'.html';
             $cache_file_path = $this->cache_file_dir.'/'.$fun.'.phtml';
+            $file = fopen($cache_file_path,'a+');
             if(C('SF_REFRESH_PAGES') || !file_exists($cache_file_path) || filemtime($file_path)>=filemtime($cache_file_path) || !file_exists($file_path)){
                 // 模板阵列变量分解成为独立变量
                 extract($this->params, EXTR_OVERWRITE);
@@ -40,7 +41,7 @@ class Controller extends View {
                 //可以实现字符替换以达到函数改写
                 $contentStr = $this->replaceContent($contentStr);
                 addDir($cache_file_path);
-                file_put_contents($cache_file_path,$contentStr) or Log::write('CON ERROR',$cache_file_path.'文件写入出错');
+                fwrite($file,$contentStr) or Log::write('CON ERROR',$cache_file_path.'文件写入出错');
             } else {
                 //打开文件异常
                 $this->errorPage('这个页面还没做呢，做了再找我！',$file_path.'这个文件还没创建');
