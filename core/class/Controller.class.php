@@ -37,9 +37,9 @@ class Controller extends View {
                 // 模板阵列变量分解成为独立变量
                 extract($this->params, EXTR_OVERWRITE);
                 //生成模板文件不存在或生成模板文件的修改时间比实际模板文件的修改时间早即生成模板文件已过时
-                $contentStr = getFileContent($file_path);echo $file_path;echo $contentStr;
+                $contentStr = getFileContent($file_path);
                 //可以实现字符替换以达到函数改写
-                $contentStr = $this->replaceContent($contentStr);echo $contentStr;
+                $contentStr = $this->replaceContent($contentStr);
                 addDir($cache_file_path);
                 file_put_contents($cache_file_path,$contentStr) or Log::write('CON ERROR',$cache_file_path.'文件写入出错');
             } else {
