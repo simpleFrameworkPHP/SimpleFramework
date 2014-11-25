@@ -12,15 +12,13 @@ class ImageInfoController extends Controller {
         $p = $_GET['path']?$_GET['path']:'2014/10/08/';
         $path = DATA_PATH.'/image/'.$p;
         $url = './data/image/'.$p;
-        $dir = opendir($path);
-        while($file = readdir($dir)){
-            if(!in_array($file,array('.','..'))){
-                $image = new Image($path.$file);
+        $files = glob($path.'*.*');
+        foreach($files as $file){
+                $image = new Image($file);
                 $ipoint = $image->getGPSInfo();
-                $ipoint['path'] = $url.$file;
+                $ipoint['path'] = $url.basename($file);
                 $ipoint['time'] = $image->info['FileDateTime'];
                 $point[] = $ipoint;
-            }
         }
         foreach($point as $key=>$value){
             foreach($point as $key1=>$value1){
