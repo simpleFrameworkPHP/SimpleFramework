@@ -133,7 +133,7 @@ function addDir($file){
     foreach($dir_array as $value){
         $idir .= $value . '/';
         if(!is_dir($idir)){
-            mkdir($idir,777);
+            mkdir($idir,0775);
         }
     }
     return is_dir($dir);
