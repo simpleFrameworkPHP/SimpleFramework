@@ -36,7 +36,7 @@ class Controller extends View {
                 // 模板阵列变量分解成为独立变量
                 extract($this->params, EXTR_OVERWRITE);
                 //生成模板文件不存在或生成模板文件的修改时间比实际模板文件的修改时间早即生成模板文件已过时
-                $contentStr = getFileContent($file_path);
+                $contentStr = getFileContent($file_path);echo $file_path;
                 //可以实现字符替换以达到函数改写
                 $contentStr = $this->replaceContent($contentStr);echo $contentStr;
                 addDir($cache_file_path);
