@@ -13,7 +13,7 @@ class Controller extends View {
     var $params = array();
 
     public function __construct(){
-        $this->file_dir = APP_PATH.'/'.$_REQUEST['a'].'/pages/'.$_REQUEST['c'];
+        $this->file_dir = APP_PATH.'/'.$_REQUEST['a'].'/pages/'.strtolower($_REQUEST['c']);
         $this->cache_file_dir = CACHE_PATH.'/pages/'.$_REQUEST['a'].'/'.$_REQUEST['c'];
     }
 
