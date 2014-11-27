@@ -8,6 +8,25 @@
 
 class ImageInfoController extends Controller {
 
+    public function getImageGPS(){
+        $p = $_GET['path']?$_GET['path']:'2014/10/08/';
+        $path = DATA_PATH.'/image/'.$p;
+        $url = './data/image/'.$p;
+        $files = glob($path.'*');
+        if(count($files)){
+            foreach($files as $file){
+                $image = new Image($file);
+                $ipoint = $image->getGPSInfo();
+                if($ipoint){
+                    $ipoint['path'] = $url.basename($file);
+                    $point[$image->info['FILE']['FileDateTime']] = $ipoint;
+                }
+            }
+        }
+        ksort($point);
+        echo json_encode($point);
+    }
+
     public function getGPSInfo(){
         $p = $_GET['path']?$_GET['path']:'2014/10/08/';
         $path = DATA_PATH.'/image/'.$p;
@@ -17,9 +36,11 @@ class ImageInfoController extends Controller {
             foreach($files as $file){
                 $image = new Image($file);
                 $ipoint = $image->getGPSInfo();
-                $ipoint['path'] = $url.basename($file);
-                $ipoint['time'] = $image->info['FileDateTime'];
-                $point[] = $ipoint;
+                if($ipoint){
+                    $ipoint['path'] = $url.basename($file);
+                    $ipoint['time'] = $image->info['FileDateTime'];
+                    $point[] = $ipoint;
+                }
             }
         }
         foreach($point as $key=>$value){
