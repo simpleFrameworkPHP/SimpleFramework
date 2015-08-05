@@ -78,7 +78,7 @@ function getBodyHTML($data,$columns,$data_rule,$column_start){
         $str .= '<tr '.$rule_str.'>';
         for ($i=$column_start; $i<$sum_column; $i++ )
         {
-            $str .= '<td>'.$key.$row[$columns[$i]].'</td>';
+            $str .= '<td>'.$row[$columns[$i]].'</td>';
         }
         $str .= "</tr>";
     }
