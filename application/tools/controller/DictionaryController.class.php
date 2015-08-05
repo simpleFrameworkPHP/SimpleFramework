@@ -13,14 +13,15 @@ class DictionaryController extends Controller {
             $_REQUEST['t'] =  'all';
         }
         if(!isset($_REQUEST['db'])){
-            $_REQUEST['db'] =  1;
+            $_REQUEST['db'] =  0;
         }
         $datalist = C('SF_DB_CONNECT');
         foreach($datalist as $k=>$v){
             $database[] = array('name'=>$v['DB_NAME'],'value'=>$k);
         }
         C('db',$database);
-        $remark = C('remark')[$_REQUEST['db']];
+        $remark = C('remark');
+        $remark = $remark[$_REQUEST['db']];
         $con1 = M('',$_REQUEST['db']);
         $data = array();
         if($_REQUEST['t'] == 'table'){
@@ -94,8 +95,9 @@ class DictionaryController extends Controller {
                 $i_table_reamrk = $table['commont'];
             } else {
                 $i_table_name = $table;
+                $i_table_reamrk = '';
             }
-            $i_remark = $remark[$i_table_name];
+            $i_remark = isset($remark[$i_table_name])?$remark[$i_table_name]:array(0=>'');
             $i_table_reamrk = $i_table_reamrk ? $i_table_reamrk : $i_remark[0];
             $sql = 'SHOW FULL COLUMNS FROM '.$i_table_name;
             $data = $model->select($sql);
