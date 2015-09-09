@@ -48,7 +48,7 @@ function writeHTMLTable($title,$remark,$columns,$column_start,$data,$data_rule =
     if(is_array($data) && count($data)){
         $html .= getBodyHTML($data,$columns,$data_rule,$column_start);
     }
-    $html .= '</table>';
+    $html .= '</table><br/>';
     echo $html;
 }
 

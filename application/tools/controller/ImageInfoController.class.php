@@ -28,9 +28,9 @@ class ImageInfoController extends Controller {
     }
 
     public function getGPSInfo(){
-        $p = $_GET['path']?$_GET['path']:'2014/10/08/';
+        $p = $_GET['path'];
         $path = DATA_PATH.'/image/'.$p;
-        $url = './data/image/'.$p;
+        $url = './data/image/'.$p;print_r($path);
         $files = glob($path.'*.*');
         if(count($files)){
             foreach($files as $file){
