@@ -16,9 +16,10 @@ function getSqlInfo($data_list,$column_start = 0){
     }
     if(count($data_list)){
         foreach($data_list as $value){
-            $value['columns'] = isset($value['columns']) ? $value['columns'] : array();
-            $value['rule'] = isset($value['rule']) ? $value['rule'] : array();
-            $value['data'] = isset($value['data']) ? $value['data'] : array();
+            if(!is_array($value)) break;
+            $value['columns'] = isset($value['columns']) ? $value['columns'] : '';
+            $value['rule'] = isset($value['rule']) ? $value['rule'] : '';
+            $value['data'] = isset($value['data']) ? $value['data'] : '';
             $value['remark'] = isset($value['remark']) ? $value['remark'] : '';
             writeHTMLTable($value['title'],$value['remark'],$value['columns'],$column_start,$value['data'],$value['rule']);
         }

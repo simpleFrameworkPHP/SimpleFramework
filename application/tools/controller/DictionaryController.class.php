@@ -34,7 +34,7 @@ class DictionaryController extends Controller {
                 } else {
                     $table_list = $con1->select('SHOW TABLE STATUS FROM '.$con1->db_name);
                     foreach($table_list as $row){
-                        $table_array[] = array('name'=>$row['Name'],'commont'=>$row['Commont']);
+                        $table_array[] = array('name'=>$row['Name'],'Comment'=>$row['Comment']);
                     }
 
                 }
@@ -91,7 +91,7 @@ class DictionaryController extends Controller {
         foreach($relate_table as $key => $table){
             if(is_array($table)){
                 $i_table_name = $table['name'];
-                $i_table_reamrk = $table['commont'];
+                $i_table_reamrk = $table['Comment'];
             } else {
                 $i_table_name = $table;
             }
