@@ -13,7 +13,7 @@ class Controller extends View {
     var $params = array();
 
     public function __construct(){
-        $this->file_dir = APP_PATH.'/'.$_REQUEST['a'].'/pages/'.$_REQUEST['c'];
+        $this->file_dir = APP_PATH.'/'.$_REQUEST['a'].'/pages/'.strtolower($_REQUEST['c']);
         $this->cache_file_dir = CACHE_PATH.'/pages/'.$_REQUEST['a'].'/'.$_REQUEST['c'];
     }
 
@@ -25,6 +25,7 @@ class Controller extends View {
             $count_url = count($path);
             $fun = (isset($path[$count_url-1]) && $path[$count_url-1] <> '') ? $path[$count_url-1] :  C('SF_DEFAULT_FUN');
             $con = (isset($path[$count_url-2]) && $path[$count_url-2] <> '') ? $path[$count_url-2] :  C('SF_DEFAULT_CON');
+            $con = strtolower($con);
             $app = (isset($path[$count_url-3]) && $path[$count_url-3] <> '') ? $path[$count_url-3] :  C('SF_DEFAULT_APP');
             $this->file_dir = APP_PATH.'/'.$app.'/pages/'.$con;
             $this->cache_file_dir = CACHE_PATH.'/pages/'.$app.'/'.$con;

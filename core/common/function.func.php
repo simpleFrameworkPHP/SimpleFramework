@@ -128,14 +128,12 @@ function S($key,$value = '',$time = 86400){
  */
 function addDir($file){
     $dir = substr($file,-1) == '/' ? $file : dirname($file);
-    $dir_array = array();
     $dir_array = explode('/',$dir);
-    $count = count($dir_array);
     $idir = '';
     foreach($dir_array as $value){
         $idir .= $value . '/';
         if(!is_dir($idir)){
-            mkdir($idir,0755);
+            mkdir($idir,0775);
         }
     }
     return is_dir($dir);

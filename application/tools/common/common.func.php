@@ -12,7 +12,7 @@ function addSelectType($type,$t){
 }
 function getSqlInfo($data_list,$column_start = 0){
     if($data_list['test']){
-        echo $data_list['test'];
+        echo $data_list['test'];unset($data_list['test']);
     }
     if(count($data_list)){
         foreach($data_list as $value){
@@ -49,7 +49,7 @@ function writeHTMLTable($title,$remark,$columns,$column_start,$data,$data_rule =
     if(is_array($data) && count($data)){
         $html .= getBodyHTML($data,$columns,$data_rule,$column_start);
     }
-    $html .= '</table>';
+    $html .= '</table><br/>';
     echo $html;
 }
 
@@ -60,9 +60,8 @@ function getBodyHTML($data,$columns,$data_rule,$column_start){
     if(is_array($data_rule)){
         $rule_key = array_keys($data_rule);
     }
-    foreach($data as $row)
+    foreach($data as $key=>$row)
     {
-        $str .=  '<tr';
         $rule_str = '';
         if(count($rule_key)){
             foreach($rule_key as $value){
@@ -73,12 +72,11 @@ function getBodyHTML($data,$columns,$data_rule,$column_start){
                     case '<=':if($row[$value] <= $data_rule[$value][1]) $rule_str = ' class="'.$data_rule[$value][2].'" ';break;
                     case '=': if($row[$value] == $data_rule[$value][1]) $rule_str = ' class="'.$data_rule[$value][2].'" ';break;
                 }
-                if($rule_str <>''){
-                    $str .= $rule_str;break;
-                }
+                if($rule_str <>'')
+                    break;
             }
         }
-        $str .= '>';
+        $str .= '<tr '.$rule_str.'>';
         for ($i=$column_start; $i<$sum_column; $i++ )
         {
             $str .= '<td>'.$row[$columns[$i]].'</td>';
