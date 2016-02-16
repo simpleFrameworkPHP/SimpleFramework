@@ -25,7 +25,9 @@ class ContrastFunctionController extends Controller {
         //第一次求序列a,b 和的差值
         $this->print_AB();
         $item = 0;
-        while($this->poor <> 0 && $item < count($this->a)){
+        $count = max(count($this->a),count($this->b));
+        print_r('序列a,b被升级前的数组:');print_r($this->a);print_r($this->b);echo "<br/>";
+        while($this->poor <> 0 && $item < count($count)){
             $data = $this->tempAB($item++);print_r('序列a,b被升级后的数组:');print_r($data);
             $this->reAB($data['a'],$data['b'],$this->poor);
         }
@@ -86,7 +88,7 @@ class ContrastFunctionController extends Controller {
         $sumA = array_sum($this->a);
         $sumB = array_sum($this->b);
         $this->poor = $sumA - $sumB;
-        echo $this->poor . '<br/>';
+        echo '<br/> | a - b | = '.$this->poor . '<br/>';
     }
 
 } 
