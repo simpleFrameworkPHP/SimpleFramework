@@ -35,7 +35,7 @@ class DictionaryController extends Controller {
                 } else {
                     $table_list = $con1->select('SHOW TABLE STATUS FROM '.$con1->db_name);
                     foreach($table_list as $row){
-                        $table_array[] = array('name'=>$row['Name'],'commont'=>$row['Commont']);
+                        $table_array[] = array('name'=>$row['Name'],'comment'=>$row['Comment']);
                     }
 
                 }
@@ -92,7 +92,7 @@ class DictionaryController extends Controller {
         foreach($relate_table as $key => $table){
             if(is_array($table)){
                 $i_table_name = $table['name'];
-                $i_table_reamrk = $table['commont'];
+                $i_table_reamrk = $table['comment'];
             } else {
                 $i_table_name = $table;
                 $i_table_reamrk = '';
@@ -104,9 +104,11 @@ class DictionaryController extends Controller {
             $list = array();
             if(is_array($data)){
                 foreach($data as $row){
+//                    var_dump($row);echo "<br/>";
                     $i_data['列名'] = $row['Field'];
                     $i_data['Null'] = $row['Null'];
                     $i_data['类型'] = $row['Type'];
+                    $i_data['默认值'] = !is_null($row['Default']) ? $row['Default'] : "NULL";
                     $i_data['注释'] = $row['Comment'] ? $row['Comment']:(isset($i_remark[$row['Field']])?$i_remark[$row['Field']]:'');
                     $list[] = $i_data;
                 }

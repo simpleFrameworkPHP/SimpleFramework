@@ -330,9 +330,10 @@ class Model{
                 } else {
                     if($v_field = $this->filterColumn($key,$table_array)){;
                         if(is_array($value)){
-                            if(in_array($value[0],array('<>','!=','<','>','<=','>='))){
-                                $where_array[] = $v_field .$value[0].$this->replaceValue($value[1]);
-                            } else if(in_array(strtoupper($value[0]),array('IN','NOT IN','NOT NULL'))) {
+                            $value[0] = strtoupper($value[0]);
+                            if(in_array($value[0],array('<>','!=','<','>','<=','>=','LIKE'))){
+                                $where_array[] = $v_field .' '.$value[0].' '.$this->replaceValue($value[1]);
+                            } else if(in_array($value[0],array('IN','NOT IN','NOT NULL'))) {
                                 $term = strtoupper($value[0]);
                                 unset($value[0]);
                                 $where_array[] = $v_field.' '.strtoupper($value[0]).' ('.implode(' , ',$this->replaceValue($value)).')';
@@ -377,7 +378,8 @@ class Model{
         $table_array = $this->getAllTable();
         foreach($param_array as $key => $value){
             $order_str = strtoupper($value) == 'DESC' ? 'DESC' : 'ASC';
-            if($v_field = $this->filterColumn($key,$table_array)){
+            $v_field = $this->filterColumn($key,$table_array);
+            if($v_field){
                 $order_array[] = $v_field .' '.$order_str;
             } else {
                 Log::write('SQL ERROR','order语句中出现的'.$value.'不存在','sql');
@@ -408,6 +410,20 @@ class Model{
         }
         $table = preg_replace('/ AS .*/','',$this->option['TABLE']);
         $insert_sql = 'INSERT INTO '.$table . ' ('.implode(',',$add_columns) . ') VALUES ('.implode(',',$add_values).')';
+        return $this->db->execute($insert_sql);
+    }
+
+    public function addKeyUp(array $Columns){
+        $str = array();
+        $table_list = $this->getAllTable();
+        foreach($Columns as $key=>$value){
+            if($this->filterColumn($key,$table_list)){
+                $str[] = $key . "='".$value."'";
+            }
+        }
+        $str = implode(",",$str);
+        $table = preg_replace('/ AS .*/','',$this->option['TABLE']);
+        $insert_sql = "INSERT INTO " . $table . " set ". $str ." on duplicate key update ".$str;
         return $this->db->execute($insert_sql);
     }
 
