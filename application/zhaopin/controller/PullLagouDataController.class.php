@@ -16,7 +16,7 @@ class PullLagouDataController extends Controller {
         while(($json['success'] && !empty($json['content']['result'])) || $i == 1){
             $url = "http://www.lagou.com/jobs/positionAjax.json?px=new&first=false&pn=$i";
             $url = isset($city) ? $url."&city=$city" : $url;
-            $json = file_get_contents($url);
+            $json = getHtmlData($url);
             $json = json_decode($json,true);
             $data = $json['content']['result'];
             foreach($data as $row){
@@ -35,7 +35,8 @@ class PullLagouDataController extends Controller {
         $model = M('',3);
         $where['city'] = "大连";
         $where['positionName'] = array("LIKE","%php%");
-        $data = $model->table(array("view_lagou_position"))->where($where)->order(array('salary'=>'DESC'))->select();
+        $where['addTime'] = "2016-02-23";
+        $data = $model->table(array("view_lagou_position"))->where($where)->order(array('createTime'=>'DESC'))->select();
 
 //        echo "<pre>";
 //        print_r($data[0]);
