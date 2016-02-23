@@ -23,7 +23,7 @@ class PullLagouDataController extends Controller {
                 $row['companyLabelList'] = implode(' ',$row['companyLabelList']);
                 $row['addTime'] = $today;
                 $model = M('',3);
-                $model->table(array("view_position"))->addKeyUp($row);
+                $model->table(array("view_lagou_position"))->addKeyUp($row);
             }
             echo  'page:'.$i."<br/>";
             sleep(3);
@@ -35,7 +35,7 @@ class PullLagouDataController extends Controller {
         $model = M('',3);
         $where['city'] = "大连";
         $where['positionName'] = array("LIKE","%php%");
-        $data = $model->table(array("view_position"))->where($where)->order(array('salary'=>'DESC'))->select();
+        $data = $model->table(array("view_lagou_position"))->where($where)->order(array('salary'=>'DESC'))->select();
 
 //        echo "<pre>";
 //        print_r($data[0]);
