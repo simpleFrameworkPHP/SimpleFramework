@@ -15,6 +15,6 @@ class Log {
         }
         $path .= $file_prefix.'_'.date('Y_m_d').'.txt';
         $content = '['.date('Y-m-d H:i:s',nowTime()).'] '.$title.' LOG : '.$info . ".\r\n";
-        file_put_contents($path,$content,FILE_APPEND);
+        @file_put_contents($path,$content,FILE_APPEND);
     }
 } 
