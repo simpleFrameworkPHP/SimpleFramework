@@ -9,12 +9,13 @@
 include_once(dirname(dirname(dirname(dirname(__FILE__))))."/core/cron.php");
 loadDirFile(dirname(dirname(__FILE__)).'/common');
 
-print_r($argv);
 
 switch($argv[1]){
     case 1:pullData();
         break;
     case 2:manageData();
+        break;
+    case 3:getPositionByWorkYear();
         break;
     default:
         manageData();
@@ -52,29 +53,53 @@ function manageData(){
     $i = 0;
     $limit = 100;
     $data = array();
+    $db = M('',3);
+    $db->table("position");
     while($i == 0 || !empty($data)){
         $data = $model->limit($limit,$i*$limit)->select();
         foreach($data as $row){
             //工作年限处理
-            $row['MinWorkYear'] = 0;
-            $row['MaxWorkYear'] = 0;
+            $row['minWorkYear'] = 0;
+            $row['maxWorkYear'] = 0;
             if(strstr($row['workYear'],'-')){
                 $work_year = explode('-',$row['workYear']);
-                $row['MinWorkYear'] = intval($work_year[0]);
-                $row['MaxWorkYear'] = intval($work_year[1]);
+                $row['minWorkYear'] = intval($work_year[0]);
+                $row['maxWorkYear'] = intval($work_year[1]);
             }
             unset($row['workYear']);
             //薪资范围处理
-            $row['MinSalary'] = 0;
-            $row['MaxSalary'] = 0;
+            $row['minSalary'] = 0;
+            $row['maxSalary'] = 0;
             if(strstr($row['salary'],'-')){
                 $salary = explode('-',$row['salary']);
-                $row['MinSalary'] = strstr($salary[0],'k') ? intval($salary[0])*1000 : intval($salary[0]);
-                $row['MaxSalary'] = strstr($salary[1],'k') ? intval($salary[1])*1000 : intval($salary[1]);
+                $row['minSalary'] = strstr($salary[0],'k') ? intval($salary[0])*1000 : intval($salary[0]);
+                $row['maxSalary'] = strstr($salary[1],'k') ? intval($salary[1])*1000 : intval($salary[1]);
             }
             unset($row['salary']);
+            unset($row['addTime']);
+            //数据来源
+            $row['dataFrom'] = 'lagou';
 
-            print_r($row);exit;
+            unset($row['id']);
+//            print_r($row);exit;
+            $id = $db->addKeyUp($row);
         }
+        echo $i."\n";
+        $i++;
     }
+}
+
+function getPositionByWorkYear(){
+    $workYear = array(0=>0,1=>0,2=>0,3=>0,4=>0,5=>0,6=>0,7=>0,8=>0,9=>0,10=>0);
+    $model = M('',3);
+    $model->table("position");
+    $bei = 2000;
+    //$where['addTime'] = date('Y-m-d');
+    foreach($workYear as $key=>&$count){
+        $where['minSalary'] = array("<=",$key*$bei);
+        $where['maxSalary'] = array(">=",$key*$bei);
+        $row = $model->where($where)->fields("count(1)",false)->select();
+        $data[$key*$bei] = $row;
+    }
+    print_r($data);
 }

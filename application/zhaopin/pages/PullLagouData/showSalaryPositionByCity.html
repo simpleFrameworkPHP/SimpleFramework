@@ -1,0 +1,29 @@
+{:initH('item_header')}
+<style>
+    .div_content table.tcenter {margin: auto;}
+    .div_content table tr th.column {background-color: #99ff99;}
+    .div_content table tr td {min-width: 50px;background-color: #88afff;}
+    .div_content table tr.yellow  td{background-color: #fffa88;}
+    .div_content table tr.red td{background-color: #ff3388;}
+    .div_content ul{list-style: none;padding: 0px;}
+    .div_content ul li{display: inline;padding: 8px;}
+    .div_content ul#tags{margin-bottom: 0px;padding: 20px 20px 8px 20px;}
+    .div_content ul#tags li:hover{cursor:pointer;background-color: #BBBBBB;}
+    .div_content ul li div.div_content{padding: 10px;}
+    .div_content .selectTag{background-color: #999999}
+    .div_content .div_hline{display: block;height: 3px;background-color: #999999;padding: 0px;}
+    ul li{float: left;}
+</style>
+<div class="div_content">
+    <ul>
+        <?php
+            foreach($data as $key=>$value){
+                echo "<li>";
+                writeHTMLTable("职位数据".$key,$remark,$columns,0,$value);
+                echo "</li>";
+            }
+        ?>
+    </ul>
+
+</div>
+{:initH('item_footer')}
