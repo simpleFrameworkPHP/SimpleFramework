@@ -54,7 +54,7 @@ function manageData(){
     $limit = 100;
     $data = array();
     $db = M('',3);
-    $db->table("position");
+    $db->table("model_position");
     while($i == 0 || !empty($data)){
         $data = $model->limit($limit,$i*$limit)->select();
         foreach($data as $row){
@@ -92,7 +92,7 @@ function manageData(){
 function getPositionByWorkYear(){
     $workYear = array(0=>0,1=>0,2=>0,3=>0,4=>0,5=>0,6=>0,7=>0,8=>0,9=>0,10=>0);
     $model = M('',3);
-    $model->table("position");
+    $model->table("model_position");
     $bei = 2000;
     //$where['addTime'] = date('Y-m-d');
     foreach($workYear as $key=>&$count){

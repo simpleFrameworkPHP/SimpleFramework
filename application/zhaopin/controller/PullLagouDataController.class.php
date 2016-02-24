@@ -35,7 +35,7 @@ class PullLagouDataController extends Controller {
         $model = M('',3);
         //$where['city'] = "大连";
         $where['positionName'] = array("LIKE","%php%");
-        $data = $model->table(array("position"))->where($where)->order(array('createTime'=>'DESC'))->select();
+        $data = $model->table(array("view_lagou_position"))->where($where)->order(array('createTime'=>'DESC'))->select();
 
 //        echo "<pre>";
 //        print_r($data);exit;
@@ -53,8 +53,8 @@ class PullLagouDataController extends Controller {
     public function showSalaryPositionByCity(){
         $workYear = array(0=>0,1=>0,2=>0,3=>0,4=>0,5=>0,6=>0,7=>0,8=>0,9=>0,10=>0);
         $model = M('',3);
-        $model->table("position");
-        $bei = 3000;
+        $model->table("model_position");
+        $bei = 3500;
         //$where['addTime'] = date('Y-m-d');
         foreach($workYear as $key=>&$count){
             $where['minSalary'] = array("<=",$key*$bei);
