@@ -32,6 +32,7 @@ class ImageInfoController extends Controller {
         $path = DATA_PATH.'/image/'.$p;
         $url = './data/image/'.$p;print_r($path);
         $files = glob($path.'*.*');
+        $point = array();
         if(count($files)){
             foreach($files as $file){
                 $image = new Image($file);

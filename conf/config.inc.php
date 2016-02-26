@@ -46,7 +46,7 @@ return array(
             'DB_MODE'=>'mysqli',
         ),
         2 => array(
-            'DB_HOST'=>'localhost',
+            'DB_HOST'=>'127.0.0.1',
             'DB_NAME'=>'opsys',
             'DB_PORT'=>3306,
             'DB_USER'=>'root',
