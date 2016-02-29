@@ -336,7 +336,7 @@ class Model{
                             } else if(in_array($value[0],array('IN','NOT IN','NOT NULL'))) {
                                 $term = strtoupper($value[0]);
                                 unset($value[0]);
-                                $where_array[] = $v_field.' '.strtoupper($value[0]).' ('.implode(' , ',$this->replaceValue($value)).')';
+                                $where_array[] = $v_field.' '.strtoupper($term).' ('.implode(' , ',$this->replaceValue($value)).')';
                             }
                         } else {
                             $where_array[] = $v_field.' = '.$this->replaceValue($value);

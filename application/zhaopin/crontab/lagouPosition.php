@@ -11,9 +11,9 @@ loadDirFile(dirname(dirname(__FILE__)).'/common');
 
 
 switch($argv[1]){
-    case 1:pullData();
+    case "add":pullData();
         break;
-    case 2:manageData();
+    case "manage":manageData();
         break;
     case 3:getPositionByWorkYear();
         break;
@@ -39,16 +39,18 @@ function pullData(){
             $model = M('',3);
             $model->table(array("view_lagou_position"))->addKeyUp($row);
         }
-        echo  'page:'.$i."\n";
-        sleep(3);
+        echo  'page:'.$i." count:".count($data)."\n";
+        sleep(1);
         $i++;
     }
+    print_r($json);
 }
 
 function manageData(){
     $model = M('',3);
     $today = date('Y-m-d');
-    $where['addTime'] = $today;
+    $where = array();
+    //$where['addTime'] = $today;
     $model->table(array("view_lagou_position"))->where($where);
     $i = 0;
     $limit = 100;
