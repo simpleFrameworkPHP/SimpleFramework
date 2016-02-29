@@ -60,17 +60,28 @@ class PullLagouDataController extends Controller {
         $bei = 5000;
         $xAxis = array();
         $json = array();
-        $all_city = $model->table("model_position")->fields("distinct city",false)->select();
-        $all_city = reIndexArray($all_city,'city');
-        $all_city = array_keys($all_city);
         $where_city = $_REQUEST['city'] == '' ? array() : explode(",",$_REQUEST['city']);
         $where = '';
-        $select_city = array();
+        $select['city'] = array();
         if(!empty($where_city)){
             $where['city'] = array_merge(array('in'),$where_city);
-            $select_city = $where_city;
+            $select['city'] = $where_city;
         }
-
+        if(isset($_REQUEST['position'])){
+            $where['positionName'] = array("LIKE","%php%");
+            $select['position'] = $_REQUEST['position'];
+        }
+        $all_city = $model->table("model_position")->fields("distinct city",false)->select();
+        foreach($all_city as $key => $value){
+            $params = $select;
+            $search = array_search($all_city[$key]['city'],$select['city']);
+            if(!is_int($search))
+                $params['city'] = array_merge(array($all_city[$key]['city']),$select['city']);
+            else
+                unset($params['city'][$search]);
+            $all_city[$key]['url'] = H('',$params);
+        }
+        $all_city = array_merge(array(array('city'=>'all','url'=>H(''))),$all_city);
 
         $city = $model->table("model_position")->fields("distinct city",false)->where($where)->select();
         $city = reIndexArray($city,'city');
@@ -102,8 +113,7 @@ class PullLagouDataController extends Controller {
             $positions[] = $value;
         }
         $city[] = 'all';
-        $all_city = array_merge(array("all"),$all_city);
-        $this->assign('select_city',$select_city);
+        $this->assign('select',$select);
         $this->assign('all_city',$all_city);
         $this->assign('city',$city);
         $this->assign('json',json_encode($positions));

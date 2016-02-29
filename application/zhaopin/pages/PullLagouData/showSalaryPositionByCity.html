@@ -17,8 +17,7 @@
         <div style="display: block;padding: 40px;">
             <?php
         foreach($all_city as $key=>$value){
-            $url = H('zhaopin/PullLagouData/showSalaryPositionByCity',array('city'=>implode(',',array_merge(array($value),$select_city))));
-            echo '&nbsp;<a style="display: inline-block;" href="'.$url.'"><input type="checkbox" name="city" '.(in_array($value,$select_city)?'checked':'').' value="'.$value.'"/>'.$value.'</a>';
+            echo '&nbsp;<a style="display: inline-block;" href="'.$value['url'].'"><input type="checkbox" name="city" '.(in_array($value['city'],$select['city'])?'checked':'').' value="'.$value['city'].'"/>'.$value['city'].'</a>';
             }
             ?>
         </div>

@@ -85,6 +85,7 @@ function H($path='',$params='',$redirect = false){
     }
     if(is_array($params)){
         foreach($params as $key =>$value){
+            if(is_array($value)) $value = implode(',',$value);
             $url .= '&'.$key.'='.$value;
         }
     } else {
