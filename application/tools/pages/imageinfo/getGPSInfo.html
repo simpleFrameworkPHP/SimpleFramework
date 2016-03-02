@@ -59,7 +59,7 @@
     $(".map_image").mouseover(function(){
         var img = $(this).attr("data-value");
         console.log(img);
-        $(".img"+img).css("color","red");
+        $(".img"+img).css("color","#FFBBBB");
         $(".img"+img).parent().css("border-color","#000000");
         var z_index = $(".img"+img).parent().parent().css("z-index");
         $(".img"+img).parent().parent().css("z-index",-z_index);
@@ -68,8 +68,7 @@
         var img = $(this).attr("data-value");
         console.log(img);
         $(".img"+img).css("color","#000000");
-        $(".img"+img).parent().css("border-color","red");
-        $(".img"+img).parent().css("z-index","1");
+        $(".img"+img).parent().css("border-color","#FFBBBB");
         var z_index = $(".img"+img).parent().parent().css("z-index");
         $(".img"+img).parent().parent().css("z-index",-z_index);
     });
