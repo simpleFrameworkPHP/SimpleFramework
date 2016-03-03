@@ -158,7 +158,7 @@ function removeDir($path) {
     $dh=opendir($path);
     while ($file=readdir($dh)) {
         if($file!="." && $file!="..") {
-            $fullpath=$path."/".$file;echo $fullpath;
+            $fullpath=$path."/".$file;echo "Clear file:".$fullpath."<br/>";
             if(!is_dir($fullpath)) {
                 unlink($fullpath);
             } else {
@@ -308,4 +308,14 @@ function expendModel($model){
             include $i_path;
         }
     }
+}
+
+function JSON($data){
+    $str = json_encode($data);
+    return preg_replace_callback('/\\\\u([0-9a-f]{4})/i',
+            create_function(
+                '$matches',
+                'return mb_convert_encoding(pack("H*", $matches[1]), "UTF-8", "UCS-2BE");'
+            ),
+            $str);
 }
