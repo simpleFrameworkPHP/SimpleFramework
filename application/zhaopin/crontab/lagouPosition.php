@@ -17,6 +17,8 @@ switch($argv[1]){
         break;
     case 3:getPositionByWorkYear();
         break;
+    case "city":manageCity();
+        break;
     default:
         manageData();
 }
@@ -104,4 +106,21 @@ function getPositionByWorkYear(){
         $data[$key*$bei] = $row;
     }
     print_r($data);
+}
+
+function manageCity(){
+    $where['add_time'] = date('Y-m-d');
+    $model = M('',3);
+    $data = $model->table("view_lagou_position")
+        ->where($where)
+        ->group("city")
+        ->fields("count(DISTINCT positionId) as countPosition,count(DISTINCT companyId) as countCompany,city",false)
+        ->select();
+    $model = M('',3);
+    $model->table("model_city");
+    foreach($data as $row){
+        $row['addTime'] = $where['addTime'];
+        $model->addKeyUp($row);
+    }
+    echo "end";
 }

@@ -109,7 +109,7 @@ class PullLagouDataController extends Controller {
             }
             $value['data'] = $idata;
             $value['name'] = $icity;
-            $value['type'] = 'line';
+            $value['type'] = 'bar';
             $positions[] = $value;
         }
         $city[] = 'all';
@@ -121,6 +121,27 @@ class PullLagouDataController extends Controller {
         $columns = array_keys($data[0][0]);
         $this->assign('columns',$columns);
         $this->assign('data',$data);
+        $this->display();
+    }
+
+    public function showCity(){
+        //$where['add_time'] = date('Y-m-d');
+        $model = M('',3);
+        $data = $model->table("model_city")
+            //->where($where)
+            ->limit(5)
+            ->order(array("countPosition"=>"DESC"))
+            ->select();
+        foreach($data as $row){
+            $city[] = $row['city'];
+            $positions[] = $row['countPosition'];
+            $companys[] = $row['countCompany'];
+        }
+        $list[] = array("data"=>$positions,"name"=>"职位数","type"=>"bar");
+        $list[] = array("data"=>$companys,"name"=>"公司数","type"=>"bar");
+        $this->assign('json',JSON($list));
+        $this->assign('xAxis',JSON($city));
+        $this->assign('city',array("职位数","公司数"));
         $this->display();
     }
 

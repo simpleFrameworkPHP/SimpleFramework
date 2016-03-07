@@ -30,11 +30,11 @@ return array(
 //            'DB_MODE'=>'mysqli',
 //        ),
         0 => array(
-            'DB_HOST'=>'10.11.81.11',
-            'DB_NAME'=>'opsys',
-            'DB_PORT'=>5001,
-            'DB_USER'=>'opsys',
-            'DB_PASS'=>'hxZradh98Z',
+            'DB_HOST'=>'127.0.0.1',
+            'DB_NAME'=>'test',
+            'DB_PORT'=>3306,
+            'DB_USER'=>'root',
+            'DB_PASS'=>'',
             'DB_MODE'=>'mysqli',
         ),
         1 => array(
