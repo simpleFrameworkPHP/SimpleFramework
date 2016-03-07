@@ -1,5 +1,5 @@
 {:initH('item_header')}
-<style>
+<style xmlns="http://www.w3.org/1999/html">
     .div_content table.tcenter {margin: auto;}
     .div_content table tr th.column {background-color: #99ff99;}
     .div_content table tr td {min-width: 50px;background-color: #88afff;}
@@ -14,6 +14,77 @@
     .div_content .div_hline{display: block;height: 3px;background-color: #999999;padding: 0px;}
     ul li{float: left;}
 </style>
+        <div style="display: block;padding: 40px;">
+            <?php
+        foreach($all_city as $key=>$value){
+            echo '&nbsp;<a style="display: inline-block;" href="'.$value['url'].'"><input type="checkbox" name="city" '.(in_array($value['city'],$select['city'])?'checked':'').' value="'.$value['city'].'"/>'.$value['city'].'</a>';
+            }
+            ?>
+        </div>
+
+<div id="main" style="height:500px;border:1px solid #ccc;padding:10px;"></div>
+
+<!--Step:2 Import echarts.js-->
+<!--Step:2 引入echarts.js-->
+<script src="__JSROOT__/echarts.js"></script>
+
+<script type="text/javascript">
+    // Step:3 conifg ECharts's path, link to echarts.js from current page.
+    // Step:3 为模块加载器配置echarts的路径，从当前页面链接到echarts.js，定义所需图表路径
+    require.config({
+        paths: {
+            echarts: '__JSROOT__'
+        }
+    });
+
+    // Step:4 require echarts and use it in the callback.
+    // Step:4 动态加载echarts然后在回调函数中开始使用，注意保持按需加载结构定义图表路径
+    require(
+            [
+                'echarts',
+                'echarts/chart/bar',
+                'echarts/chart/line'
+            ],
+            function (ec) {
+                //--- 折柱 ---
+                var myChart = ec.init(document.getElementById('main'));
+
+                myChart.setOption({
+                    tooltip : {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data:{:json_encode($city)}
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            mark : {show: true},
+                            dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            restore : {show: true},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis : [
+                        {
+                            type : 'category',
+                            data : {$xAxis}
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            type : 'value',
+                            splitArea : {show : true}
+                        }
+                    ],
+                    series : {$json}
+                });
+            }
+    );
+
+</script>
 <div class="div_content">
     <ul>
         <?php

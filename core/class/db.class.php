@@ -15,15 +15,15 @@ class Db {
     public $select_db = false;
     public $select_sql = '%FIELD% %TABLE% %WHERE% %GROUP% %HAVING% %ORDER% %LIMIT%';
 
-    public function __construct($host,$user,$pass,$db_name,$port,$mode,$no=0){
-        return self::initDBCon($host,$user,$pass,$db_name,$port,$mode,$no);
+    public function __construct($host,$user,$pass,$db_name,$port,$mode,$no=0,$chart_set){
+        return self::initDBCon($host,$user,$pass,$db_name,$port,$mode,$no,$chart_set);
     }
-    public static  function initDBCon($host,$user,$pass,$db_name,$port,$mode,$no=0){
+    public static  function initDBCon($host,$user,$pass,$db_name,$port,$mode,$no=0,$chart_set){
 
         switch($mode){
             case 'mysql':$db = new DBMysql($host,$user,$pass,$db_name,$port,$no);break;
-            case 'mysqli':$db = new DBMysqli($host,$user,$pass,$db_name,$port,$no);break;
-            default:$db = new DBMysqli($host,$user,$pass,$db_name,$port,$no);
+            case 'mysqli':$db = new DBMysqli($host,$user,$pass,$db_name,$port,$no,$chart_set);break;
+            default:$db = new DBMysqli($host,$user,$pass,$db_name,$port,$no,$chart_set);
         }
         return $db;
     }

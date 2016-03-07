@@ -55,7 +55,7 @@ class FileCache extends Cache {
             $file_data = json_decode(getFileContent($path),true);
             $save_data = array_merge($file_data,$save_data);
         }
-        $this->writeParam($path,json_encode($save_data));
+        $this->writeParam($path,JSON($save_data));
     }
 
     function writeParam($file,$content){

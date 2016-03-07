@@ -1,7 +1,22 @@
 ﻿{:initH('header')}
 <div id="mapobj" class="map-big-window"></div>
+<ul>
+    <?php
+    foreach($point as $i=>$ipoint){
+    ?>
+    <li><img class="map_image" data-value="{$i}" src="{$ipoint['path']}"></li>
+    <?php
+    }
+    ?>
+</ul>
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=13633ae8e4d58d659f2d06f14f81ac0c"></script>
 <script type="text/javascript" src="http://developer.baidu.com/map/jsdemo/demo/changeMore.js"></script>
+<style>
+    ul{height: 100px;}
+    ul li{float: left;list-style: none;padding: 5px;}
+    ul li img{height: 90px;}
+    ul li img:hover{height: 100px;}
+</style>
 <script>
     var map = new BMap.Map('mapobj');
     map.addControl(new BMap.NavigationControl());
@@ -36,10 +51,26 @@
     }
     for(var i in points){
         BMappoint.push(new BMap.Point(points[i].x,points[i].y));
-        sContent.push("<h4 style='margin:0 0 5px 0;padding:0.2em 0'>图片"+i+"</h4>" +
+        sContent.push("<h4 class='img"+i+"' style='margin:0 0 5px 0;padding:0.2em 0'>图片"+i+"</h4>" +
                 "<img style='float:right;margin:4px' id='imgDemo' width='100px' height='100px' src='"+points[i].path+"'/>" +
                 "</div>");
     }
     BMap.Convertor.transMore(BMappoint,0,callback);     //真实经纬度转成百度坐标
+    $(".map_image").mouseover(function(){
+        var img = $(this).attr("data-value");
+        console.log(img);
+        $(".img"+img).css("color","#FFBBBB");
+        $(".img"+img).parent().css("border-color","#000000");
+        var z_index = $(".img"+img).parent().parent().css("z-index");
+        $(".img"+img).parent().parent().css("z-index",-z_index);
+    });
+    $(".map_image").mouseleave(function(){
+        var img = $(this).attr("data-value");
+        console.log(img);
+        $(".img"+img).css("color","#000000");
+        $(".img"+img).parent().css("border-color","#FFBBBB");
+        var z_index = $(".img"+img).parent().parent().css("z-index");
+        $(".img"+img).parent().parent().css("z-index",-z_index);
+    });
 </script>
 {:initH('footer')}

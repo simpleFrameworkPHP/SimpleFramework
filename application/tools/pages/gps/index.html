@@ -1,0 +1,45 @@
+{:initH('header')}
+<div id="mapobj" class="map-big-window"></div>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=13633ae8e4d58d659f2d06f14f81ac0c"></script>
+<script type="text/javascript" src="http://developer.baidu.com/map/jsdemo/demo/changeMore.js"></script>
+<script>
+    var map = new BMap.Map('mapobj');
+    map.addControl(new BMap.NavigationControl());
+    map.enableScrollWheelZoom();
+    map.enableContinuousZoom();
+    map.enableInertialDragging();
+    var points = eval('<?php echo json_encode($point)?>');
+    var BMappoint = [];
+    var sContent = [];
+    //坐标转换完之后的回调函数
+    callback = function (points){
+        var xyResult = null;
+        var sumX = 0,sumY = 0;
+        var pcount=0;
+        for(var i in points){
+            xyResult = points[i];console.log(xyResult);
+            if(xyResult.error != 0){continue;}//出错就直接返回;
+            pcount++;
+            sumX += BMappoint[i].lng;
+            sumY += BMappoint[i].lat;
+            var point = new BMap.Point(xyResult.x, xyResult.y);
+            var marker = new BMap.Marker(point);
+            map.addOverlay(marker);
+//            var mapLabel = new BMap.Label(sContent[i],{offset:new BMap.Size(20,-10)});
+//            marker.setLabel(mapLabel);
+        }
+        sumX = sumX / pcount;
+        sumY = sumY / pcount;
+        var centerPoint = new BMap.Point(sumX,sumY);
+        map.centerAndZoom(centerPoint,15);
+        map.setCenter(centerPoint);
+    }
+    for(var i in points){
+        BMappoint.push(new BMap.Point(points[i].x,points[i].y));
+//        sContent.push("<h4 style='margin:0 0 5px 0;padding:0.2em 0'>图片"+i+"</h4>" +
+//                "<img style='float:right;margin:4px' id='imgDemo' width='100px' height='100px' src='"+points[i].path+"'/>" +
+//                "</div>");
+    }
+    BMap.Convertor.transMore(BMappoint,0,callback);     //真实经纬度转成百度坐标
+</script>
+{:initH('footer')}

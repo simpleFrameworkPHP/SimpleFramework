@@ -34,8 +34,8 @@ class Model{
      * @param $mode 链接模式
      * @param int $no   链接id
      */
-    public function __construct($host = '',$user = '',$pass = '',$db_name = '',$port = '',$mode = '',$no = 0){
-        $con = $this->initDBConnect($host,$user,$pass,$db_name,$port,$mode,$no);
+    public function __construct($host = '',$user = '',$pass = '',$db_name = '',$port = '',$mode = '',$no = 0,$chart_set = 'utf8'){
+        $con = $this->initDBConnect($host,$user,$pass,$db_name,$port,$mode,$no,$chart_set);
         if(isset($this->var_table)){
             //默认操作表
             $key = array_keys($this->var_table);
@@ -43,25 +43,16 @@ class Model{
         }
         $this->db_name = $db_name;
         $this->link_ID = $no;
-        if($this->tables_info = S('DB_INFO_'.$no.'/DB_INFO'))
-            ;
-        else
-            $this->initTableInfo($no);
+        $this->initTableInfo($no);
         return $this;
     }
 
-    public function initDBConnect($host,$user,$pass,$db_name,$port,$mode,$no){
+    public function initDBConnect($host,$user,$pass,$db_name,$port,$mode,$no,$chart_set){
         if($host == ''){
-            $con = C('SF_DB_CONNECT');
-            $host = $con[$no]['DB_HOST'];
-            $user = $con[$no]['DB_USER'];
-            $pass = $con[$no]['DB_PASS'];
-            $db_name = $con[$no]['DB_NAME'];
-            $port = $con[$no]['DB_PORT'];
-            $mode = $con[$no]['DB_MODE'];
+            return array('error'=>"Can't connect DB.");
         }
             //创建对应的数据库链接；
-            return $this->db = Db::initDBCon($host,$user,$pass,$db_name,$port,$mode,$no);
+            return $this->db = Db::initDBCon($host,$user,$pass,$db_name,$port,$mode,$no,$chart_set);
     }
 
     public function select($sql = ''){
@@ -84,14 +75,18 @@ class Model{
 
 
     function initTableInfo($link_ID = 0){
-        $sql = 'SHOW TABLES';
-        $tables = $this->db->select($sql);
-        if(is_array($tables) && isset($this->db_name)){
-            foreach($tables as $value){
-                $this->getColumnInfo($value['Tables_in_'.$this->db_name]);
+        $cache_str = 'DB_INFO_'.$link_ID.'/DB_INFO';
+        $this->tables_info = S($cache_str);
+        if(empty($this->tables_info)){
+            $sql = 'SHOW TABLES';
+            $tables = $this->db->select($sql);
+            if(is_array($tables) && isset($this->db_name)){
+                foreach($tables as $value){
+                    $this->getColumnInfo($value['Tables_in_'.$this->db_name]);
+                }
+                //存储数据结构
+                S($cache_str,$this->tables_info);
             }
-            //存储数据结构
-            S('DB_INFO_'.$link_ID . '/DB_INFO',$this->tables_info);
         }
     }
     function getColumnInfo($table_name,$link_ID = 0){
@@ -336,7 +331,7 @@ class Model{
                             } else if(in_array($value[0],array('IN','NOT IN','NOT NULL'))) {
                                 $term = strtoupper($value[0]);
                                 unset($value[0]);
-                                $where_array[] = $v_field.' '.strtoupper($value[0]).' ('.implode(' , ',$this->replaceValue($value)).')';
+                                $where_array[] = $v_field.' '.strtoupper($term).' ('.implode(' , ',$this->replaceValue($value)).')';
                             }
                         } else {
                             $where_array[] = $v_field.' = '.$this->replaceValue($value);

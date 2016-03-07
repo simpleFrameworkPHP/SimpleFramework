@@ -8,7 +8,7 @@
 
 class DBMysqli extends Db {
 
-    public function __construct($host,$user,$pass,$db_name,$port,$no){
+    public function __construct($host,$user,$pass,$db_name,$port,$no,$chart_set){
         if ( !extension_loaded('mysqli') ) {
             errorPage('你没有安装mysqli模块，快去安装吧','系统不支持:mysqli');
         }
@@ -20,7 +20,7 @@ class DBMysqli extends Db {
         $this->con = new mysqli($host,$user,$pass,$db_name,$port)
             or errorPage('没有连上数据库','错误信息：'.mysql_error());
         //使用UTF8存取数据库
-        $this->con->query("SET NAMES '".C('SF_DB_CHARSET')."'");
+        $this->con->query("SET NAMES '".$chart_set."'");
         $this->select_db = true;
         return $this->con;
     }
