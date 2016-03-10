@@ -6,3 +6,9 @@ div.div_footer {min-height: 200px;margin-bottom: 20px;padding-top: 20px;text-ali
 div.div_footer .span_foot_link{margin: 0px 10px 0px 10px;}
 div.div_footer .span_foot_link a{text-decoration: none;}
 div.div_footer .span_foot_title{color: #999999;font-size: smaller;}
+.main_left{width: 150px;height: 900px;position: fixed;}
+.main_left ul{list-style: none;background-color: #9999ff;padding-left: 0px;padding-top: 200px;height: 100%;}
+.main_left ul li{width: 130px;height: 30px;padding-left: 20px;}
+.main_left ul li:hover{background-color: #7777ff;}
+.main_right{margin-left: 150px;margin-top: 0px;min-width: 850px;height: 900px;}
+.right_header{height: 40px;padding: 10px 10px 10px 20px;background-color: #EEEEEE;}
