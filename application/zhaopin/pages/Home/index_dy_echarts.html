@@ -1,0 +1,64 @@
+<li class="index_li" id="{$id}"></li>
+<script type="text/javascript">
+    // Step:3 conifg ECharts's path, link to echarts.js from current page.
+    // Step:3 为模块加载器配置echarts的路径，从当前页面链接到echarts.js，定义所需图表路径
+    require.config({
+        paths: {
+            echarts: '__JSROOT__'
+        }
+    });
+
+    // Step:4 require echarts and use it in the callback.
+    // Step:4 动态加载echarts然后在回调函数中开始使用，注意保持按需加载结构定义图表路径
+    require(
+            [
+                'echarts',
+                'echarts/chart/bar',
+                'echarts/chart/line'
+            ],
+            function (ec) {
+                //--- 折柱 ---
+                var myChart = ec.init(document.getElementById('{$id}'));
+
+                myChart.setOption({
+                    title:{text:'{$title}',x:"center"},
+                    tooltip : {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data:{$item},
+                        y:'bottom'
+    },
+//    toolbox: {
+//        show : true,
+//        feature : {
+//            mark : {show: true},
+//            dataView : {show: true, readOnly: false},
+//            magicType : {show: true, type: ['line', 'bar']},
+//            restore : {show: true},
+//            saveAsImage : {show: true}
+//        }
+//    },
+    calculable : true,
+            xAxis : [
+        {
+            type : 'category',
+            data : {$xAxis}
+        }
+    ],
+            yAxis : [
+                {
+                    type : 'value',
+                    splitArea : {show : true}
+                },
+                {
+                    type : 'value',
+                    splitArea : {show : true}
+                }
+    ],
+            series : {$json}
+    });
+    }
+    );
+
+</script>

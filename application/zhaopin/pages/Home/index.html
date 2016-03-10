@@ -1,0 +1,18 @@
+{:initH('header')}
+<script src="__JSROOT__/echarts.js"></script>
+<link rel="stylesheet" href="__THEME__/css/home.css" type="text/css"/>
+        <ul>
+            <li class="main_left"></li>
+            <li class="main_right">
+                <ul class="main_echarts_ul">
+                <?php
+                foreach($template as $value){
+                    echo $value;
+                }
+                ?>
+                </ul>
+            </li>
+        </ul>
+
+
+{:initH('footer')}

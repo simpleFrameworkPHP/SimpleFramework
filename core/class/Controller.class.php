@@ -17,7 +17,7 @@ class Controller extends View {
         $this->cache_file_dir = CACHE_PATH.'/pages/'.$_REQUEST['a'].'/'.$_REQUEST['c'];
     }
 
-    public function display($fun = '',$is_create = false,$create_file = ''){
+    public function fetch($fun = ''){
         if($fun == ''){
             $fun = $_REQUEST['f'];
         } else {
@@ -61,7 +61,10 @@ class Controller extends View {
         empty($content)?include $cache_file_path:eval('?>'.$content);
         // 获取并清空缓存
         $content = ob_get_clean();
-
+        return $content;
+    }
+    public function display($fun = '',$is_create = false,$create_file = ''){
+        $content = $this->fetch($fun);
         $this->rander($content,'','',$is_create,$create_file);
     }
 
