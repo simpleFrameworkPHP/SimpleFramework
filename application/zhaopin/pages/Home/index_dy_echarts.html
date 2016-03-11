@@ -1,15 +1,10 @@
 <li class="index_li" id="{$id}"></li>
 <script type="text/javascript">
-    // Step:3 conifg ECharts's path, link to echarts.js from current page.
-    // Step:3 为模块加载器配置echarts的路径，从当前页面链接到echarts.js，定义所需图表路径
     require.config({
         paths: {
             echarts: '__JSROOT__'
         }
     });
-
-    // Step:4 require echarts and use it in the callback.
-    // Step:4 动态加载echarts然后在回调函数中开始使用，注意保持按需加载结构定义图表路径
     require(
             [
                 'echarts',
@@ -39,13 +34,13 @@
 //            saveAsImage : {show: true}
 //        }
 //    },
-    calculable : true,
-            xAxis : [
-        {
-            type : 'category',
-            data : {$xAxis}
-        }
-    ],
+            calculable : true,
+                    xAxis : [
+                {
+                    type : 'category',
+                    data : {$xAxis}
+                }
+            ],
             yAxis : [
                 {
                     type : 'value',
@@ -56,7 +51,8 @@
                     splitArea : {show : true}
                 }
     ],
-            series : {$json}
+            series : {$json},
+                    backgroundColor:"#FAFAFA"
     });
     }
     );
