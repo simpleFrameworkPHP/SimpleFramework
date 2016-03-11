@@ -37,7 +37,7 @@ class PullLagouDataController extends Controller {
         if($_REQUEST['city']){
             $where['city'] = $_REQUEST['city'];
         }
-        //$where['city'] = "大连";
+        $where['city'] = "大连";
         $where['positionName'] = array("LIKE","%php%");
         $data = $model->table(array("view_lagou_position"))->where($where)->order(array('createTime'=>'DESC'))->select();
 

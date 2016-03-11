@@ -10,7 +10,7 @@ class HomeController extends Controller {
 
     public function index(){
         $template[] = $this->indexCityCP();
-        $template[] = $this->indexWorkYearNP();
+        $template[] = $this->indexWorkYearCP();
 
         $this->assign('template',$template);
         $this->display();
@@ -48,11 +48,12 @@ class HomeController extends Controller {
     /**
      * 按照年限统计薪资分布
      */
-    public function indexWorkYearNP(){
+    public function indexWorkYearCP(){
         //$where['add_time'] = date('Y-m-d');
-        $workYear = array(0,1,2,3,4,5,6,7,8,9,10);
+        $workYear = array(1,2,3,4,5,6);
+        $salary = array(1,2,3,4,5,6,7,8);
         $bei = 5000;
-        foreach($workYear as $key=>$value){
+        foreach($salary as $key=>$value){
             $salary[$key] = $value * $bei;
         }
         $salary = array_values($salary);
@@ -61,15 +62,16 @@ class HomeController extends Controller {
             //->where($where)
             ->fields('positionId,minWorkYear,maxWorkYear,minSalary,maxSalary')
             ->select();
-        $item = $salary;
+        $item = $salary;// array_merge(array('年限平均工资'),$salary);
+        $item[] = '平均薪资';
         $list = array();
         foreach($result as $row){
             foreach($salary as $skey=>$svalue){
-                if($row['minSalary'] == 0 || $row['minSalary'] <= $svalue){
-                    if($row['maxSalary'] == 0 || $row['maxSalary'] >= $svalue){
+                if($row['minSalary'] <= $svalue){
+                    if($row['maxSalary'] >= $svalue){
                         foreach($workYear as $nkey=>$nvalue){
-                            if($row['minWorkYear'] == 0 || $row['minWorkYear'] <= $nvalue){
-                                if($row['maxWorkYear'] == 0 || $row['maxWorkYear'] >= $nvalue){
+                            if($row['minWorkYear'] <= $nvalue){
+                                if($row['maxWorkYear'] >= $nvalue){
                                     $list[$svalue][$nvalue]++;
                                 }
                             }
@@ -78,6 +80,14 @@ class HomeController extends Controller {
                 }
             }
         }
+        foreach($workYear as $value){
+            $xAxis[] = $value.'年';
+        }
+
+        foreach($list as $key => $value){
+            $data[] = array("data"=>array_values($value),"name"=>$key,"type"=>"bar");
+        }
+
         //工作年限&cp
         $iyear = array();
         //工作年限&薪资
@@ -92,14 +102,8 @@ class HomeController extends Controller {
         foreach($iyear as $year => $value){
             $avgSalary[$year] = number_format($isalary[$year] / $iyear[$year],2,'.','');
         }
-        $data[] = array("data"=>array_values($avgSalary),"name"=>'工作年限&平均工资',"type"=>"line","yAxisIndex"=>1);
-        foreach($workYear as $value){
-            $xAxis[] = $value.'年';
-        }
+        $data[] = array("data"=>array_values($avgSalary),"name"=>'平均薪资',"type"=>"line","yAxisIndex"=>1);
 
-        foreach($list as $key => $value){
-            $data[] = array("data"=>array_values($value),"name"=>$key,"type"=>"bar");
-        }
         $this->assign('json',JSON($data));
         $this->assign('xAxis',JSON($xAxis));
         $this->assign('item',JSON($item));
