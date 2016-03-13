@@ -22,7 +22,7 @@ class PullLagouDataController extends Controller {
             foreach($data as $row){
                 $row['companyLabelList'] = implode(' ',$row['companyLabelList']);
                 $row['addTime'] = $today;
-                $model = M('',3);
+                $model = M('',0);
                 $model->table(array("view_lagou_position"))->addKeyUp($row);
             }
             echo  'page:'.$i."<br/>";
@@ -32,7 +32,7 @@ class PullLagouDataController extends Controller {
     }
 
     public function showPosition(){
-        $model = M('',3);
+        $model = M('',0);
         print_r($_REQUEST);
         if($_REQUEST['city']){
             $where['city'] = $_REQUEST['city'];
@@ -56,7 +56,7 @@ class PullLagouDataController extends Controller {
 
     public function showSalaryPositionByCity(){
         $workYear = array(0=>0,1=>0,2=>0,3=>0,4=>0,5=>0,6=>0,7=>0,8=>0,9=>0,10=>0);
-        $model = M('',3);
+        $model = M('',0);
         $bei = 5000;
         $xAxis = array();
         $json = array();
@@ -126,7 +126,7 @@ class PullLagouDataController extends Controller {
 
     public function showCity(){
         //$where['add_time'] = date('Y-m-d');
-        $model = M('',3);
+        $model = M('',0);
         $data = $model->table("model_city")
             //->where($where)
             ->limit(5)

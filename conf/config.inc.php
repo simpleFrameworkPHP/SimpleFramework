@@ -13,22 +13,6 @@ return array(
 
 
     'SF_DB_CONNECT'=>array(
-//        0 => array(
-//            'DB_HOST'=>'172.16.0.231',
-//            'DB_NAME'=>'eachbuyer',
-//            'DB_PORT'=>3306,
-//            'DB_USER'=>'root',
-//            'DB_PASS'=>'db01123456',
-//            'DB_MODE'=>'mysqli',
-//        ),
-//        1 => array(
-//            'DB_HOST'=>'172.16.0.231',
-//            'DB_NAME'=>'eb_pc_site',
-//            'DB_PORT'=>3306,
-//            'DB_USER'=>'root',
-//            'DB_PASS'=>'db01123456',
-//            'DB_MODE'=>'mysqli',
-//        ),
         0 => array(
             'DB_HOST'=>'127.0.0.1',
             'DB_NAME'=>'test',

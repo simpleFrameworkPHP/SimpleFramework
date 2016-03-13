@@ -38,7 +38,7 @@ function pullData(){
         foreach($data as $row){
             $row['companyLabelList'] = implode(' ',$row['companyLabelList']);
             $row['addTime'] = $today;
-            $model = M('',3);
+            $model = M('',0);
             $model->table(array("view_lagou_position"))->addKeyUp($row);
         }
         echo  'page:'.$i." count:".count($data)."\n";
@@ -49,7 +49,7 @@ function pullData(){
 }
 
 function manageData(){
-    $model = M('',3);
+    $model = M('',0);
     $today = date('Y-m-d');
     $where = array();
     //$where['addTime'] = $today;
@@ -57,7 +57,7 @@ function manageData(){
     $i = 0;
     $limit = 100;
     $data = array();
-    $db = M('',3);
+    $db = M('',0);
     $db->table("model_position");
     while($i == 0 || !empty($data)){
         $data = $model->limit($limit,$i*$limit)->select();
@@ -95,7 +95,7 @@ function manageData(){
 
 function getPositionByWorkYear(){
     $workYear = array(0=>0,1=>0,2=>0,3=>0,4=>0,5=>0,6=>0,7=>0,8=>0,9=>0,10=>0);
-    $model = M('',3);
+    $model = M('',0);
     $model->table("model_position");
     $bei = 2000;
     //$where['addTime'] = date('Y-m-d');
@@ -110,13 +110,13 @@ function getPositionByWorkYear(){
 
 function manageCity(){
     $where['add_time'] = date('Y-m-d');
-    $model = M('',3);
+    $model = M('',0);
     $data = $model->table("view_lagou_position")
         ->where($where)
         ->group("city")
         ->fields("count(DISTINCT positionId) as countPosition,count(DISTINCT companyId) as countCompany,city",false)
         ->select();
-    $model = M('',3);
+    $model = M('',0);
     $model->table("model_city");
     foreach($data as $row){
         $row['addTime'] = $where['addTime'];

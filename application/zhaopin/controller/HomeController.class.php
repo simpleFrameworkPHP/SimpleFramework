@@ -22,7 +22,7 @@ class HomeController extends Controller {
      */
     public function indexCityCP(){
         //$where['add_time'] = date('Y-m-d');
-        $model = M('',3);
+        $model = M('',0);
         $data = $model->table("model_city")
             //->where($where)
             ->limit(5)
@@ -51,13 +51,13 @@ class HomeController extends Controller {
     public function indexWorkYearCP(){
         //$where['add_time'] = date('Y-m-d');
         $workYear = array(1,2,3,4,5,6);
-        $salary = array(1,2,3,4,5,6,7,8);
+        $salary = array(1,2,3,4,6,8,10);
         $bei = 5000;
         foreach($salary as $key=>$value){
             $salary[$key] = $value * $bei;
         }
         $salary = array_values($salary);
-        $model = M('',3);
+        $model = M('',0);
         $result = $model->table("model_position")
             //->where($where)
             ->fields('positionId,minWorkYear,maxWorkYear,minSalary,maxSalary')
