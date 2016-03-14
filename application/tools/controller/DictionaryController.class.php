@@ -72,9 +72,9 @@ class DictionaryController extends Controller {
     }
 
     public function relateSqlData($model){
-        $relate_sql = C('relate_sql');
-        if(isset($relate_sql[$_REQUEST['t']]) && is_array($relate_sql[$_REQUEST['t']])){
-            foreach($relate_sql[$_REQUEST['t']] as $key =>$sql){
+        if($_REQUEST['t'] == 'sql' && $_REQUEST['sql'] <> ''){
+            $relate_sql = explode(';',$_REQUEST['sql']);
+            foreach($relate_sql as $key =>$sql){
                 $i_data['title'] = $key;
                 $i_data['remark'] = $sql;
                 $i_data['data'] = $model->select($sql);
@@ -83,6 +83,7 @@ class DictionaryController extends Controller {
                 }
                 $relate_data[] = $i_data;
             }
+            $this->assign('sql',$_REQUEST['sql']);
             $this->assign('relate_data',$relate_data);
         }
     }

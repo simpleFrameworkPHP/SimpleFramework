@@ -9,13 +9,7 @@ return array(
     "type" => array(
         0 =>array("name"=>"表目录","value"=>"table"),
         1 =>array("name"=>"全部","value"=>"all"),
-        2 =>array('name'=>'订阅相关','value'=>'subscribe'),
-        3 =>array('name'=>'分类页相关','value'=>'product_list'),
-        4 =>array('name'=>'商品详情页','value'=>'product'),
-        4 =>array('name'=>'折扣业务相关','value'=>'discount'),
-        5 =>array('name'=>'购物车相关','value'=>'cart'),
-        6 =>array('name'=>'sku映射关系','value'=>'sku'),
-        6 =>array('name'=>'首页商品行业务','value'=>'home_product'),
+        2 =>array('name'=>'查询','value'=>'sql')
     ),
     "relate_table"=>array(
         //模式=>关联表

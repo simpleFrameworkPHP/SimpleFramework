@@ -19,6 +19,12 @@
             var db = $("select[name=db]").val();
             window.location.href = "{:H('tools/Dictionary/index')}&t="+ t + "&db=" + db;
         }
+        function submit(){
+            var t = $("select[name=t]").val();
+            var db = $("select[name=db]").val();
+            var sql = $("textarea[name=sql]").val();
+            window.location.href = "{:H('tools/Dictionary/index')}&t="+ t + "&db=" + db + "&sql=" + sql;
+        }
         function selectTag(showContent,selfObj){
             // 操作标签
             var tag = document.getElementById("tags").getElementsByTagName("li");
@@ -53,14 +59,15 @@
     $select .= '</select>';
     echo $select;
     ?>
+    <?php if($_REQUEST['t'] == 'sql'){ ?><br/><textarea style="resize :none;width: 1000px;height: 200px;" name="sql">{$sql}</textarea><button onclick="submit()"> 提交 </button><?php } ?>
     <ul id="tags">
-        <li class="selectTag" onclick="selectTag('tagContent0',this)">相关表</li>
-        <?php if(isset($relate_data)){ ?><li onclick="selectTag('tagContent1',this)">业务sql</li><?php }?>
+        <li <?php if(!empty($data)){ ?>class="selectTag"<?php }?> onclick="selectTag('tagContent0',this)">相关表</li>
+        <?php if(isset($relate_data)){ ?><li  <?php if(empty($data)){ ?>class="selectTag"<?php }?> onclick="selectTag('tagContent1',this)">业务sql</li><?php }?>
     </ul>
     <div class="div_hline"></div>
     <ul>
         <li>
-            <div class="div_content" id="tagContent0">
+            <div class="div_content" id="tagContent0" <?php if(empty($data)){ ?>style="display: none;"<?php }?>>
                 <?php
             //表结构内容展现
             getSqlInfo($data,$start);
@@ -68,7 +75,7 @@
             </div>
         </li>
         <li>
-            <div class="div_content" id="tagContent1" style="display: none;">
+            <div class="div_content" id="tagContent1" <?php if(!empty($data)){ ?>style="display: none;"<?php }?>>
                 <?php
             //具体业务查询展现
             if(isset($relate_data)){
