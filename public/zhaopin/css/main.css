@@ -12,11 +12,11 @@ div.div_footer .span_foot_link{margin: 0px 10px 0px 10px;}
 div.div_footer .span_foot_link a{text-decoration: none;}
 div.div_footer .span_foot_title{color: #999999;font-size: smaller;}
 .main_left{width: 150px;height: 900px;top:0px;position: fixed;}
-.main_left ul{list-style: none;background-color: #9999ff;padding-left: 0px;padding-top: 200px;height: 100%;}
+.main_left ul{list-style: none;background-color: #2196f3;padding-left: 0px;padding-top: 200px;height: 100%;}
 .main_left ul li{width: 130px;height: 30px;padding-left: 20px;line-height: 30px;}
-.main_left ul li:hover{background-color: #7777ff;}
-.main_left ul li.cur{background-color: #7777ff;}
-.main_right{margin-left: 150px; overflow: hidden; height: 900px;}
+.main_left ul li.cur{background-color: #21c6f3;}
+.main_left ul li:hover{background-color: #2166f3;cursor:pointer;}
+.main_right{margin-left: 150px; overflow: hidden; height: 900px;background-color: #FAFAFA;}
 .main_right_header{height: 40px;border-bottom: solid 1px #ddd;padding: 0 10px;line-height: 40px;}
 .main_right_body{margin-top: 10px;}
 
