@@ -65,8 +65,8 @@ function M($path='',$link_ID = 0){
     }
     $config = C('SF_DB_CONNECT');
     if(class_exists($model) && isset($config[$link_ID])){
-        return new $model($config[$link_ID]['DB_HOST'],$config[$link_ID]['DB_USER'],$config[$link_ID]['DB_PASS'],
-            $config[$link_ID]['DB_NAME'],$config[$link_ID]['DB_PORT'],$config[$link_ID]['DB_MODE'],$link_ID,C('SF_DB_CHARSET'));
+        $link = $config[$link_ID];
+        return new $model($link['DB_HOST'],$link['DB_USER'],$link['DB_PASS'],$link['DB_NAME'],$link['DB_PORT'],$link['DB_MODE'],$link_ID,C('SF_DB_CHARSET'));
     } else {
         return false;
     }

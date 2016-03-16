@@ -78,7 +78,7 @@ class DBMysql extends Db {
         return $data;
     }
 
-    public function execute($str){
+    public function execute($str,$type){
         $data = array();
         $this->sql_str = $str;
         $result = mysql_query($str,$this->con);
@@ -88,6 +88,12 @@ class DBMysql extends Db {
             Log::write('SQL ERROR',$str."\t[error sql]",'sql');
             Log::write('SQL ERROR',mysql_error($this->con).' ; '.mysql_errno($this->con),'sql');
         } else {
+            switch($type){
+                case "add"://返回添加的id
+                    $result = mysql_insert_id($this->con);break;
+                default://返回影响行数
+                    $result = mysql_affected_rows($this->con);
+            }
             //正常查询日志
             Log::write('SQL',$str."\t[{$this->result_rows}]",'sql');
         }

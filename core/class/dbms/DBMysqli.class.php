@@ -77,7 +77,7 @@ class DBMysqli extends Db {
         return $data;
     }
 
-    public function execute($str){
+    public function execute($str,$type){
         $data = array();
         $this->sql_str = $str;
         $result = $this->con->query($str);
@@ -87,6 +87,12 @@ class DBMysqli extends Db {
             Log::write('SQL',$str."\t[error sql]",'sql');
             Log::write('SQL ERROR',mysqli_error($this->con).' : '.mysqli_errno($this->con),'sql');
         } else {
+            switch($type){
+                case "add"://返回添加的id
+                    $result = mysqli_insert_id($this->con);break;
+                default://返回影响行数
+                    $result = mysqli_affected_rows($this->con);
+            }
             //正常查询日志
             Log::write('SQL',$str."\t[{$this->result_rows}]",'sql');
         }

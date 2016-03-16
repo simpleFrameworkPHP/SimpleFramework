@@ -67,4 +67,20 @@ class Db {
     public function errorPage($msg,$info,$error_code){
         errorPage($msg,$info,$error_code);
     }
+
+    public function set($str){
+        return $this->execute($str,'update');
+    }
+
+    public function add($str){
+        return $this->execute($str,'add');
+    }
+
+    public function delete($str){
+        return $this->execute($str,'delete');
+    }
+
+    public function getLastSql(){
+        return $this->sql_str;
+    }
 } 

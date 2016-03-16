@@ -51,6 +51,7 @@ class Model{
         if($host == ''){
             return array('error'=>"Can't connect DB.");
         }
+        $this->con_str = "{$host}:{$port}_{$user}@{$pass}_{$db_name}";
             //创建对应的数据库链接；
             return $this->db = Db::initDBCon($host,$user,$pass,$db_name,$port,$mode,$no,$chart_set);
     }
@@ -73,9 +74,21 @@ class Model{
         return $data;
     }
 
+    public function simple($sql = ''){
+        $data = false;
+        if($sql == ''){
+            $sql = $this->option;
+        }
+        $result = $this->db->select($sql,1);
+        if(!empty($result)){
+            $data = current($result);
+        }
+        return $data;
+    }
+
 
     function initTableInfo($link_ID = 0){
-        $cache_str = 'DB_INFO_'.$link_ID.'/DB_INFO';
+        $cache_str = 'DB_INFO_'.$this->con_str.'/DB_INFO';
         $this->tables_info = S($cache_str);
         if(empty($this->tables_info)){
             $sql = 'SHOW TABLES';
@@ -405,7 +418,7 @@ class Model{
         }
         $table = preg_replace('/ AS .*/','',$this->option['TABLE']);
         $insert_sql = 'INSERT INTO '.$table . ' ('.implode(',',$add_columns) . ') VALUES ('.implode(',',$add_values).')';
-        return $this->db->execute($insert_sql);
+        return $this->db->add($insert_sql);
     }
 
     public function addKeyUp(array $Columns){
@@ -419,7 +432,7 @@ class Model{
         $str = implode(",",$str);
         $table = preg_replace('/ AS .*/','',$this->option['TABLE']);
         $insert_sql = "INSERT INTO " . $table . " set ". $str ." on duplicate key update ".$str;
-        return $this->db->execute($insert_sql);
+        return $this->db->add($insert_sql);
     }
 
     public function set(array $Columns){
@@ -437,7 +450,7 @@ class Model{
         if(isset($this->option['WHERE'])){
             $edit_sql .= ' WHERE '.$this->option['WHERE'];
         }
-        return $this->db->execute($edit_sql);
+        return $this->db->set($edit_sql);
     }
 
     public function delete(){
@@ -448,7 +461,7 @@ class Model{
         if(isset($this->option['WHERE'])){
             $delete_sql .= ' WHERE '.$this->option['WHERE'];
         }
-        return $this->db->execute($delete_sql);
+        return $this->db->delete($delete_sql);
     }
 
     public function replaceColumns($params){
