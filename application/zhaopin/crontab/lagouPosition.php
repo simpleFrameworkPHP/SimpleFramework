@@ -58,19 +58,31 @@ function manageData(){
     $limit = 100;
     $data = array();
     $db = M('',0);
+    $dic_industry = M('zhaopin/DicIndustry',0);
+    $workyear = M('zhaopin/WorkYear');
+    $workyear_list = $workyear->select();
+    foreach($workyear_list as $row){
+        $min_work_list[$row['id']] = $row['minWorkYear'];
+    }
     $db->table("model_position");
     while($i == 0 || !empty($data)){
         $data = $model->limit($limit,$i*$limit)->select();
         foreach($data as $row){
+            $i_position = array();
             //工作年限处理
-            $row['minWorkYear'] = 0;
-            $row['maxWorkYear'] = 0;
+            $i_position['work_year'] = $row['workYear'];
             if(strstr($row['workYear'],'-')){
                 $work_year = explode('-',$row['workYear']);
-                $row['minWorkYear'] = intval($work_year[0]);
-                $row['maxWorkYear'] = intval($work_year[1]);
-            }
+                $work_min = current($work_year);
+                foreach($min_work_list as $key=>$min_yaer){
+                    if($min_yaer <= $work_min){
+                        $i_position['workyear_id'] = $key;
+                        break;
+                    }
+                }
+            }exit;
             unset($row['workYear']);
+//============================================
             //薪资范围处理
             $row['minSalary'] = 0;
             $row['maxSalary'] = 0;
@@ -86,6 +98,21 @@ function manageData(){
 
             unset($row['id']);
 //            print_r($row);exit;
+
+            if(strstr($row['industryField'],' · ')){
+                $industrys = explode(' · ',$row['industryField']);
+            } else {
+                $industrys = array($row['industryField']);
+            }
+
+            foreach($industrys as $v){
+                $industry = array('industry_title'=>$v);
+                $ind_id = $dic_industry->fields('id')->where($industry)->simple();
+                if(!intval($ind_id)){
+                    $ind_id = $dic_industry->addKeyUp($industry);
+                }
+            }
+
             $id = $db->addKeyUp($row);
         }
         echo $i."\n";

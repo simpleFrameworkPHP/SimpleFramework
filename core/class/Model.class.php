@@ -18,7 +18,7 @@ class Model{
      *  'LIMIT'     => LIMIT子句string
      * )
     */
-    var $option;
+    var $option = array();
     var $var_table = array();//model默认表 array('简称'=>'表名');
     var $link_ID;//数据库链接ID，平时为0，多数据库链接时使用
     var $tables_info;//array('表名'=>array('列名'))
@@ -38,8 +38,7 @@ class Model{
         $con = $this->initDBConnect($host,$user,$pass,$db_name,$port,$mode,$no,$chart_set);
         if(isset($this->var_table)){
             //默认操作表
-            $key = array_keys($this->var_table);
-            $con->table = $this->var_table[$key[0]];
+            $this->db->table = current($this->var_table);
         }
         $this->db_name = $db_name;
         $this->link_ID = $no;
