@@ -180,7 +180,8 @@ class Model{
         if(isset($this->db->columns)){
             return $this->db->columns;
         } else {
-            return false;
+            //获取默认表的简单数据结构
+            return $this->tables_info[current($this->var_table)];
         }
     }
 

@@ -36,7 +36,7 @@ class DBMysqli extends Db {
                 while($row =$result->fetch_assoc()){
                     $data[] = $row;
                 }
-                $this->columns = array_keys($data[0]);
+                $this->columns = array_keys(current($data));
             }
             $result->free();
         }

@@ -57,18 +57,73 @@ function manageData(){
     $i = 0;
     $limit = 100;
     $data = array();
-    $db = M('',0);
+    $MPosition = M('zhaopin/MPosition',0);
+    $MCompany = M('zhaopin/MCompany',0);
     $dic_industry = M('zhaopin/DicIndustry',0);
-    $workyear = M('zhaopin/WorkYear');
+    //工作年限范围标准数组初始化
+    $workyear = M('zhaopin/WorkYear',0);
     $workyear_list = $workyear->select();
+    $min_work_list = array();
     foreach($workyear_list as $row){
-        $min_work_list[$row['id']] = $row['minWorkYear'];
+        $min_work_list[$row['id']] = $row['min_workyear'];
     }
-    $db->table("model_position");
+    //薪资范围标准数组初始化
+    $salary = M('zhaopin/DicSalary',0);
+    $salary_list = $salary->select();
+    $min_salary_list = array();
+    foreach($salary_list as $row){
+        $min_salary_list[$row['id']] = $row['min_salary'];
+    }
+
+    //薪资范围标准数组初始化
+    $size = M('zhaopin/DicCSize',0);
+    $size_list = $size->select();
+    $min_size_list = array();
+    foreach($size_list as $row){
+        $min_size_list[$row['id']] = $row['min_user'];
+    }
+
+    //公司层级标准数组初始化
+    $level = M('zhaopin/DicCLevel',0);
+    $evel_list = $level->select();
+    $level_array = array();
+    foreach($evel_list as $row){
+        $level_array[$row['title']] = $row['id'];
+    }
+
     while($i == 0 || !empty($data)){
         $data = $model->limit($limit,$i*$limit)->select();
         foreach($data as $row){
-            $i_position = array();
+            var_export($row);
+            $i_position = $MPosition->getColumns();
+            $i_company = $MCompany->getColumns();
+            //公司发展层级处理
+            $level_id = isset($level_array[$row['financeStage']]) ? $level_array[$row['financeStage']] : 0 ;
+            if(!$level_id){
+                $level_id = $level->addKeyUp(array('title'=>$row['financeStage']));
+            }
+
+            //公司规模处理
+            $i_position['work_year'] = $row['companySize'];
+            if(strstr($row['workYear'],'-')){
+                $work_year = explode('-',$row['workYear']);
+                $work_min = current($work_year);
+                foreach($min_work_list as $key=>$min_yaer){
+                    if($min_yaer <= $work_min){
+                        $i_position['workyear_id'] = $key;
+                    }
+                }
+            }//=======================================
+            //公司信息处理
+            $i_company = array (
+                'company_name' => $row['companyName'],
+                'company_short_name' => $row['companyShortName'],
+                'stage_level_id' => $level_id,
+                'company_size_id' => 'int',
+                'company_label' => $row['companyLabelList'],
+                'add_time' => '',
+            );
+            var_export($i_company);
             //工作年限处理
             $i_position['work_year'] = $row['workYear'];
             if(strstr($row['workYear'],'-')){
@@ -77,26 +132,28 @@ function manageData(){
                 foreach($min_work_list as $key=>$min_yaer){
                     if($min_yaer <= $work_min){
                         $i_position['workyear_id'] = $key;
-                        break;
                     }
                 }
-            }exit;
+            }
             unset($row['workYear']);
-//============================================
+
+            //拉钩数据录入
+            $i_position['position_id'] = $row['positionId'];
+            $i_position['data_from'] = 'lagou';
+
             //薪资范围处理
-            $row['minSalary'] = 0;
-            $row['maxSalary'] = 0;
+            $i_position['salary'] = $row['salary'];
             if(strstr($row['salary'],'-')){
                 $salary = explode('-',$row['salary']);
-                $row['minSalary'] = strstr($salary[0],'k') ? intval($salary[0])*1000 : intval($salary[0]);
-                $row['maxSalary'] = strstr($salary[1],'k') ? intval($salary[1])*1000 : intval($salary[1]);
+                $min_salary = strstr(current($salary),'k') ? intval(current($salary))*1000 : intval(current($salary));
+            } else {
+                $min_salary = strstr(current($salary),'k') ? intval(current($salary))*1000 : intval(current($salary));
             }
-            unset($row['salary']);
-            unset($row['addTime']);
-            //数据来源
-            $row['dataFrom'] = 'lagou';
-
-            unset($row['id']);
+            foreach($min_salary_list as $key=>$isalary){
+                if($isalary <= $min_salary){
+                    $i_position['salary_id'] = $key;
+                }
+            }
 //            print_r($row);exit;
 
             if(strstr($row['industryField'],' · ')){
@@ -112,8 +169,8 @@ function manageData(){
                     $ind_id = $dic_industry->addKeyUp($industry);
                 }
             }
-
-            $id = $db->addKeyUp($row);
+            var_export($i_position);echo "\n";exit;
+//            $id = $db->addKeyUp($row);
         }
         echo $i."\n";
         $i++;

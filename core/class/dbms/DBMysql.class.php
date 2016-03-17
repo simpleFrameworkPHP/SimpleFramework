@@ -38,7 +38,7 @@ class DBMysql extends Db {
                 while($row = mysql_fetch_assoc($result)){
                     $data[] = $row;
                 }
-                $this->columns = array_keys($data[0]);
+                $this->columns = array_keys(current($data));
             }
             mysql_free_result($result);
         }
