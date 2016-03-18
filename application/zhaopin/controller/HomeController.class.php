@@ -50,52 +50,47 @@ class HomeController extends Controller {
      */
     public function indexWorkYearCP(){
         //$where['add_time'] = date('Y-m-d');
-        $workYear = array(1,2,3,4,5,6);
-        $salary = array(1,2,3,4,6,8,10);
-        $bei = 5000;
-        foreach($salary as $key=>$value){
-            $salary[$key] = $value * $bei;
+        $Dworkyear = M('zhaopin/WorkYear',0);
+        $data = $Dworkyear->select();
+        foreach($data as $value){
+            $workyearlist[$value['id']] = $value['title'];
         }
-        $salary = array_values($salary);
+        $Dsalary = M('zhaopin/DicSalary',0);
+        $data = $Dsalary->select();
+
+        foreach($data as $value){
+            $salary[$value['id']] = $value['title'];
+            $vagSalary[$value['id']] = ($value['min_salary'] + $value['max_salary']) / 2;
+        }
         $model = M('',0);
         $result = $model->table("model_position")
             //->where($where)
-            ->fields('positionId,minWorkYear,maxWorkYear,minSalary,maxSalary')
+            ->fields('workyear_id,salary_id')
             ->select();
-        $item = $salary;// array_merge(array('年限平均工资'),$salary);
-        $item[] = '平均薪资';
         $list = array();
         foreach($result as $row){
-            foreach($salary as $skey=>$svalue){
-                if($row['minSalary'] <= $svalue){
-                    if($row['maxSalary'] >= $svalue){
-                        foreach($workYear as $nkey=>$nvalue){
-                            if($row['minWorkYear'] <= $nvalue){
-                                if($row['maxWorkYear'] >= $nvalue){
-                                    $list[$svalue][$nvalue]++;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+              $list[$row['salary_id']][$row['workyear_id']]++;
         }
-        foreach($workYear as $value){
-            $xAxis[] = $value.'年';
+        foreach($list as $ksalary=>$value){
+            $itemkey[] = $ksalary;
+            ksort($list[$ksalary]);
         }
+        sort($itemkey);
+        foreach($itemkey as $value){
+            $data[] = array("data"=>array_values($list[$value]),"name"=>$salary[$value],"type"=>"bar");
+            $item[] = $salary[$value];
+        }
+        $xAxis = array_values($workyearlist);
 
-        foreach($list as $key => $value){
-            $data[] = array("data"=>array_values($value),"name"=>$key,"type"=>"bar");
-        }
 
         //工作年限&cp
         $iyear = array();
         //工作年限&薪资
         $isalary = array();
-        foreach($list as $salary=>$value){
+        foreach($list as $salary_id=>$value){
             foreach($value as $year=>$cp){
                 $iyear[$year] += $cp;
-                $isalary[$year] += $cp*$salary;
+                $isalary[$year] += $cp*$vagSalary[$salary_id];
             }
         }
         $avgSalary = array();
@@ -103,6 +98,7 @@ class HomeController extends Controller {
             $avgSalary[$year] = number_format($isalary[$year] / $iyear[$year],2,'.','');
         }
         $data[] = array("data"=>array_values($avgSalary),"name"=>'平均薪资',"type"=>"line","yAxisIndex"=>1);
+        $item[] = '平均薪资';
 
         $this->assign('json',JSON($data));
         $this->assign('xAxis',JSON($xAxis));
