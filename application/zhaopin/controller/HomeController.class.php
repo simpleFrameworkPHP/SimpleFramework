@@ -12,6 +12,7 @@ class HomeController extends Controller {
         $template[] = $this->indexCityCP();
         $template[] = $this->indexWorkYearCP();
         $template[] = $this->initIndustry();
+        $template[] = $this->initLevel();
 
         $this->assign('template',$template);
         $this->display();
@@ -190,4 +191,55 @@ class HomeController extends Controller {
         $this->assign('title','【数据挖掘】按照行业统计薪资分布');
         return $this->fetch('index_dy_echarts');
     }
+
+    public function initLevel(){
+        //薪资初始化
+        $Dsalary = M('zhaopin/DicSalary',0);
+        $data = $Dsalary->select();
+
+        foreach($data as $value){
+            $salary[$value['id']] = $value['title'];
+            $vagSalary[$value['id']] = ($value['min_salary'] + $value['max_salary']) / 2;
+        }
+        //公司形态数据
+        $company_list = M('zhaopin/MCompany',0)->fields('id,stage_level_id')->select();
+        foreach($company_list as $item){
+            $level_list[$item['id']] = $item['stage_level_id'];
+        }
+
+        //level数据
+        $level = M('zhaopin/DicCLevel',0)->select();
+        foreach($level as $item){
+            $level_info[$item['id']] = $item['level_title'];
+        }
+
+        //职位统计
+        $position_list = M('zhaopin/MPosition',0)->fields('company_id,salary_id')->select();
+        $list = array();
+        foreach($position_list as $i_position){
+            $list[$i_position['salary_id']][$level_list[$i_position['company_id']]]++;
+        }
+
+        foreach($list as $salary_id=>$value){
+            $itemkey[] = $salary_id;
+            ksort($list[$salary_id]);
+        }
+        sort($itemkey);
+        $data = array();
+        $item = array();
+        foreach($itemkey as $value){
+            $data[] = array("data"=>array_values($list[$value]),"name"=>$salary[$value],"type"=>"bar");
+            $item[] = $salary[$value];
+        }
+        ksort($level_info);
+        $xAxis = array_values($level_info);
+
+        $this->assign('json',JSON($data));
+        $this->assign('xAxis',JSON($xAxis));
+        $this->assign('item',JSON($item));
+        $this->assign('id','level_cp');
+        $this->assign('title','【数据挖掘】按照行业统计薪资分布');
+        return $this->fetch('index_dy_echarts');
+    }
+
 } 
