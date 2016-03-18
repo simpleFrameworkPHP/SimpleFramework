@@ -11,6 +11,7 @@ class HomeController extends Controller {
     public function index(){
         $template[] = $this->indexCityCP();
         $template[] = $this->indexWorkYearCP();
+        $template[] = $this->initIndustry();
 
         $this->assign('template',$template);
         $this->display();
@@ -107,5 +108,84 @@ class HomeController extends Controller {
         $this->assign('title','【数据挖掘】按照工作年限统计薪资分布');
         return $this->fetch('index_dy_echarts');
 
+    }
+
+    public function initIndustry(){
+        //薪资初始化
+        $Dsalary = M('zhaopin/DicSalary',0);
+        $data = $Dsalary->select();
+
+        foreach($data as $value){
+            $salary[$value['id']] = $value['title'];
+            $vagSalary[$value['id']] = ($value['min_salary'] + $value['max_salary']) / 2;
+        }
+
+        //公司id=》行业id列表
+        $industry_list = M('zhaopin/MIndCom',0)->select();
+        foreach($industry_list as $value){
+            $industry_company[$value['company_id']] = $value['industry_id'];
+        }
+        //职位统计
+        $position_list = M('zhaopin/MPosition',0)->fields('company_id,salary_id')->select();
+        $list = array();
+        foreach($position_list as $i_position){
+            $list[$i_position['salary_id']][$industry_company[$i_position['company_id']]]++;
+        }
+
+        //计算各个行业平均工资(找出top5)
+        $icp = array();
+        $isalary = array();
+        foreach($list as $salary_id=>$item){
+            foreach($item as $industry_id=>$cp){
+                $icp[$industry_id] += $cp;
+                $isalary[$industry_id] += $cp * $vagSalary[$salary_id];
+            }
+        }
+        foreach($icp as $industry_id => $cp){
+            $cp_list[$icp[$industry_id]] = $industry_id;
+        }
+        krsort($cp_list);
+        $industry_ids = array();
+        foreach($cp_list as $industry_id){
+            if(count($industry_ids) < 6){
+                $industry_ids[] = $industry_id;
+            }
+        }
+
+        //数据筛选
+        foreach($list as $ksalary=>$value){
+            $itemkey[] = $ksalary;
+            foreach($list[$ksalary] as $industry_id=>$cp){
+                if(!in_array($industry_id,$industry_ids))
+                    unset($list[$ksalary][$industry_id]);
+            }
+            ksort($list[$ksalary]);
+        }
+        sort($itemkey);
+        foreach($itemkey as $value){
+            $data[] = array("data"=>array_values($list[$value]),"name"=>$salary[$value],"type"=>"bar");
+            $item[] = $salary[$value];
+        }
+
+        //行业数组初始化
+        $industrys = M('zhaopin/DicIndustry',0)->select();
+        foreach($industrys as $industry){
+            if(in_array($industry['id'],$industry_ids)){
+                $industry_info[$industry['id']] = $industry['industry_title'];
+                $avg_salary[$industry['id']] = number_format($isalary[$industry['id']] / $icp[$industry['id']],2,'.','');
+            }
+        }
+        ksort($industry_info);
+        $xAxis = array_values($industry_info);
+
+        $data[] = array("data"=>array_values($avg_salary),"name"=>'平均薪资',"type"=>"line","yAxisIndex"=>1);
+        $item[] = '平均薪资';
+
+        $this->assign('json',JSON($data));
+        $this->assign('xAxis',JSON($xAxis));
+        $this->assign('item',JSON($item));
+        $this->assign('id','industry_cp');
+        $this->assign('title','【数据挖掘】按照行业统计薪资分布');
+        return $this->fetch('index_dy_echarts');
     }
 } 
