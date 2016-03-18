@@ -317,7 +317,7 @@ class Model{
                 if(count($field_array)){
                     $this->option['FIELD'] = implode(',',$field_array);
                 } else {
-                    return false;
+                    errorPage('没有要用的字段','你需要查看fields方法写的字段是否正确！');
                 }
             }
         } else {
