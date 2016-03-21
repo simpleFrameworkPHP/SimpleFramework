@@ -158,9 +158,9 @@ function manageData(){
             $i_position['education'] = $row['education'];
             $i_position['position_first_type_id'] = 0;
             if($row['positionFirstType'] <> ''){
-                $i_position['position_first_type_id'] = $MPositionType->addKeyUp(array('pos_name'=>$row['positionFirstType']));
+                $i_position['position_first_type_id'] = $MPositionType->addKeyUp(array('pos_name'=>$row['positionFirstType'],'pos_type'=>2));
             }
-            $i_position['position_type_id'] = $MPositionType->addKeyUp(array('pos_name'=>$row['positionType'],'pos_type'=>$i_position['position_first_type_id']));
+            $i_position['position_type_id'] = $MPositionType->addKeyUp(array('pos_name'=>$row['positionType'],'pos_type'=>3,'pid'=>$i_position['position_first_type_id']));
             //工作年限处理
             $i_position['work_year'] = $row['workYear'];
             if(strstr($row['workYear'],'-')){

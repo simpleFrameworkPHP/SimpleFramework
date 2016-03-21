@@ -431,8 +431,12 @@ class Model{
         }
         $str = implode(",",$str);
         $table = preg_replace('/ AS .*/','',$this->option['TABLE']);
-        $insert_sql = "INSERT INTO " . $table . " set ". $str ." on duplicate key update ".$str;
-        return $this->db->add($insert_sql);
+        $insert_sql = "INSERT INTO " . $table . " set ". $str ." ON DUPLICATE KEY UPDATE ".$str;
+        $id = $this->db->add($insert_sql);
+        if(!$id){
+            $id = $this->fields('id')->where($Columns)->simple();
+        }
+        return $id;
     }
 
     public function set(array $Columns){
