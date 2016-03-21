@@ -23,38 +23,50 @@
                     legend: {
                         data:{$item},
                         y:'bottom'
-    },
-//    toolbox: {
-//        show : true,
-//        feature : {
-//            mark : {show: true},
-//            dataView : {show: true, readOnly: false},
-//            magicType : {show: true, type: ['line', 'bar']},
-//            restore : {show: true},
-//            saveAsImage : {show: true}
-//        }
-//    },
-            calculable : true,
+                    },
+//                    toolbox: {
+//                        show : true,
+//                        feature : {
+//                            mark : {show: true},
+//                            dataView : {show: true, readOnly: false},
+//                            magicType : {show: true, type: ['line', 'bar']},
+//                            restore : {show: true},
+//                            saveAsImage : {show: true}
+//                        }
+//                    },
+                    calculable : true,
                     xAxis : [
-                {
-                    type : 'category',
-                    data : {$xAxis}
-                }
-            ],
-            yAxis : [
-                {
-                    type : 'value',
-                    splitArea : {show : true}
-                },
-                {
-                    type : 'value',
-                    splitArea : {show : true}
-                }
-    ],
-            series : {$json},
+                        {
+                            type : 'category',
+                            axisLabel:{
+                                rotate:'<?php echo isset($x_degree) ? $x_degree : 0 ;?>',
+                                margin:10,
+                                textStyle:{
+                                    color:222
+                                }
+                            },
+                            data : {$xAxis}
+                        }
+                    ],
+                    grid: { // 控制图的大小，调整下面这些值就可以，
+                        x: 40,
+                        x2: 100,
+                        y2: 80// y2可以控制 X轴跟Zoom控件之间的间隔，避免以为倾斜后造成 label重叠到zoom上
+                    },
+                    yAxis : [
+                        {
+                            type : 'value',
+                            splitArea : {show : true}
+                        },
+                        {
+                            type : 'value',
+                            splitArea : {show : true}
+                        }
+                    ],
+                    series : {$json},
                     backgroundColor:"#FFFFFF"
-    });
-    }
+                });
+            }
     );
 
 </script>

@@ -220,10 +220,21 @@ class HomeController extends Controller {
             $list[$i_position['salary_id']][$level_list[$i_position['company_id']]]++;
         }
 
+        $vagcp = array();
+        $vag_salary = array();
         foreach($list as $salary_id=>$value){
             $itemkey[] = $salary_id;
+            foreach($value as $level_id => $cp){
+                $vagcp[$level_id] += $cp;
+                $vag_salary[$level_id] += $cp * $vagSalary[$salary_id];
+            }
             ksort($list[$salary_id]);
         }
+        //核算平均工资
+        foreach($vag_salary as $level_id=>$i_salary){
+            $salary_list[$level_id] = number_format($i_salary / $vagcp[$level_id],2,'.','');
+        }
+        ksort($salary_list);
         sort($itemkey);
         $data = array();
         $item = array();
@@ -231,14 +242,17 @@ class HomeController extends Controller {
             $data[] = array("data"=>array_values($list[$value]),"name"=>$salary[$value],"type"=>"bar");
             $item[] = $salary[$value];
         }
-        ksort($level_info);
+        $data[] = array("data"=>array_values($salary_list),"name"=>'平均薪资',"type"=>"line","yAxisIndex"=>1);
+        $item[] = '平均薪资';
+            ksort($level_info);
         $xAxis = array_values($level_info);
 
         $this->assign('json',JSON($data));
         $this->assign('xAxis',JSON($xAxis));
         $this->assign('item',JSON($item));
         $this->assign('id','level_cp');
-        $this->assign('title','【数据挖掘】按照行业统计薪资分布');
+        $this->assign('x_degree',15);
+        $this->assign('title','【数据挖掘】按照公司融资阶段统计薪资分布');
         return $this->fetch('index_dy_echarts');
     }
 
