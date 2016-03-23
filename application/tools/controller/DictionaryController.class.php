@@ -66,7 +66,7 @@ class DictionaryController extends Controller {
             $table['rule'] = array('数据行数'=>array('>','10000','red'),'Update_time'=>array('<',nowTime()-ONE_DAY*31,'yellow'));
             $table_data[] = $table;
         }
-        $table_data['test'] = '<table style="float: right;position: fixed;right: 150px;top: 300px;"><tr><th>图例</th></tr><tr class="red"><td>数据行数>10000</td></tr><tr class="yellow"><td>最后更新时间大于31天</td></tr><tr><td>正常使用表格</td></tr></table>';
+        $table_data['test'] = '<ul class="t_table" style="float: right;position: fixed;right: 150px;top: 300px;border: solid 2px #0066cc;"><li class="t_tr"><span>图例</span></li><li class="t_tr"><span class="t_td red">数据行数>10000</span></li><li class="t_tr"><span class="t_td yellow">最后更新时间大于31天</span></li><li class="t_tr"><span class="t_td">正常使用表格</span></li></ul>';
         $this->assign('start',1);
         return $table_data;
     }
@@ -75,6 +75,7 @@ class DictionaryController extends Controller {
         if($_REQUEST['t'] == 'sql' && $_REQUEST['sql'] <> ''){
             $relate_sql = explode(';',$_REQUEST['sql']);
             foreach($relate_sql as $key =>$sql){
+                if($sql == ''){continue;}
                 $i_data['title'] = $key;
                 $i_data['remark'] = $sql;
                 $i_data['data'] = $model->select($sql);

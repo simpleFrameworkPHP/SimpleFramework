@@ -11,7 +11,6 @@ div.div_page div.div_footer {min-height: 200px;background-color: #88afff;margin-
 .t_table {display: table;min-width:400px;}
 .t_tr {display: table-row;width: 100%;line-height: 25px;}
 .t_td {display: table-cell;min-width: 80px;background-color: #88afff; border: solid 1px #ffffff;}
-.t_tl {display: table-cell;width: 100%;}
 .t_tr .column {background-color: #99ff99;}
 .t_tr .yellow {background-color: #fffa88;}
 .t_tr .red {background-color: #ff3388;}

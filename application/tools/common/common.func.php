@@ -38,13 +38,14 @@ function getColumnHTML($columns,$start = 1){
 
 function writeHTMLTable($title,$remark,$columns,$column_start,$data,$data_rule = ''){
     $count = count($columns);
-    $html = '<ul class="t_table">';
+    $html = '';
     if($title <> ''){
-        $html .= '<li class="t_tr"><span class="t_tc" colspan="'.$count.'">'.$title.'</span></li>';
+        $html .= '<p>'.$title.'</p>';
     }
     if($remark <> ''){
-        $html .='<li class="t_tr"><span class="t_td" colspan="'.$count.'">'.$remark.'</span></li>';
+        $html .='<p>'.$remark.'</p>';
     }
+    $html .= '<ul class="t_table">';
     $html .= getColumnHTML($columns,$column_start);
     if(is_array($data) && count($data)){
         $html .= getBodyHTML($data,$columns,$data_rule,$column_start);
