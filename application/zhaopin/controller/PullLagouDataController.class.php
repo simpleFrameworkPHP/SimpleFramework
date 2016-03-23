@@ -12,9 +12,11 @@ class PullLagouDataController extends Controller {
         $today = date('Y-m-d');
         $i = 1;
         $json = array();
-        $city = urlencode("大连");
+        $url_str = "http://www.lagou.com/jobs/positionAjax.json?px=new&first=false&pn=";
+//$city = urlencode("大连");
+        webLongEcho("拉勾网数据处理中......");
         while(($json['success'] && !empty($json['content']['result'])) || $i == 1){
-            $url = "http://www.lagou.com/jobs/positionAjax.json?px=new&first=false&pn=$i";
+            $url = $url_str."$i";
             $url = isset($city) ? $url."&city=$city" : $url;
             $json = getHtmlData($url);
             $json = json_decode($json,true);
@@ -25,10 +27,12 @@ class PullLagouDataController extends Controller {
                 $model = M('',0);
                 $model->table(array("view_lagou_position"))->addKeyUp($row);
             }
-            echo  'page:'.$i."<br/>";
-            sleep(3);
+            webLongEcho('处理页数:'.$i." 数据处理数:".count($data)."<br/>");
+            sleep(1);
             $i++;
         }
+        echo "处理完毕";
+//        print_r($json);
     }
 
     public function showPosition(){

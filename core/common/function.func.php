@@ -30,6 +30,9 @@ function loadDirFile($path = '.'){
 }
 //加载controller
 function runController($application,$controller){
+    $charset = C('DEFAULT_CHARSET');
+    $contentType = C('TMPL_CONTENT_TYPE');
+    @header('Content-Type:'.$contentType.'; charset='.$charset);
     if(is_dir(__PATH__.'/application/'.$application.'/common'))
         loadDirFile(__PATH__.'/application/'.$application.'/common');
     $file_path = __PATH__.'/application/'.$application.'/controller/'.$controller.'Controller.class.php';
@@ -318,4 +321,10 @@ function JSON($data){
                 'return mb_convert_encoding(pack("H*", $matches[1]), "UTF-8", "UCS-2BE");'
             ),
             $str);
+}
+
+function webLongEcho($str){
+    echo $str;
+    echo str_repeat(' ',300);
+    @ob_flush();@flush();
 }

@@ -42,7 +42,7 @@ function pullData(){
             $model->table(array("view_lagou_position"))->addKeyUp($row);
         }
         echo  'page:'.$i." count:".count($data)."\n";
-        sleep(1);
+//        sleep(1);
         $i++;
     }
     print_r($json);

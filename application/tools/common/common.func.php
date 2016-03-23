@@ -27,29 +27,29 @@ function getSqlInfo($data_list,$column_start = 0){
 }
 function getColumnHTML($columns,$start = 1){
     $count = count($columns);
-    $column ="<tr>";
+    $column ='<li class="t_tr">';
     for($i=$start;$i<$count;$i++)
     {
-        $column .= '<th class="column">'. $columns[$i]."</th>";
+        $column .= '<span class="column t_td">'. $columns[$i]."</span>";
     }
-    $column .= "</tr>";
+    $column .= "</li>";
     return $column;
 }
 
 function writeHTMLTable($title,$remark,$columns,$column_start,$data,$data_rule = ''){
     $count = count($columns);
-    $html = '<table>';
+    $html = '<ul class="t_table">';
     if($title <> ''){
-        $html .= '<tr><th colspan="'.$count.'">'.$title.'</th></tr>';
+        $html .= '<li class="t_tr"><span class="t_tc" colspan="'.$count.'">'.$title.'</span></li>';
     }
     if($remark <> ''){
-        $html .='<tr><td colspan="'.$count.'">'.$remark.'</td></tr>';
+        $html .='<li class="t_tr"><span class="t_td" colspan="'.$count.'">'.$remark.'</span></li>';
     }
     $html .= getColumnHTML($columns,$column_start);
     if(is_array($data) && count($data)){
         $html .= getBodyHTML($data,$columns,$data_rule,$column_start);
     }
-    $html .= '</table><br/>';
+    $html .= '</ul><br/>';
     echo $html;
 }
 
@@ -76,12 +76,12 @@ function getBodyHTML($data,$columns,$data_rule,$column_start){
                     break;
             }
         }
-        $str .= '<tr '.$rule_str.'>';
+        $str .= '<li class="t_tr" '.$rule_str.'>';
         for ($i=$column_start; $i<$sum_column; $i++ )
         {
-            $str .= '<td>'.$row[$columns[$i]].'</td>';
+            $str .= '<span class="t_td">'.$row[$columns[$i]].'</span>';
         }
-        $str .= "</tr>";
+        $str .= "</li>";
     }
     return $str;
 }

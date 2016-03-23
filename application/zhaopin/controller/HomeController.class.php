@@ -78,6 +78,8 @@ class HomeController extends Controller {
             ksort($list[$ksalary]);
         }
         sort($itemkey);
+        $data = array();
+        $item = array();
         foreach($itemkey as $value){
             $data[] = array("data"=>array_values($list[$value]),"name"=>$salary[$value],"type"=>"bar");
             $item[] = $salary[$value];
