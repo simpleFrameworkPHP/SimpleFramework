@@ -67,20 +67,20 @@ function getBodyHTML($data,$columns,$data_rule,$column_start){
         if(count($rule_key)){
             foreach($rule_key as $value){
                 switch($data_rule[$value][0]){
-                    case '>':if($row[$value] > $data_rule[$value][1]) $rule_str = ' class="'.$data_rule[$value][2].'" ';break;
-                    case '<':if($row[$value] < $data_rule[$value][1]) $rule_str = ' class="'.$data_rule[$value][2].'" ';break;
-                    case '>=':if($row[$value] >= $data_rule[$value][1]) $rule_str = ' class="'.$data_rule[$value][2].'" ';break;
-                    case '<=':if($row[$value] <= $data_rule[$value][1]) $rule_str = ' class="'.$data_rule[$value][2].'" ';break;
-                    case '=': if($row[$value] == $data_rule[$value][1]) $rule_str = ' class="'.$data_rule[$value][2].'" ';break;
+                    case '>':if($row[$value] > $data_rule[$value][1]) $rule_str = ' '.$data_rule[$value][2];break;
+                    case '<':if($row[$value] < $data_rule[$value][1]) $rule_str = ' '.$data_rule[$value][2];break;
+                    case '>=':if($row[$value] >= $data_rule[$value][1]) $rule_str = ' '.$data_rule[$value][2];break;
+                    case '<=':if($row[$value] <= $data_rule[$value][1]) $rule_str = ' '.$data_rule[$value][2];break;
+                    case '=': if($row[$value] == $data_rule[$value][1]) $rule_str = ' '.$data_rule[$value][2];break;
                 }
                 if($rule_str <>'')
                     break;
             }
         }
-        $str .= '<li class="t_tr" '.$rule_str.'>';
+        $str .= '<li class="t_tr">';
         for ($i=$column_start; $i<$sum_column; $i++ )
         {
-            $str .= '<span class="t_td">'.$row[$columns[$i]].'</span>';
+            $str .= '<span class="t_td '.$rule_str.'">'.$row[$columns[$i]].'</span>';
         }
         $str .= "</li>";
     }

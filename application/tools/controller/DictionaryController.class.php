@@ -49,25 +49,25 @@ class DictionaryController extends Controller {
 
     public function getAllTable($model,$remark){
         $data = $model->select('SHOW TABLE STATUS FROM '.$model->db_name);
+//        echo "<pre>";var_export($data);
         $table_data = array();
         if($data){
             foreach($data as $key=>$value){
-                $i_data['Update_time'] = strtotime($value['Update_time']);
                 $i_data['表名'] = $value['Name'];
                 $i_data['注释'] = $value['Comment'] ? $value['Comment']:(isset($remark[$value['Name']][0])?$remark[$value['Name']][0]:'');
                 $i_data['数据行数'] = $value['Rows'];
-                $i_data['最后更新'] = $value['Update_time'];
+                $i_data['存储引擎'] = $value['Engine'];
                 $result[] = $i_data;
             }
             $table['title'] = '表的列表';
-            $table['remark'] = '以下是“'.$model->db_name.'”库中的所有表的信息';
+            $table['remark'] = '以下是&nbsp;“&nbsp;'.$model->db_name.'&nbsp;”&nbsp;库中的所有表的信息';
             $table['data'] = $result;
             $table['columns'] = array_keys($i_data);
-            $table['rule'] = array('数据行数'=>array('>','10000','red'),'Update_time'=>array('<',nowTime()-ONE_DAY*31,'yellow'));
+            $table['rule'] = array('数据行数'=>array('>','10000','red'));
             $table_data[] = $table;
         }
         $table_data['test'] = '<ul class="t_table" style="float: right;position: fixed;right: 150px;top: 300px;border: solid 2px #0066cc;"><li class="t_tr"><span>图例</span></li><li class="t_tr"><span class="t_td red">数据行数>10000</span></li><li class="t_tr"><span class="t_td yellow">最后更新时间大于31天</span></li><li class="t_tr"><span class="t_td">正常使用表格</span></li></ul>';
-        $this->assign('start',1);
+        $this->assign('start',0);
         return $table_data;
     }
 
