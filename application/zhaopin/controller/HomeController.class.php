@@ -6,7 +6,7 @@
  * Time: 上午9:44
  */
 
-class HomeController extends Controller {
+class HomeController extends BaseController {
 
     public function index(){
         $template[] = $this->indexCityCP();

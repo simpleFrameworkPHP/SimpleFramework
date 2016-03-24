@@ -10,7 +10,6 @@ class Controller extends View {
 
     var $file_dir = '';
     var $cache_file_dir = '';
-    var $params = array();
 
     public function __construct(){
         $this->file_dir = APP_PATH.'/'.$_REQUEST['a'].'/pages/'.strtolower($_REQUEST['c']);
@@ -34,14 +33,14 @@ class Controller extends View {
             $file_path = $this->file_dir.'/'.$fun.'.html';
             $cache_file_path = $this->cache_file_dir.'/'.$fun.'.phtml';
             if(C('SF_REFRESH_PAGES') || !file_exists($cache_file_path) || filemtime($file_path)>=filemtime($cache_file_path) || !file_exists($file_path)){
-                // 模板阵列变量分解成为独立变量
-                extract($this->params, EXTR_OVERWRITE);
                 //生成模板文件不存在或生成模板文件的修改时间比实际模板文件的修改时间早即生成模板文件已过时
                 $contentStr = getFileContent($file_path);
                 //可以实现字符替换以达到函数改写
                 $contentStr = $this->replaceContent($contentStr);
                 addDir($cache_file_path);
                 file_put_contents($cache_file_path,$contentStr) or Log::write('CON ERROR',$cache_file_path.'文件写入出错');
+            } elseif(file_exists($cache_file_path)){
+
             } else {
                 //打开文件异常
                 $this->errorPage('这个页面还没做呢，做了再找我！',$file_path.'这个文件还没创建');
@@ -55,14 +54,32 @@ class Controller extends View {
         if(isset($log_title)){
             Log::write($log_title,$log_info);
         }
+        // 模板阵列变量分解成为独立变量
+        extract($this->params, EXTR_OVERWRITE);
         // 页面缓存
         ob_start();
         ob_implicit_flush(0);
-        empty($content)?include $cache_file_path:eval('?>'.$content);
+        empty($contentStr)?include $cache_file_path:eval('?>'.$contentStr);
         // 获取并清空缓存
         $content = ob_get_clean();
         return $content;
     }
+
+    public function initHtml($file){
+        $path = THEME_PATH . '/html/' . $file . '.html';
+        if(file_exists($path)){
+            // 模板阵列变量分解成为独立变量
+            extract($this->params, EXTR_OVERWRITE);
+            ob_start();
+            include $path;
+            $content = ob_get_clean();
+            $content = $this->replaceContent($content);
+            return $content;
+        } else {
+            $this->errorPage('no page','没有找到'.$path.'这个模板');
+        }
+    }
+
     public function display($fun = '',$is_create = false,$create_file = ''){
         $content = $this->fetch($fun);
         $this->rander($content,'','',$is_create,$create_file);

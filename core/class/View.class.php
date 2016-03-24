@@ -8,10 +8,15 @@
 
 class View {
 
+    var $params = array();
+
     function replaceContent($content){
-        $content = preg_replace(array('/{\$(\w+[^\{\}]*)}/','/{:(\w+)(\([^\{\}]*\))}/'),array('<?php echo $\1;?>','<?php echo \1\2;?>'),$content);
+        // 模板阵列变量分解成为独立变量
+        extract($this->params);
+        $content = @preg_replace(array('/{\$(\w+[^\{\}]*)}/','/{:(\w+)(\([^\{\}]*\))}/'),array('<?php echo $\1;?>','<?php echo \1\2;?>'),$content);
         //待优化---扩展常量数组
         $content = str_replace(array('__ROOT__','__JSROOT__','__THEME__','__PUBLIC__','__PLROOT__','UPLOAD_ROOT'),array(__ROOT__,__JSROOT__,__THEME__,__PUBLIC__,__PLROOT__,UPLOAD_ROOT),$content);
+        $content = preg_replace('/{:\$(.+)(\([^\{\}]*\))}/','<?php echo $this->\1\2;?>',$content);
         return $content;
     }
 

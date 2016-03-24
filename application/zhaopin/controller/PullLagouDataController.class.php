@@ -6,7 +6,11 @@
  * Time: 上午10:55
  */
 
-class PullLagouDataController extends Controller {
+class PullLagouDataController extends BaseController {
+
+    public function index(){
+        $this->display();
+    }
 
     public function writePosition(){
         $today = date('Y-m-d');

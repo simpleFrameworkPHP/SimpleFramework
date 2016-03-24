@@ -11,4 +11,9 @@ return array(
     'SF_DEFAULT_FUN'=>'index',
     //网站主题
     'SF_THEME_DEFAULT'=>'zhaopin',
+    //菜单
+    'MENU'=> array(
+        'zhaopin/home/index'=>'首页',
+        'zhaopin/pulllagoudata/index'=>'拉钩数据处理',
+    )
 );
