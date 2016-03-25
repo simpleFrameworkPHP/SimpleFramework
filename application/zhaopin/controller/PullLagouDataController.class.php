@@ -31,11 +31,11 @@ class PullLagouDataController extends BaseController {
                 $model = M('',0);
                 $model->table(array("view_lagou_position"))->addKeyUp($row);
             }
-            webLongEcho('处理页数:'.$i." 数据处理数:".count($data)."<br/>");
-            sleep(1);
+            webLongEcho('|处理页数:'.$i." 数据处理数:".count($data));
+            if(!($i%4))sleep(1);
             $i++;
         }
-        echo "处理完毕";
+        echo "|处理完毕";
 //        print_r($json);
     }
 

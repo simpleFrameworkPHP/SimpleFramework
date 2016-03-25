@@ -1,5 +1,59 @@
 {:$initHtml('header')}
-<div>
+<style>
+    div.div_content_warp{height: 200px;overflow-y: scroll;overflow-x: hidden;width: 800px;border: solid 1px #333333;}
+    ul{display: block;}
+    ul.ul_content li{line-height: 20px;}
+    .button{line-height: 30px;min-width: 80px;background-color: #4488DD;border-radius:7px;padding:3px 8px;display: inline-block;margin: 5px;color: #EEE;cursor: hand;}
+    .button:hover{background-color: #3377CC;}
+</style>
+<div class="div_content">
+    <span class="button" id="but_wp">拉勾网当日数据拉取</span>
+    <div class="div_content_warp" id="write_position_warp">
+        <ul class="ul_content" id="writePosition"></ul>
+    </div>
 
 </div>
+        <script>
+            var request;
+            function createRequest() {
+                try {
+                    request = new XMLHttpRequest();
+                } catch (trymicrosoft) {
+                    try {
+                        request = new ActiveXObject("Msxml2.XMLHTTP");
+                    } catch (othermicrosoft) {
+                        try {
+                            request = new ActiveXObject("Microsoft.XMLHTTP");
+                        } catch (failed) {
+                            request = false;
+                        }
+                    }
+                }
+                if (!request)
+                    alert("Error initializing XMLHttpRequest!");
+            }
+            $(function(){
+                $("#but_wp").on('click',function(){
+                    var url = "{:H('zhaopin/pulllagoudata/writePosition')}";
+                    createRequest();
+                    request.open("GET", url, true);
+                    request.onreadystatechange = updatePage;
+                    request.send(null);
+                });
+                function updatePage() {
+                    if (request.readyState == 3) {
+                        if (request.status == 200) {
+//                        alert(request.responseText);
+                            var data = $.trim(request.responseText);
+                            var arr = data.split('|');
+                            var lastStr = arr[arr.length - 1];
+                            $("#writePosition").append("<li>" + lastStr + "</li>");
+                            var height = $("#writePosition").height();
+                            $("#write_position_warp").scrollTop(height);
+                        }
+                    }
+                }
+            });
+
+        </script>
 {:$initHtml('footer')}
