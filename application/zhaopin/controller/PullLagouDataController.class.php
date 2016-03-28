@@ -12,36 +12,18 @@ class PullLagouDataController extends BaseController {
         $this->display();
     }
 
-    public function writePosition(){
-        $today = date('Y-m-d');
-        $i = 1;
-        $json = array();
-        $url_str = "http://www.lagou.com/jobs/positionAjax.json?px=new&first=false&pn=";
-//$city = urlencode("大连");
-        webLongEcho("拉勾网数据处理中......");
-        while(($json['success'] && !empty($json['content']['result'])) || $i == 1){
-            $url = $url_str."$i";
-            $url = isset($city) ? $url."&city=$city" : $url;
-            $json = getHtmlData($url);
-            $json = json_decode($json,true);
-            $data = $json['content']['result'];
-            foreach($data as $row){
-                $row['companyLabelList'] = implode(' ',$row['companyLabelList']);
-                $row['addTime'] = $today;
-                $model = M('',0);
-                $model->table(array("view_lagou_position"))->addKeyUp($row);
-            }
-            webLongEcho('|处理页数:'.$i." 数据处理数:".count($data));
-            if(!($i%4))sleep(1);
-            $i++;
-        }
-        echo "|处理完毕";
+    public function addData(){
+        addData();
 //        print_r($json);
+    }
+
+    public function initData(){
+        $today = date('H-m-d');
+        initData($today);
     }
 
     public function showPosition(){
         $model = M('',0);
-        print_r($_REQUEST);
         if($_REQUEST['city']){
             $where['city'] = $_REQUEST['city'];
         }
@@ -59,97 +41,6 @@ class PullLagouDataController extends BaseController {
         }
         $this->assign('columns',$columns);
         $this->assign('data',$data);
-        $this->display();
-    }
-
-    public function showSalaryPositionByCity(){
-        $workYear = array(0=>0,1=>0,2=>0,3=>0,4=>0,5=>0,6=>0,7=>0,8=>0,9=>0,10=>0);
-        $model = M('',0);
-        $bei = 5000;
-        $xAxis = array();
-        $json = array();
-        $where_city = $_REQUEST['city'] == '' ? array() : explode(",",$_REQUEST['city']);
-        $where = '';
-        $select['city'] = array();
-        if(!empty($where_city)){
-            $where['city'] = array_merge(array('in'),$where_city);
-            $select['city'] = $where_city;
-        }
-        if(isset($_REQUEST['position'])){
-            $where['positionName'] = array("LIKE","%php%");
-            $select['position'] = $_REQUEST['position'];
-        }
-        $all_city = $model->table("model_position")->fields("distinct city",false)->select();
-        foreach($all_city as $key => $value){
-            $params = $select;
-            $search = array_search($all_city[$key]['city'],$select['city']);
-            if(!is_int($search))
-                $params['city'] = array_merge(array($all_city[$key]['city']),$select['city']);
-            else
-                unset($params['city'][$search]);
-            $all_city[$key]['url'] = H('',$params);
-        }
-        $all_city = array_merge(array(array('city'=>'all','url'=>H(''))),$all_city);
-
-        $city = $model->table("model_position")->fields("distinct city",false)->where($where)->select();
-        $city = reIndexArray($city,'city');
-        $city = array_keys($city);
-        foreach($workYear as $key=>&$count){
-            $salary = $key*$bei;
-            $where['minSalary'] = array("<=",$salary);
-            $where['maxSalary'] = array(">=",$salary);
-            $row = $model->table("model_position")->where($where)->fields("count(1),city",false)->group("city")->select();
-            $data[$salary] = empty($row)? array(0=>array("count(1)"=>0,"city"=>"")) : $row;
-            $row = reIndexArray($row,'city');
-            $xAxis[] = $salary;
-            $all_salary = 0;
-            foreach($city as $icity){
-                $count = isset($row[$icity]) && $row[$icity]['count(1)'] ? $row[$icity]['count(1)'] : 0;
-                $all_salary += $count;
-                $json[$icity]['data'][] = $count;
-            }
-            $json['all']['data'][] = $all_salary;
-        }
-        foreach($json as $icity=>$value){
-            $idata = array();
-            foreach($value['data'] as $item){
-                $idata[] = $item;
-            }
-            $value['data'] = $idata;
-            $value['name'] = $icity;
-            $value['type'] = 'bar';
-            $positions[] = $value;
-        }
-        $city[] = 'all';
-        $this->assign('select',$select);
-        $this->assign('all_city',$all_city);
-        $this->assign('city',$city);
-        $this->assign('json',json_encode($positions));
-        $this->assign('xAxis',json_encode($xAxis));
-        $columns = array_keys($data[0][0]);
-        $this->assign('columns',$columns);
-        $this->assign('data',$data);
-        $this->display();
-    }
-
-    public function showCity(){
-        //$where['add_time'] = date('Y-m-d');
-        $model = M('',0);
-        $data = $model->table("model_city")
-            //->where($where)
-            ->limit(5)
-            ->order(array("countPosition"=>"DESC"))
-            ->select();
-        foreach($data as $row){
-            $city[] = $row['city'];
-            $positions[] = $row['countPosition'];
-            $companys[] = $row['countCompany'];
-        }
-        $list[] = array("data"=>$positions,"name"=>"职位数","type"=>"bar");
-        $list[] = array("data"=>$companys,"name"=>"公司数","type"=>"bar");
-        $this->assign('json',JSON($list));
-        $this->assign('xAxis',JSON($city));
-        $this->assign('city',array("职位数","公司数"));
         $this->display();
     }
 

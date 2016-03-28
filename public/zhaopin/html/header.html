@@ -4,17 +4,18 @@
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
     <link rel="stylesheet" href="__THEME__/css/main.css" type="text/css"/>
     <script type="text/javascript" src="__JSROOT__/jquery-2.1.1.js"></script>
+    <script type="text/javascript" src="__JSROOT__/common.js"></script>
 </head>
 <body>
 <section class="main_left">
     <ul>
-        <?php foreach($menu_list as $item){ ?>
+        <?php foreach($menu_list as $item){ if($item['class'] != '')$location = $item['title'];?>
         <li class="<?php echo $item['class'];?>"><a class="menu_a" href="<?php echo $item['url'];?>"><?php echo $item['title'];?></a></li>
         <?php } ?>
     </ul>
 </section>
 <section class="main_right">
     <div class="main_right_header">
-        您的位置：。。。。。
+        您的位置：<?php echo $location;?>
     </div>
     <div class="main_right_body">

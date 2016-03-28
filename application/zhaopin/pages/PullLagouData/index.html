@@ -3,55 +3,52 @@
     div.div_content_warp{height: 200px;overflow-y: scroll;overflow-x: hidden;width: 800px;border: solid 1px #333333;}
     ul{display: block;}
     ul.ul_content li{line-height: 20px;}
-    .button{line-height: 30px;min-width: 80px;background-color: #4488DD;border-radius:7px;padding:3px 8px;display: inline-block;margin: 5px;color: #EEE;cursor: hand;}
+    .button{line-height: 30px;min-width: 80px;background-color: #4488DD;border-radius:7px;padding:3px 8px;display: inline-block;margin: 5px;color: #EEE;cursor: pointer;}
     .button:hover{background-color: #3377CC;}
 </style>
 <div class="div_content">
-    <span class="button" id="but_wp">拉勾网当日数据拉取</span>
+    <span class="button" id="but_add">拉勾网当日数据拉取</span> ==》<span class="button" id="but_init">拉勾网数据初始化</span>
     <div class="div_content_warp" id="write_position_warp">
         <ul class="ul_content" id="writePosition"></ul>
     </div>
 
 </div>
         <script>
-            var request;
-            function createRequest() {
-                try {
-                    request = new XMLHttpRequest();
-                } catch (trymicrosoft) {
-                    try {
-                        request = new ActiveXObject("Msxml2.XMLHTTP");
-                    } catch (othermicrosoft) {
-                        try {
-                            request = new ActiveXObject("Microsoft.XMLHTTP");
-                        } catch (failed) {
-                            request = false;
-                        }
-                    }
-                }
-                if (!request)
-                    alert("Error initializing XMLHttpRequest!");
-            }
             $(function(){
-                $("#but_wp").on('click',function(){
-                    var url = "{:H('zhaopin/pulllagoudata/writePosition')}";
+                $("#but_add").on('click',function(){
+                    var url = "{:H('zhaopin/pulllagoudata/addData')}";
                     createRequest();
                     request.open("GET", url, true);
-                    request.onreadystatechange = updatePage;
+                    request.onreadystatechange = add;
                     request.send(null);
                 });
-                function updatePage() {
+                function add() {
+                    chenged("#writePosition","#write_position_warp");
+                }
+                function chenged(id,pid){
                     if (request.readyState == 3) {
                         if (request.status == 200) {
 //                        alert(request.responseText);
                             var data = $.trim(request.responseText);
                             var arr = data.split('|');
                             var lastStr = arr[arr.length - 1];
-                            $("#writePosition").append("<li>" + lastStr + "</li>");
-                            var height = $("#writePosition").height();
-                            $("#write_position_warp").scrollTop(height);
+                            $(id).append("<li>" + lastStr + "</li>");
+                            var height = $(id).height();
+                            $(id).parent().scrollTop(height);
                         }
+                    } else if (request.readyState == 4) {
+                        $("#but_init").on('click',function(){
+                            var url = "{:H('zhaopin/pulllagoudata/initData')}";
+                            createRequest();
+                            request.open("GET", url, true);
+                            request.onreadystatechange = init;
+                            request.send(null);
+                        });
                     }
+                }
+
+                function init(){
+                    chenged("#writePosition","#write_position_warp");
                 }
             });
 
