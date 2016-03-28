@@ -253,7 +253,7 @@ class HomeController extends BaseController {
         $this->assign('xAxis',JSON($xAxis));
         $this->assign('item',JSON($item));
         $this->assign('id','level_cp');
-        $this->assign('x_degree',15);
+        $this->assign('x_degree',20);
         $this->assign('title','【数据挖掘】按照公司融资阶段统计薪资分布');
         return $this->fetch('index_dy_echarts');
     }

@@ -40,6 +40,7 @@ function addData(){
  * @param $today
  */
 function initData($today){
+    webLongEcho('正在处理拉勾网数据。。。。');
     $model = M('',0);
     $where = array();
     $where['addTime'] = $today;
@@ -122,13 +123,13 @@ function initData($today){
             }
             $ind_ids = array();
             foreach($industrys as $v){
+                var_dump($v);
                 $industry = array('industry_title'=>trim($v));
                 $ind_id = $industry_list[trim($v)];
                 if(!intval($ind_id)){
                     $ind_id = $dic_industry->addKeyUp($industry);
                 }
                 if($ind_id == 0){
-                    var_dump(trim($v));
                     foreach($industry_list as $k=>$a){
                         var_dump($k,$a);
                     }
@@ -192,7 +193,8 @@ function initData($today){
             }
             $id = $MPosition->addKeyUp($i_position);
         }
-        echo $i."\n";
+        webLongEcho("|已处理".$i*$limit."条数据。。");
         $i++;
     }
+    webLongEcho("|处理完毕");
 }

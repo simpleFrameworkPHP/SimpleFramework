@@ -18,7 +18,7 @@ class PullLagouDataController extends BaseController {
     }
 
     public function initData(){
-        $today = date('H-m-d');
+        $today = date('Y-m-d');
         initData($today);
     }
 

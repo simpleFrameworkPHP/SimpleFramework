@@ -37,15 +37,15 @@
                             $(id).parent().scrollTop(height);
                         }
                     } else if (request.readyState == 4) {
-                        $("#but_init").on('click',function(){
-                            var url = "{:H('zhaopin/pulllagoudata/initData')}";
-                            createRequest();
-                            request.open("GET", url, true);
-                            request.onreadystatechange = init;
-                            request.send(null);
-                        });
                     }
                 }
+                $("#but_init").on('click',function(){
+                    var url = "{:H('zhaopin/pulllagoudata/initData')}";
+                    createRequest();
+                    request.open("GET", url, true);
+                    request.onreadystatechange = init;
+                    request.send(null);
+                });
 
                 function init(){
                     chenged("#writePosition","#write_position_warp");

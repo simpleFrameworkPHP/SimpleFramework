@@ -10,13 +10,13 @@ div.div_footer {min-height: 200px;margin-bottom: 20px;padding-top: 20px;text-ali
 div.div_footer .span_foot_link{margin: 0px 10px 0px 10px;}
 div.div_footer .span_foot_link a{text-decoration: none;}
 div.div_footer .span_foot_title{color: #999999;font-size: smaller;}
-.main_left{width: 150px;height: 900px;top:0px;position: fixed;}
+.main_left{width: 130px;height: 900px;top:0px;position: fixed;}
 .main_left ul{list-style: none;background-color: #2196f3;padding-left: 0px;padding-top: 200px;height: 100%;}
-.main_left ul li{width: 130px;height: 30px;padding-left: 20px;line-height: 30px;}
+.main_left ul li{width: 110px;height: 30px;padding-left: 20px;line-height: 30px;}
 .main_left ul li.cur{background-color: #21c6f3;}
 .main_left ul li:hover{background-color: #2166f3;cursor:pointer;}
 .main_left ul li a{display: block;width: 100%;height: 100%;}
-.main_right{margin-left: 150px; overflow: hidden; height: 900px;background-color: #F8F8F8;}
+.main_right{margin-left: 130px; overflow: hidden; height: 900px;background-color: #F8F8F8;}
 .main_right_header{height: 40px;border-bottom: solid 1px #ddd;padding: 0 10px;line-height: 40px;}
 .main_right_body{margin-top: 10px;}
 
