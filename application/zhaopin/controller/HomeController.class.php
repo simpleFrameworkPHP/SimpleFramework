@@ -8,8 +8,10 @@
 
 class HomeController extends BaseController {
 
+    var $db_num = 0;
+
     public function index(){
-        $template[] = $this->indexCityCP();
+//        $template[] = $this->indexCityCP();
         $template[] = $this->indexWorkYearCP();
         $template[] = $this->initIndustry();
         $template[] = $this->initLevel();
@@ -24,7 +26,7 @@ class HomeController extends BaseController {
      */
     public function indexCityCP(){
         //$where['add_time'] = date('Y-m-d');
-        $model = M('',0);
+        $model = M('',$this->db_num);
         $data = $model->table("model_city")
             //->where($where)
             ->limit(5)
@@ -52,19 +54,19 @@ class HomeController extends BaseController {
      */
     public function indexWorkYearCP(){
         //$where['add_time'] = date('Y-m-d');
-        $Dworkyear = M('zhaopin/WorkYear',0);
+        $Dworkyear = M('zhaopin/WorkYear',$this->db_num);
         $data = $Dworkyear->select();
         foreach($data as $value){
             $workyearlist[$value['id']] = $value['title'];
         }
-        $Dsalary = M('zhaopin/DicSalary',0);
+        $Dsalary = M('zhaopin/DicSalary',$this->db_num);
         $data = $Dsalary->select();
 
         foreach($data as $value){
             $salary[$value['id']] = $value['title'];
             $vagSalary[$value['id']] = ($value['min_salary'] + $value['max_salary']) / 2;
         }
-        $model = M('',0);
+        $model = M('',$this->db_num);
         $result = $model->table("model_position")
             //->where($where)
             ->fields('workyear_id,salary_id')
@@ -115,7 +117,7 @@ class HomeController extends BaseController {
 
     public function initIndustry(){
         //薪资初始化
-        $Dsalary = M('zhaopin/DicSalary',0);
+        $Dsalary = M('zhaopin/DicSalary',$this->db_num);
         $data = $Dsalary->select();
 
         foreach($data as $value){
@@ -124,12 +126,12 @@ class HomeController extends BaseController {
         }
 
         //公司id=》行业id列表
-        $industry_list = M('zhaopin/MIndCom',0)->select();
+        $industry_list = M('zhaopin/MIndCom',$this->db_num)->select();
         foreach($industry_list as $value){
             $industry_company[$value['company_id']] = $value['industry_id'];
         }
         //职位统计
-        $position_list = M('zhaopin/MPosition',0)->fields('company_id,salary_id')->select();
+        $position_list = M('zhaopin/MPosition',$this->db_num)->fields('company_id,salary_id')->select();
         $list = array();
         foreach($position_list as $i_position){
             $list[$i_position['salary_id']][$industry_company[$i_position['company_id']]]++;
@@ -173,7 +175,7 @@ class HomeController extends BaseController {
         }
 
         //行业数组初始化
-        $industrys = M('zhaopin/DicIndustry',0)->select();
+        $industrys = M('zhaopin/DicIndustry',$this->db_num)->select();
         foreach($industrys as $industry){
             if(in_array($industry['id'],$industry_ids)){
                 $industry_info[$industry['id']] = $industry['industry_title'];
@@ -196,7 +198,7 @@ class HomeController extends BaseController {
 
     public function initLevel(){
         //薪资初始化
-        $Dsalary = M('zhaopin/DicSalary',0);
+        $Dsalary = M('zhaopin/DicSalary',$this->db_num);
         $data = $Dsalary->select();
 
         foreach($data as $value){
@@ -204,19 +206,19 @@ class HomeController extends BaseController {
             $vagSalary[$value['id']] = ($value['min_salary'] + $value['max_salary']) / 2;
         }
         //公司形态数据
-        $company_list = M('zhaopin/MCompany',0)->fields('id,stage_level_id')->select();
+        $company_list = M('zhaopin/MCompany',$this->db_num)->fields('id,stage_level_id')->select();
         foreach($company_list as $item){
             $level_list[$item['id']] = $item['stage_level_id'];
         }
 
         //level数据
-        $level = M('zhaopin/DicCLevel',0)->select();
+        $level = M('zhaopin/DicCLevel',$this->db_num)->select();
         foreach($level as $item){
             $level_info[$item['id']] = $item['level_title'];
         }
 
         //职位统计
-        $position_list = M('zhaopin/MPosition',0)->fields('company_id,salary_id')->select();
+        $position_list = M('zhaopin/MPosition',$this->db_num)->fields('company_id,salary_id')->select();
         $list = array();
         foreach($position_list as $i_position){
             $list[$i_position['salary_id']][$level_list[$i_position['company_id']]]++;

@@ -14,6 +14,7 @@ return array(
     //菜单
     'MENU'=> array(
         'zhaopin/home/index'=>'首页',
+        'zhaopin/position/index'=>'职位信息查询',
         'zhaopin/pulllagoudata/index'=>'拉钩数据处理',
     )
 );

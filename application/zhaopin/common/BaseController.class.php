@@ -23,4 +23,13 @@ class BaseController extends Controller {
         }
         $this->assign('menu_list',$menu_list);
     }
+
+    public function getLastLogTime($type){
+        $time = date('Y-m-d');
+        $data = M('DataLog',0)->getLastLog($type);
+        if(!empty($data)){
+            $time = $data['content'];
+        }
+        return $time;
+    }
 } 

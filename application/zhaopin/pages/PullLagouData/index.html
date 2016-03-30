@@ -5,6 +5,8 @@
     ul.ul_content li{line-height: 20px;}
     .button{line-height: 30px;min-width: 80px;background-color: #4488DD;border-radius:7px;padding:3px 8px;display: inline-block;margin: 5px;color: #EEE;cursor: pointer;}
     .button:hover{background-color: #3377CC;}
+    .button_red{background-color: #ff4444;}
+    .button_grey{background-color: #aaaaaa;}
 </style>
 <div class="div_content">
     <span class="button" id="but_add">拉勾网当日数据拉取</span> ==》<span class="button" id="but_init">拉勾网数据初始化</span>
@@ -20,12 +22,13 @@
                     createRequest();
                     request.open("GET", url, true);
                     request.onreadystatechange = add;
+                    $(this).addClass('button_red');
                     request.send(null);
                 });
                 function add() {
-                    chenged("#writePosition","#write_position_warp");
+                    chenged("#writePosition","#but_add",initData);
                 }
-                function chenged(id,pid){
+                function chenged(id,bid,func){
                     if (request.readyState == 3) {
                         if (request.status == 200) {
 //                        alert(request.responseText);
@@ -37,18 +40,23 @@
                             $(id).parent().scrollTop(height);
                         }
                     } else if (request.readyState == 4) {
+                        $(bid).removeClass('button_red');
+                        $(bid).addClass('button_grey');
+                        if(typeof func == 'function')
+                            func();
                     }
                 }
-                $("#but_init").on('click',function(){
+
+                function initData(){
                     var url = "{:H('zhaopin/pulllagoudata/initData')}";
                     createRequest();
                     request.open("GET", url, true);
                     request.onreadystatechange = init;
+                    $("#but_init").addClass('button_red');
                     request.send(null);
-                });
-
+                }
                 function init(){
-                    chenged("#writePosition","#write_position_warp");
+                    chenged("#writePosition","#but_init",'');
                 }
             });
 

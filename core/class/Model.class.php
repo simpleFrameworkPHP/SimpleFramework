@@ -354,7 +354,7 @@ class Model{
                     }
                 }
             }
-            $where_str = implode(' AND ',$where_array);
+            $where_str = " ( " . implode(' ) AND ( ',$where_array) . " ) ";
         } else {
             $where_str = $where;
         }
@@ -384,6 +384,7 @@ class Model{
     public function order($params){
         $param_array = $this->replaceColumns($params);
         $table_array = $this->getAllTable();
+        $order_array = array();
         foreach($param_array as $key => $value){
             $order_str = strtoupper($value) == 'DESC' ? 'DESC' : 'ASC';
             $v_field = $this->filterColumn($key,$table_array);
