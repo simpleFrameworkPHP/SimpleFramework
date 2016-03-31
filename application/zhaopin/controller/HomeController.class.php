@@ -53,7 +53,7 @@ class HomeController extends BaseController {
      * 按照年限统计薪资分布
      */
     public function indexWorkYearCP(){
-        $where['add_time'] = $this->getLastLogTime('model_position');
+        $where['add_time'] = CommonController::getLastLogTime('model_position');
         $Dworkyear = M('zhaopin/WorkYear',$this->db_num);
         $data = $Dworkyear->select();
         foreach($data as $value){
@@ -116,7 +116,7 @@ class HomeController extends BaseController {
     }
 
     public function initIndustry(){
-        $where['add_time'] = $this->getLastLogTime('model_position');
+        $where['add_time'] = CommonController::getLastLogTime('model_position');
         //薪资初始化
         $Dsalary = M('zhaopin/DicSalary',$this->db_num);
         $data = $Dsalary->select();
@@ -198,7 +198,7 @@ class HomeController extends BaseController {
     }
 
     public function initLevel(){
-        $where['add_time'] = $this->getLastLogTime('model_position');
+        $where['add_time'] = CommonController::getLastLogTime('model_position');
         //薪资初始化
         $Dsalary = M('zhaopin/DicSalary',$this->db_num);
         $data = $Dsalary->select();
@@ -250,7 +250,10 @@ class HomeController extends BaseController {
         }
         $data[] = array("data"=>array_values($salary_list),"name"=>'平均薪资',"type"=>"line","yAxisIndex"=>1);
         $item[] = '平均薪资';
-            ksort($level_info);
+        ksort($vagcp);
+        $data[] = array("data"=>array_values($vagcp),"name"=>'总职位数',"type"=>"line");
+        $item[] = '总职位数';
+        ksort($level_info);
         $xAxis = array_values($level_info);
 
         $this->assign('json',JSON($data));

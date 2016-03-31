@@ -1,11 +1,11 @@
 /*css reset*/
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, em, p, font, img, small, strong, center, dl, dt, dd, ol, ul, li, form, label, table, caption, tbody, tr, th, td {margin:0;padding:0;border:0;outline:0;font-size:12px;}
 ol, ul {list-style:none}
-a{text-decoration:none;color:#404040;}
-a:hover{text-decoration:underline;color:#FF3300;}
+a{text-decoration:none;color: #4488DD;}
+a:hover{text-decoration:none;color: #1155AA;}
 
 div.div_menu{width: 100%;height: 60px;background-color: lightskyblue;}
-div.div_content{min-height: 400px;margin-left: 20px;}
+div.div_content{min-height: 400px;padding: 0 20px;}
 div.div_footer {min-height: 200px;margin-bottom: 20px;padding-top: 20px;text-align: center; clear: both;}
 div.div_footer .span_foot_link{margin: 0px 10px 0px 10px;}
 div.div_footer .span_foot_link a{text-decoration: none;}
@@ -15,20 +15,28 @@ div.div_footer .span_foot_title{color: #999999;font-size: smaller;}
 .main_left ul li{width: 110px;height: 30px;padding-left: 20px;line-height: 30px;}
 .main_left ul li.cur{background-color: #21c6f3;}
 .main_left ul li:hover{background-color: #2166f3;cursor:pointer;}
-.main_left ul li a{display: block;width: 100%;height: 100%;}
+.main_left ul li a{display: block;width: 100%;height: 100%;color: #404040}
 .main_right{margin-left: 130px; overflow: hidden; min-height: 900px;background-color: #F8F8F8;}
 .main_right_header{height: 40px;border-bottom: solid 1px #ddd;padding: 0 10px;line-height: 40px;}
 .main_right_body{margin-top: 10px;}
-
+/*表格样式*/
 .t_table {display: table;min-width:400px;}
-.t_tr {display: table-row;width: 100%;line-height: 25px;}
-.t_td {display: table-cell;min-width: 80px;background-color: #88afff; border: solid 1px #ffffff;}
-.t_tr .column {background-color: #99ff99;}
+.t_tr {display: table-row;width: 100%;line-height: 30px;}
+.t_td {display: table-cell;background-color: #FFFFFF; border-bottom: solid 1px #f0f0f0;border-right: solid 1px #EEEEEE;white-space:nowrap;padding: 0px 4px;}
+.t_tr .column {background-color: #ccc;color: #333;line-height: 35px;text-align: center;}
 .t_tr .yellow {background-color: #fffa88;}
 .t_tr .red {background-color: #ff3388;}
 .t_tr .search {background-color: #FFFFFF;}
+.t_td.search {background-color: #FFFFFF;border: none;}
+.t100{width:100%;}
 
+/*按钮样式*/
+.button{line-height: 20px;min-width: 80px;background-color: #4488DD;border-radius:7px;padding:3px 8px;display: inline-block;margin: 5px;color: #EEE;cursor: pointer;}
+.button:hover{background-color: #3377CC;}
+.button_red{background-color: #ff4444;}
+.button_grey{background-color: #aaaaaa;}
+/*响应样式*/
 @media screen and (max-width: 640px) {
     .main_left{ display: none;}
-    .main_main_right{margin-left: 0px;}
+    .main_right{margin-left: 0px;}
 }

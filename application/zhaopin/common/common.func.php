@@ -45,7 +45,7 @@ function writeHTMLTable($title,$remark,$columns,$column_start,$data,$data_rule =
     if($remark <> ''){
         $html .='<p>'.$remark.'</p>';
     }
-    $html .= '<ul class="t_table">';
+    $html .= '<ul class="t_table t100">';
     $html .= getColumnHTML($columns,$column_start);
     if(is_array($data) && count($data)){
         $html .= getBodyHTML($data,$columns,$data_rule,$column_start);

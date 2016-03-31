@@ -19,7 +19,7 @@ class PullLagouDataController extends BaseController {
     }
 
     public function initData(){
-        $today = $this->getLastLogTime('view_lagou_position');
+        $today = CommonController::getLastLogTime('view_lagou_position');
         initData($today);
     }
 } 
