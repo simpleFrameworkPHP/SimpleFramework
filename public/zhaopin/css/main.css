@@ -20,6 +20,14 @@ div.div_footer .span_foot_title{color: #999999;font-size: smaller;}
 .main_right_header{height: 40px;border-bottom: solid 1px #ddd;padding: 0 10px;line-height: 40px;}
 .main_right_body{margin-top: 10px;}
 
+.t_table {display: table;min-width:400px;}
+.t_tr {display: table-row;width: 100%;line-height: 25px;}
+.t_td {display: table-cell;min-width: 80px;background-color: #88afff; border: solid 1px #ffffff;}
+.t_tr .column {background-color: #99ff99;}
+.t_tr .yellow {background-color: #fffa88;}
+.t_tr .red {background-color: #ff3388;}
+.t_tr .search {background-color: #FFFFFF;}
+
 @media screen and (max-width: 640px) {
     .main_left{ display: none;}
     .main_main_right{margin-left: 0px;}

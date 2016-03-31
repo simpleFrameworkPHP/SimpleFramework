@@ -9,7 +9,7 @@
 /**
  * 添加拉钩数据
  */
-function addData(){
+function addData($city = ''){
     $today = date('Y-m-d');
     $num = 0;
     $i = 1;
@@ -20,6 +20,7 @@ function addData(){
     webLongEcho("拉勾网数据处理中......");
     while(($json['success'] && !empty($json['content']['result'])) || $i == 1){
         $url = $url_str."$i";
+        $url = $city == '' ? $url : $url . "&city=$city";
         $json = getHtmlData($url);
         $json = json_decode($json,true);
         $data = $json['content']['result'];

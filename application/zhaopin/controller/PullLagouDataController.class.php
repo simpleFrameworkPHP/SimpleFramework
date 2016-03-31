@@ -13,11 +13,13 @@ class PullLagouDataController extends BaseController {
     }
 
     public function addData(){
-        addData();
+        addData('北京');
+        addData('大连');
+        addData('杭州');
     }
 
     public function initData(){
-        $today = date('Y-m-d');
+        $today = $this->getLastLogTime('view_lagou_position');
         initData($today);
     }
 } 

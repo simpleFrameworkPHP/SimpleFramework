@@ -53,7 +53,7 @@ class HomeController extends BaseController {
      * 按照年限统计薪资分布
      */
     public function indexWorkYearCP(){
-        //$where['add_time'] = date('Y-m-d');
+        $where['add_time'] = $this->getLastLogTime('model_position');
         $Dworkyear = M('zhaopin/WorkYear',$this->db_num);
         $data = $Dworkyear->select();
         foreach($data as $value){
@@ -68,7 +68,7 @@ class HomeController extends BaseController {
         }
         $model = M('',$this->db_num);
         $result = $model->table("model_position")
-            //->where($where)
+            ->where($where)
             ->fields('workyear_id,salary_id')
             ->select();
         $list = array();
@@ -116,6 +116,7 @@ class HomeController extends BaseController {
     }
 
     public function initIndustry(){
+        $where['add_time'] = $this->getLastLogTime('model_position');
         //薪资初始化
         $Dsalary = M('zhaopin/DicSalary',$this->db_num);
         $data = $Dsalary->select();
@@ -131,7 +132,7 @@ class HomeController extends BaseController {
             $industry_company[$value['company_id']] = $value['industry_id'];
         }
         //职位统计
-        $position_list = M('zhaopin/MPosition',$this->db_num)->fields('company_id,salary_id')->select();
+        $position_list = M('zhaopin/MPosition',$this->db_num)->fields('company_id,salary_id')->where($where)->select();
         $list = array();
         foreach($position_list as $i_position){
             $list[$i_position['salary_id']][$industry_company[$i_position['company_id']]]++;
@@ -197,6 +198,7 @@ class HomeController extends BaseController {
     }
 
     public function initLevel(){
+        $where['add_time'] = $this->getLastLogTime('model_position');
         //薪资初始化
         $Dsalary = M('zhaopin/DicSalary',$this->db_num);
         $data = $Dsalary->select();
@@ -218,7 +220,7 @@ class HomeController extends BaseController {
         }
 
         //职位统计
-        $position_list = M('zhaopin/MPosition',$this->db_num)->fields('company_id,salary_id')->select();
+        $position_list = M('zhaopin/MPosition',$this->db_num)->fields('company_id,salary_id')->where($where)->select();
         $list = array();
         foreach($position_list as $i_position){
             $list[$i_position['salary_id']][$level_list[$i_position['company_id']]]++;

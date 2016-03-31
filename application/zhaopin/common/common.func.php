@@ -16,9 +16,10 @@ function getSqlInfo($data_list,$column_start = 0){
     }
     if(count($data_list)){
         foreach($data_list as $value){
-            $value['columns'] = isset($value['columns']) ? $value['columns'] : array();
-            $value['rule'] = isset($value['rule']) ? $value['rule'] : array();
-            $value['data'] = isset($value['data']) ? $value['data'] : array();
+            if(!is_array($value)) break;
+            $value['columns'] = isset($value['columns']) ? $value['columns'] : '';
+            $value['rule'] = isset($value['rule']) ? $value['rule'] : '';
+            $value['data'] = isset($value['data']) ? $value['data'] : '';
             $value['remark'] = isset($value['remark']) ? $value['remark'] : '';
             writeHTMLTable($value['title'],$value['remark'],$value['columns'],$column_start,$value['data'],$value['rule']);
         }
@@ -26,29 +27,30 @@ function getSqlInfo($data_list,$column_start = 0){
 }
 function getColumnHTML($columns,$start = 1){
     $count = count($columns);
-    $column ="<tr>";
+    $column ='<li class="t_tr">';
     for($i=$start;$i<$count;$i++)
     {
-        $column .= '<th class="column">'. $columns[$i]."</th>";
+        $column .= '<span class="column t_td">'. $columns[$i]."</span>";
     }
-    $column .= "</tr>";
+    $column .= "</li>";
     return $column;
 }
 
 function writeHTMLTable($title,$remark,$columns,$column_start,$data,$data_rule = ''){
     $count = count($columns);
-    $html = '<table>';
+    $html = '';
     if($title <> ''){
-        $html .= '<tr><th colspan="'.$count.'">'.$title.'</th></tr>';
+        $html .= '<p>'.$title.'</p>';
     }
     if($remark <> ''){
-        $html .='<tr><td colspan="'.$count.'">'.$remark.'</td></tr>';
+        $html .='<p>'.$remark.'</p>';
     }
+    $html .= '<ul class="t_table">';
     $html .= getColumnHTML($columns,$column_start);
     if(is_array($data) && count($data)){
         $html .= getBodyHTML($data,$columns,$data_rule,$column_start);
     }
-    $html .= '</table><br/>';
+    $html .= '</ul><br/>';
     echo $html;
 }
 
@@ -65,33 +67,23 @@ function getBodyHTML($data,$columns,$data_rule,$column_start){
         if(count($rule_key)){
             foreach($rule_key as $value){
                 switch($data_rule[$value][0]){
-                    case '>':if($row[$value] > $data_rule[$value][1]) $rule_str = ' class="'.$data_rule[$value][2].'" ';break;
-                    case '<':if($row[$value] < $data_rule[$value][1]) $rule_str = ' class="'.$data_rule[$value][2].'" ';break;
-                    case '>=':if($row[$value] >= $data_rule[$value][1]) $rule_str = ' class="'.$data_rule[$value][2].'" ';break;
-                    case '<=':if($row[$value] <= $data_rule[$value][1]) $rule_str = ' class="'.$data_rule[$value][2].'" ';break;
-                    case '=': if($row[$value] == $data_rule[$value][1]) $rule_str = ' class="'.$data_rule[$value][2].'" ';break;
+                    case '>':if($row[$value] > $data_rule[$value][1]) $rule_str = ' '.$data_rule[$value][2];break;
+                    case '<':if($row[$value] < $data_rule[$value][1]) $rule_str = ' '.$data_rule[$value][2];break;
+                    case '>=':if($row[$value] >= $data_rule[$value][1]) $rule_str = ' '.$data_rule[$value][2];break;
+                    case '<=':if($row[$value] <= $data_rule[$value][1]) $rule_str = ' '.$data_rule[$value][2];break;
+                    case '=': if($row[$value] == $data_rule[$value][1]) $rule_str = ' '.$data_rule[$value][2];break;
                 }
                 if($rule_str <>'')
                     break;
             }
         }
-        $str .= '<tr '.$rule_str.'>';
+        $str .= '<li class="t_tr">';
         for ($i=$column_start; $i<$sum_column; $i++ )
         {
-            $str .= '<td>'.$row[$columns[$i]].'</td>';
+            $str .= '<span class="t_td '.$rule_str.'">'.$row[$columns[$i]].'</span>';
         }
-        $str .= "</tr>";
+        $str .= "</li>";
     }
     return $str;
-}
-function getHtmlData($url){
-    return file_get_contents($url);
-}
-function reIndexArray($array,$key){
-    foreach($array as $item){
-        if(isset($item[$key]))
-            $data[$item[$key]] = $item;
-    }
-    return $data;
 }
 ?>
