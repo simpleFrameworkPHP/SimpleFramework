@@ -33,8 +33,10 @@ function addData($city = ''){
             $model->table(array("view_lagou_position"))->addKeyUp($row);
         }
         $num += count($data);
-        webLongEcho('|处理页数:'.$i." 已数据处理:".$num."条");
-        if(!($i%4))sleep(1);
+        if(!($i%5)){
+            webLongEcho('|处理页数:'.$i." 已数据处理:".$num."条");
+            sleep(1);
+        }
         $i++;
     }
     M('zhaopin/DataLog',$db_num)->add(array('type'=>'view_lagou_position','content'=>$today,'remark'=>'添加拉钩数据'));
@@ -92,7 +94,7 @@ function initData($today){
         foreach($data as $row){
             $num++;
             //公司发展层级处理
-            $level_id = isset($level_array[$row['financeStage']]) ? $level_array[$row['financeStage']] : 0 ;
+            $level_id = isset($level_array[$row['financeStage']]) ? $level_array[$row['financeStage']] : 11 ;//默认不需要融资
             if(!$level_id){
                 $level_id = $level->addKeyUp(array('title'=>$row['financeStage']));
                 $level_array[$row['financeStage']] = $level_id;
