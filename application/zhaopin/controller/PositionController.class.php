@@ -70,7 +70,7 @@ class PositionController extends BaseController {
             $row['职位分析'] = "<a href='".H('zhaopin/position/parsing',array('position_id'=>$item['position_id']))."'>分析详情</a>";
             $row['职位优势'] = $item['position_advantage'];
 //            $row['工作类型'] = $item['job_nature'];
-//            $row['直属领导'] = $item['leader_name'];
+            $row['直属领导'] = $item['leader_name'];
             $list[$key] = $row;
         }
         $columns = array_keys(current($list));
@@ -80,10 +80,51 @@ class PositionController extends BaseController {
 
     public function parsing(){
         $mposition = M('zhaopin/MPosition',0);
+        $init_where['add_time'] = CommonController::getLastLogTime('model_position');
         if($_REQUEST['position_id']){
-            $data = $mposition->where(array('position_id'=>$_REQUEST['position_id']))->find();
+            $where = array_merge($init_where,array('position_id'=>$_REQUEST['position_id']));
+            $info = $mposition->where($where)->find();
+            //公司维度数据准备
+            $where = array_merge($init_where,array('company_id'=>$info['company_id']));
+            $comp_list = $mposition->fields('salary,salary_id,work_year,workyear_id')
+                ->where($where)->select();
+            $c_salary_cp = array();
+            $c_workyear_cp = array();
+            foreach($comp_list as $row){
+                $c_salary_cp[$row['salary_id']]++;
+                $c_workyear_cp[$row['salary_id']][$row['workyear_id']]++;
+            }
 
-            print_r($data);
+            //城市维度数据准备
+            $where = array_merge($init_where,array('city'=>$info['city']));
+            $city_list = $mposition->fields('salary,salary_id,work_year,workyear_id')
+                ->where($where)->select();
+            $ct_salary_cp = array();
+            foreach($city_list as $row){
+                $ct_salary_cp[$row['salary_id']]++;
+            }
+
+            //同行业数据准备
+            $where = array_merge($init_where,array('position_first_type_id'=>$info['position_first_type_id'],'city'=>$info['city']));
+            $city_list = $mposition->fields('salary,salary_id,work_year,workyear_id')
+                ->where($where)->select();
+            $ind_salary_cp = array();
+            foreach($city_list as $row){
+                $ind_salary_cp[$row['salary_id']]++;
+            }
+
+            //同城同行业数据准备
+            $where = array_merge($init_where,array('position_first_type_id'=>$info['position_first_type_id']));
+            $city_list = $mposition->fields('salary,salary_id,work_year,workyear_id')
+                ->where($where)->select();
+            $ctind_salary_cp = array();
+            foreach($city_list as $row){
+                $ctind_salary_cp[$row['salary_id']]++;
+            }
+
+            echo '<pre>';
+            var_dump($c_salary_cp,$c_workyear_cp,$ct_salary_cp,$ind_salary_cp,$ctind_salary_cp);
+            print_r($info);
         } else {
 
         }

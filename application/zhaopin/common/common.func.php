@@ -96,4 +96,16 @@ function reIndexArray($array,$key){
     }
     return $data;
 }
+
+function initArray($array1,$array2 = array(),$default = 0){
+    $list = array();
+    if(!empty($array2))
+        foreach($array1 as $k=>$v)
+            foreach($array2 as $kk=>$vv)
+                $list[$k][$kk] = $default;
+    else
+        foreach($array1 as $k=>$v)
+                $list[$k] = $default;
+    return $list;
+}
 ?>

@@ -12,66 +12,46 @@ class HomeController extends BaseController {
 
     public function index(){
 //        $template[] = $this->indexCityCP();
-        $template[] = $this->indexWorkYearCP();
-        $template[] = $this->initIndustry();
-        $template[] = $this->initLevel();
+        //工作年限列表
+        $workyearlist = $this->showWorkYear();
+        //薪酬范围&平均薪资列表
+        $Dsalary = M('zhaopin/DicSalary',$this->db_num);
+        $data = $Dsalary->fields(array('id','title','min_salary','max_salary'))->select();
+
+        foreach($data as $value){
+            $salary[$value['id']] = $value['title'];
+            $vagSalary[$value['id']] = ($value['min_salary'] + $value['max_salary']) / 2;
+        }
+        //公司id=》行业id列表
+        $industry_list = M('zhaopin/MIndCom',$this->db_num)->fields(array('company_id','industry_id'))->select();
+        foreach($industry_list as $value){
+            $industry_company[$value['company_id']] = $value['industry_id'];
+        }
+
+        //行业数组初始化
+        $industrys = M('zhaopin/DicIndustry',$this->db_num)->fields('id,industry_title')->select();
+        $ind_info_list = array();
+        foreach($industrys as $item)
+            $ind_info_list[$item['id']] = $item['industry_title'];
+
+        $where['add_time'] = CommonController::getLastLogTime('model_position');
+        $data = M('zhaopin/MPosition',$this->db_num)->fields(array('workyear_id','company_id','salary_id'))->where($where)->select();
+
+        $template[] = $this->indexWorkYearCP($data, $workyearlist, $salary, $vagSalary);
+        $template[] = $this->initLevel($data, $salary, $vagSalary);
+        $template[] = $this->initIndustryCP($data,$salary, $vagSalary, $industry_company, $ind_info_list);
+        $template[] = $this->initIndustrySalary($data,$salary, $vagSalary, $industry_company, $ind_info_list);
+
 
         $this->assign('template',$template);
         $this->display();
     }
 
     /**
-     * 按照城市统计职位数与公司数的分析图
-     * @return string
-     */
-    public function indexCityCP(){
-        //$where['add_time'] = date('Y-m-d');
-        $model = M('',$this->db_num);
-        $data = $model->table("model_city")
-            //->where($where)
-            ->limit(5)
-            ->order(array("countPosition"=>"DESC"))
-            ->select();
-        foreach($data as $row){
-            $city[] = $row['city'];
-            $positions[] = $row['countPosition'];
-            $companys[] = $row['countCompany'];
-            $cp[] = $row['countPosition']/$row['countCompany'];
-        }
-        $list[] = array("data"=>$positions,"name"=>"职位数","type"=>"bar");
-        $list[] = array("data"=>$companys,"name"=>"公司数","type"=>"bar");
-        $list[] = array("data"=>$cp,"name"=>"职位数/公司数","type"=>"line","yAxisIndex"=>1);
-        $this->assign('json',JSON($list));
-        $this->assign('xAxis',JSON($city));
-        $this->assign('item',JSON(array("职位数","公司数","职位数/公司数")));
-        $this->assign('id','city_cp');
-        $this->assign('title','【数据挖掘】职位数与公司数的城市分布');
-        return $this->fetch('index_dy_echarts');
-    }
-
-    /**
      * 按照年限统计薪资分布
      */
-    public function indexWorkYearCP(){
-        $where['add_time'] = CommonController::getLastLogTime('model_position');
-        $Dworkyear = M('zhaopin/WorkYear',$this->db_num);
-        $data = $Dworkyear->select();
-        foreach($data as $value){
-            $workyearlist[$value['id']] = $value['title'];
-        }
-        $Dsalary = M('zhaopin/DicSalary',$this->db_num);
-        $data = $Dsalary->select();
-
-        foreach($data as $value){
-            $salary[$value['id']] = $value['title'];
-            $vagSalary[$value['id']] = ($value['min_salary'] + $value['max_salary']) / 2;
-        }
-        $model = M('',$this->db_num);
-        $result = $model->table("model_position")
-            ->where($where)
-            ->fields('workyear_id,salary_id')
-            ->select();
-        $list = array();
+    public function indexWorkYearCP($result, $workyearlist, $salary, $vagSalary){
+        $list = initArray($salary,$workyearlist);
         foreach($result as $row){
               $list[$row['salary_id']][$row['workyear_id']]++;
         }
@@ -100,40 +80,76 @@ class HomeController extends BaseController {
             }
         }
         $avgSalary = array();
+        foreach($workyearlist as $wid=>$w_title){
+            $avgSalary[$wid]= 0 ;
+        }
         foreach($iyear as $year => $value){
             $avgSalary[$year] = number_format($isalary[$year] / $iyear[$year],2,'.','');
         }
         $data[] = array("data"=>array_values($avgSalary),"name"=>'平均薪资',"type"=>"line","yAxisIndex"=>1);
         $item[] = '平均薪资';
 
-        $this->assign('json',JSON($data));
-        $this->assign('xAxis',JSON($xAxis));
-        $this->assign('item',JSON($item));
-        $this->assign('id','workyear_np');
-        $this->assign('title','【数据挖掘】按照工作年限统计薪资分布');
-        return $this->fetch('index_dy_echarts');
-
+        return $this->showEcharts($data,$xAxis,$item,'workyear_np','【数据挖掘】按照工作年限统计薪资分布');
     }
 
-    public function initIndustry(){
-        $where['add_time'] = CommonController::getLastLogTime('model_position');
-        //薪资初始化
-        $Dsalary = M('zhaopin/DicSalary',$this->db_num);
-        $data = $Dsalary->select();
-
-        foreach($data as $value){
-            $salary[$value['id']] = $value['title'];
-            $vagSalary[$value['id']] = ($value['min_salary'] + $value['max_salary']) / 2;
+    public function initLevel($position_list, $salary, $vagSalary){
+        //公司形态数据
+        $company_list = M('zhaopin/MCompany',$this->db_num)->fields(array('id','stage_level_id'))->select();
+        foreach($company_list as $item){
+            $level_list[$item['id']] = $item['stage_level_id'];
         }
 
-        //公司id=》行业id列表
-        $industry_list = M('zhaopin/MIndCom',$this->db_num)->select();
-        foreach($industry_list as $value){
-            $industry_company[$value['company_id']] = $value['industry_id'];
+        //level数据
+        $level = M('zhaopin/DicCLevel',$this->db_num)->fields(array('id','level_title'))->select();
+        foreach($level as $item){
+            $level_info[$item['id']] = $item['level_title'];
         }
+
         //职位统计
-        $position_list = M('zhaopin/MPosition',$this->db_num)->fields('company_id,salary_id')->where($where)->select();
-        $list = array();
+
+        $list = initArray($salary,$level_list);
+        foreach($position_list as $i_position){
+            $list[$i_position['salary_id']][$level_list[$i_position['company_id']]]++;
+        }
+
+        $vagcp = array();
+        $vag_salary = array();
+        foreach($list as $salary_id=>$value){
+            $itemkey[] = $salary_id;
+            foreach($value as $level_id => $cp){
+                $vagcp[$level_id] += $cp;
+                $vag_salary[$level_id] += $cp * $vagSalary[$salary_id];
+            }
+            ksort($list[$salary_id]);
+        }
+        //核算平均工资
+        foreach($vag_salary as $level_id=>$i_salary){
+            $salary_list[$level_id] = $i_salary ? number_format($i_salary / $vagcp[$level_id],2,'.','') : 0;
+        }
+        ksort($salary_list);
+        sort($itemkey);
+        $data = array();
+        $item = array();
+        foreach($itemkey as $value){
+            $data[] = array("data"=>array_values($list[$value]),"name"=>$salary[$value],"type"=>"bar");
+            $item[] = $salary[$value];
+        }
+        $data[] = array("data"=>array_values($salary_list),"name"=>'平均薪资',"type"=>"line","yAxisIndex"=>1);
+        $item[] = '平均薪资';
+//        ksort($vagcp);
+//        $data[] = array("data"=>array_values($vagcp),"name"=>'总职位数',"type"=>"line");
+//        $item[] = '总职位数';
+        ksort($level_info);
+        $xAxis = array_values($level_info);
+
+        return $this->showEcharts($data,$xAxis,$item,'level_cp','【数据挖掘】按照公司融资阶段统计薪资分布',20);
+    }
+
+    public function initIndustryCP($position_list,$salary, $vagSalary,$industry_company, $industrys){
+
+        //职位统计
+        $industry_list = array_flip($industry_company);
+        $list = initArray($salary,$industry_list);
         foreach($position_list as $i_position){
             $list[$i_position['salary_id']][$industry_company[$i_position['company_id']]]++;
         }
@@ -175,13 +191,9 @@ class HomeController extends BaseController {
             $item[] = $salary[$value];
         }
 
-        //行业数组初始化
-        $industrys = M('zhaopin/DicIndustry',$this->db_num)->select();
-        foreach($industrys as $industry){
-            if(in_array($industry['id'],$industry_ids)){
-                $industry_info[$industry['id']] = $industry['industry_title'];
-                $avg_salary[$industry['id']] = number_format($isalary[$industry['id']] / $icp[$industry['id']],2,'.','');
-            }
+        foreach($industry_ids as $ind_id){
+            $industry_info[$ind_id] = isset($industry[$ind_id]) ? $industry[$ind_id] : '';
+            $avg_salary[$ind_id] = number_format($isalary[$ind_id] / $icp[$ind_id],2,'.','');
         }
         ksort($industry_info);
         $xAxis = array_values($industry_info);
@@ -189,58 +201,47 @@ class HomeController extends BaseController {
         $data[] = array("data"=>array_values($avg_salary),"name"=>'平均薪资',"type"=>"line","yAxisIndex"=>1);
         $item[] = '平均薪资';
 
-        $this->assign('json',JSON($data));
-        $this->assign('xAxis',JSON($xAxis));
-        $this->assign('item',JSON($item));
-        $this->assign('id','industry_cp');
-        $this->assign('title','【数据挖掘】按照行业统计薪资分布');
-        return $this->fetch('index_dy_echarts');
+        return $this->showEcharts($data,$xAxis,$item,'industry_cp','【数据挖掘】按照行业需求职位top5统计薪资分布');
     }
 
-    public function initLevel(){
-        $where['add_time'] = CommonController::getLastLogTime('model_position');
-        //薪资初始化
-        $Dsalary = M('zhaopin/DicSalary',$this->db_num);
-        $data = $Dsalary->select();
-
-        foreach($data as $value){
-            $salary[$value['id']] = $value['title'];
-            $vagSalary[$value['id']] = ($value['min_salary'] + $value['max_salary']) / 2;
-        }
-        //公司形态数据
-        $company_list = M('zhaopin/MCompany',$this->db_num)->fields('id,stage_level_id')->select();
-        foreach($company_list as $item){
-            $level_list[$item['id']] = $item['stage_level_id'];
-        }
-
-        //level数据
-        $level = M('zhaopin/DicCLevel',$this->db_num)->select();
-        foreach($level as $item){
-            $level_info[$item['id']] = $item['level_title'];
-        }
+    public function initIndustrySalary($position_list, $salary, $vagSalary, $industry_company, $industrys){
 
         //职位统计
-        $position_list = M('zhaopin/MPosition',$this->db_num)->fields('company_id,salary_id')->where($where)->select();
-        $list = array();
+        $industry_list = array_flip($industry_company);
+        $list = initArray($salary,$industry_list);
         foreach($position_list as $i_position){
-            $list[$i_position['salary_id']][$level_list[$i_position['company_id']]]++;
+            $list[$i_position['salary_id']][$industry_company[$i_position['company_id']]]++;
         }
 
-        $vagcp = array();
-        $vag_salary = array();
-        foreach($list as $salary_id=>$value){
-            $itemkey[] = $salary_id;
-            foreach($value as $level_id => $cp){
-                $vagcp[$level_id] += $cp;
-                $vag_salary[$level_id] += $cp * $vagSalary[$salary_id];
+        //计算各个行业平均工资(找出top5)
+        $icp = array();
+        $isalary = array();
+        foreach($list as $salary_id=>$item){
+            foreach($item as $industry_id=>$cp){
+                $icp[$industry_id] += $cp;
+                $isalary[$industry_id] += $cp * $vagSalary[$salary_id];
             }
-            ksort($list[$salary_id]);
         }
-        //核算平均工资
-        foreach($vag_salary as $level_id=>$i_salary){
-            $salary_list[$level_id] = number_format($i_salary / $vagcp[$level_id],2,'.','');
+        foreach($isalary as $industry_id => $salary_sum){
+            $cp_list[$salary_sum] = $industry_id;
         }
-        ksort($salary_list);
+        krsort($cp_list);
+        $industry_ids = array();
+        foreach($cp_list as $industry_id){
+            if(count($industry_ids) < 6){
+                $industry_ids[] = $industry_id;
+            }
+        }
+
+        //数据筛选
+        foreach($list as $ksalary=>$value){
+            $itemkey[] = $ksalary;
+            foreach($list[$ksalary] as $industry_id=>$cp){
+                if(!in_array($industry_id,$industry_ids))
+                    unset($list[$ksalary][$industry_id]);
+            }
+            ksort($list[$ksalary]);
+        }
         sort($itemkey);
         $data = array();
         $item = array();
@@ -248,21 +249,39 @@ class HomeController extends BaseController {
             $data[] = array("data"=>array_values($list[$value]),"name"=>$salary[$value],"type"=>"bar");
             $item[] = $salary[$value];
         }
-        $data[] = array("data"=>array_values($salary_list),"name"=>'平均薪资',"type"=>"line","yAxisIndex"=>1);
+
+        //行业数组初始化
+        foreach($industry_ids as $ind_id){
+            $industry_info[$ind_id] = isset($industry[$ind_id]) ? $industry[$ind_id] : '';
+            $avg_salary[$ind_id] = number_format($isalary[$ind_id] / $icp[$ind_id],2,'.','');
+        }
+        ksort($industry_info);
+        $xAxis = array_values($industry_info);
+
+        $data[] = array("data"=>array_values($avg_salary),"name"=>'平均薪资',"type"=>"line","yAxisIndex"=>1);
         $item[] = '平均薪资';
-        ksort($vagcp);
-        $data[] = array("data"=>array_values($vagcp),"name"=>'总职位数',"type"=>"line");
-        $item[] = '总职位数';
-        ksort($level_info);
-        $xAxis = array_values($level_info);
+        return $this->showEcharts($data,$xAxis,$item,'industry_cp1','【数据挖掘】按照行业薪资总额top5统计薪资分布');
+    }
+
+    //工作年限数据
+    public function showWorkYear(){
+        $Dworkyear = M('zhaopin/WorkYear',$this->db_num);
+        $data = $Dworkyear->fields(array('id','title'))->select();
+        $workyearlist = array();
+        foreach($data as $value){
+            $workyearlist[$value['id']] = $value['title'];
+        }
+        return $workyearlist;
+    }
+
+    public function showEcharts($data,$xAxis,$item,$id,$title,$x_degree = 0){
 
         $this->assign('json',JSON($data));
         $this->assign('xAxis',JSON($xAxis));
         $this->assign('item',JSON($item));
-        $this->assign('id','level_cp');
-        $this->assign('x_degree',20);
-        $this->assign('title','【数据挖掘】按照公司融资阶段统计薪资分布');
+        $this->assign('id',$id);
+        $this->assign('x_degree',$x_degree);
+        $this->assign('title',$title);
         return $this->fetch('index_dy_echarts');
     }
-
 } 
