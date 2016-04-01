@@ -26,6 +26,19 @@ class PositionController extends BaseController {
         if($_REQUEST['position']){
             $where['position_name'] = array('like',"%{$_REQUEST['position']}%");
         }
+        //公司条件搜索
+        if($_REQUEST['company_name']){
+            $c_where['company_name'] = array('like',"%{$_REQUEST['company_name']}%");
+            $list = M('zhaopin/MCompany',0)->fields('id')->where($c_where)->select();
+            $cids = array();
+            if(!empty($list)){
+                $cids = reIndexArray($list,'id');
+                $cids = array_keys($cids);
+            }
+            $where['company_id'] = array('in');
+            $where['company_id'] = array_merge($where['company_id'],$cids);
+        }
+        //获取最后一次抓取数据的时间
         $where['add_time'] = CommonController::getLastLogTime('model_position');
         $this->assign('where',$_REQUEST);
         return $where;
@@ -46,15 +59,16 @@ class PositionController extends BaseController {
             $row['序号'] = $key;
             $row['职位名称'] = $item['position_name'];
             $row['城市'] = $item['city'];
-            $row['职位类型'] = $position_types[$item['position_type_id']];
-            $row['薪酬范围'] = $item['salary'];
+//            $row['职位类型'] = $position_types[$item['position_type_id']];
+            $row['薪酬'] = $item['salary'];
             $row['工作年限'] = $item['work_year'];
             $row['学历'] = $item['education'];
-            $row['创建时间'] = $item['create_time'];
+            $row['创建时间'] = date('Y-m-d',strtotime($item['create_time']));
+
             $row['公司'] = $company_list[$item['company_id']];
-            $row['职位优势'] = $item['position_advantage'];
-            $row['职位详情'] = "<a href='".CommonController::getUrl($item['position_id'],$item['data_from'])."'>点击查看详情</a>";
+            $row['职位详情'] = "<a href='".CommonController::getUrl($item['position_id'],$item['data_from'])."'>查看详情</a>";
             $row['职位分析'] = "<a href='".H('zhaopin/position/parsing',array('position_id'=>$item['position_id']))."'>分析详情</a>";
+            $row['职位优势'] = $item['position_advantage'];
 //            $row['工作类型'] = $item['job_nature'];
 //            $row['直属领导'] = $item['leader_name'];
             $list[$key] = $row;
@@ -68,7 +82,10 @@ class PositionController extends BaseController {
         $mposition = M('zhaopin/MPosition',0);
         if($_REQUEST['position_id']){
             $data = $mposition->where(array('position_id'=>$_REQUEST['position_id']))->find();
+
             print_r($data);
+        } else {
+
         }
     }
 } 
