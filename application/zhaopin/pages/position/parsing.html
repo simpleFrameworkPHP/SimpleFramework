@@ -1,0 +1,27 @@
+{:$initHtml('header')}
+<style>
+    #salary_cp{height: 300px;width: 400px;display: inline-block;}
+    #workyear_cp{height: 300px;width: 400px;display: inline-block;}
+</style>
+<div class="div_content">
+    <?php if($show){ //正常显示职位信息?>
+    <script src="__JSROOT__/echarts.js"></script>
+    <ul>
+        <li>职位信息</li>
+        <li>{$template['salary_cp']}{$template['workyear_cp']}</li>
+    </ul>
+
+    <?php } else { //选择查询职位表单?>
+    <form action="{:H('')}" method="post">
+        <ul>
+            <li>
+                <span>职位ID</span><span><input name="position_id"></span>
+            </li>
+            <li>
+                <input class="button" value="提交" type="submit">
+            </li>
+        </ul>
+    </form>
+    <?php } ?>
+</div>
+{:$initHtml('footer')}

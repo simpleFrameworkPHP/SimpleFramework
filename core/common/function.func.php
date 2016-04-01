@@ -80,10 +80,11 @@ function H($path='',$params='',$redirect = false){
     if(is_string($path)){
         $url =  __ROOT__ . '/index.php?';
         $path = explode('/',$path);
-        $count_url = count($path);
-        $fun = (isset($path[$count_url-1]) && $path[$count_url-1] <> '') ? $path[$count_url-1] : $_REQUEST['f'];
-        $con = (isset($path[$count_url-2]) && $path[$count_url-2] <> '') ? $path[$count_url-2] : $_REQUEST['c'];
-        $app = (isset($path[$count_url-3]) && $path[$count_url-3] <> '') ? $path[$count_url-3] : $_REQUEST['a'];
+        $fun = end($path) ? end($path) : $_REQUEST['f'];
+        array_pop($path);
+        $con = end($path) ? end($path) : $_REQUEST['c'] ;
+        array_pop($path);
+        $app = end($path) ? end($path) : $_REQUEST['a'] ;
         $url .='a='.$app.'&c='.$con.'&f='.$fun;
     }
     if(is_array($params)){
