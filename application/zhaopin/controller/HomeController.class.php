@@ -282,6 +282,6 @@ class HomeController extends BaseController {
         $this->assign('id',$id);
         $this->assign('x_degree',$x_degree);
         $this->assign('title',$title);
-        return $this->fetch('index_dy_echarts');
+        return $this->fetch('common/index_dy_echarts');
     }
 } 

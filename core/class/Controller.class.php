@@ -19,13 +19,24 @@ class Controller extends View {
     public function fetch($fun = ''){
         if($fun == ''){
             $fun = $_REQUEST['f'];
+            $con = $_REQUEST['c'] ;
+            $app = $_REQUEST['a'] ;
+
+            $this->file_dir = APP_PATH.'/'.$app.'/pages/'.$con;
+            $this->cache_file_dir = CACHE_PATH.'/pages/'.$app.'/'.$con;
         } else {
             $path = explode('/',$fun);
             $count_url = count($path);
-            $fun = (isset($path[$count_url-1]) && $path[$count_url-1] <> '') ? $path[$count_url-1] :  C('SF_DEFAULT_FUN');
-            $con = (isset($path[$count_url-2]) && $path[$count_url-2] <> '') ? $path[$count_url-2] :  C('SF_DEFAULT_CON');
-            $con = strtolower($con);
-            $app = (isset($path[$count_url-3]) && $path[$count_url-3] <> '') ? $path[$count_url-3] :  C('SF_DEFAULT_APP');
+//            $fun = (isset($path[$count_url-1]) && $path[$count_url-1] <> '') ? $path[$count_url-1] :  C('SF_DEFAULT_FUN');
+//            $con = (isset($path[$count_url-2]) && $path[$count_url-2] <> '') ? $path[$count_url-2] :  C('SF_DEFAULT_CON');
+//            $con = strtolower($con);
+//            $app = (isset($path[$count_url-3]) && $path[$count_url-3] <> '') ? $path[$count_url-3] :  C('SF_DEFAULT_APP');
+            $fun = end($path);
+            array_pop($path);
+            $con = end($path) ? end($path) : $_REQUEST['c'] ;
+            array_pop($path);
+            $app = end($path) ? end($path) : $_REQUEST['a'] ;
+
             $this->file_dir = APP_PATH.'/'.$app.'/pages/'.$con;
             $this->cache_file_dir = CACHE_PATH.'/pages/'.$app.'/'.$con;
         }
