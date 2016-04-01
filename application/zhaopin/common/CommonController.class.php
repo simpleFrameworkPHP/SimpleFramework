@@ -27,6 +27,12 @@ class CommonController extends Controller {
         return $url;
     }
 
+    public static function getFrom($from_type){
+        $from_list = array('lagou'=>'拉勾网');
+        $from = isset($from_list[$from_type]) ? $from_list[$from_type] : '';
+        return $from;
+    }
+
     //工作年限数据
     public static function showWorkYear(){
         $Dworkyear = M('zhaopin/WorkYear',self::$db_num);

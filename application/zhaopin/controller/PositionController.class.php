@@ -59,7 +59,7 @@ class PositionController extends BaseController {
         foreach($data as $key => $item){
             $row = array();
             $row['序号'] = $key;
-            $row['职位名称'] = $item['position_name'];
+            $row['职位名称'] = "<a href='".CommonController::getUrl($item['position_id'],$item['data_from'])."'>{$item['position_name']}</a>";
             $row['城市'] = $item['city'];
 //            $row['职位类型'] = $position_types[$item['position_type_id']];
             $row['薪酬'] = $item['salary'];
@@ -68,7 +68,6 @@ class PositionController extends BaseController {
             $row['创建时间'] = date('Y-m-d',strtotime($item['create_time']));
 
             $row['公司'] = $company_list[$item['company_id']];
-            $row['职位详情'] = "<a href='".CommonController::getUrl($item['position_id'],$item['data_from'])."'>查看详情</a>";
             $row['职位分析'] = "<a href='".H('zhaopin/position/parsing',array('position_id'=>$item['position_id']))."'>分析详情</a>";
             $row['职位优势'] = $item['position_advantage'];
 //            $row['工作类型'] = $item['job_nature'];
@@ -115,50 +114,89 @@ class PositionController extends BaseController {
             $ind_salary_cp = array();
             //同行业&&同城数据准备
             $ctind_salary_cp = array();
+            //同公司&&同城数据准备
+            $c_ct_salary_cp = array();
             foreach($comp_list as $row){
                 if($row['company_id'] == $info['company_id']){
+                    //同公司职位数分布
                     $c_salary_cp[$row['salary_id']]++;
                     $c_workyear_cp[$row['workyear_id']]++;
                 }
+                if($row['company_id'] == $info['company_id'] && $row['city'] == $info['city']){
+                    //同城同公司职位数分布
+                    $c_ct_salary_cp[$row['salary_id']]++;
+                }
+                if($row['city'] == $info['city'] && $row['position_first_type_id'] == $info['position_first_type_id']){
+                    //同行业同城薪资分布
+                    $ctind_salary_cp[$row['salary_id']]++;
+                }
                 if($row['city'] == $info['city']){
+                    //同城职位数统计
                     $ct_salary_cp[$row['salary_id']]++;
                 }
                 if($row['position_first_type_id'] == $info['position_first_type_id']){
+                    //同行业职位数统计
                     $ind_salary_cp[$row['salary_id']]++;
-                }
-                if($row['city'] == $info['city'] && $row['position_first_type_id'] == $info['position_first_type_id']){
-                    $ctind_salary_cp[$row['salary_id']]++;
                 }
             }
 
 //            echo '<pre>';
-//            var_dump($c_salary_cp,$c_workyear_cp,$ct_salary_cp,$ind_salary_cp,$ctind_salary_cp);
+//            var_dump($ct_salary_cp,$ind_salary_cp,$ctind_salary_cp);
 //            print_r($info);exit;
-            $template['salary_cp'] = $this->showSalaryCP($c_salary_cp, $salary);
-            $template['workyear_cp'] = $this->showWorkYearCP($c_workyear_cp, $salary);
+            $template['pie1'] = $this->showPie1($c_workyear_cp, $workyearlist,$c_salary_cp, $salary);
+            $template['pie2'] = $this->showPie2($c_ct_salary_cp,$ctind_salary_cp, $salary);
             $this->assign('template',$template);
+            $this->assign('info',$this->showPositionInfo($info));
             $show = true;
         }
         $this->assign('show',$show);
         $this->display();
     }
 
-    function showSalaryCP($c_salary_cp, $salary){
+    function showPie1($c_workyear_cp, $workyear,$c_salary_cp,$salary){
+        $item_style = array('normal'=>array('label'=>array('show'=>false),'labelLine'=>array('show'=>false)));
+        $init_style = array('type'=>'pie','roseType'=>'radius','width'=>'38%','max'=>40);
+        $data = array();
+        foreach($c_workyear_cp as $workyear_id => $cp){
+            $data[] = array('name'=>$workyear[$workyear_id],'value'=>$cp);
+            $item[] = $workyear[$workyear_id];
+        }
+        $list[] = array_merge($init_style,array('name'=>'年限分布','radius'=>array(20,100),'center'=>array('22%',180),'itemStyle'=>$item_style,'data'=>$data));
         $data = array();
         foreach($c_salary_cp as $salary_id => $cp){
             $data[] = array('name'=>$salary[$salary_id],'value'=>$cp);
             $item[] = $salary[$salary_id];
         }
-        return $this->showPieEcharts($data,$item,'salary_cp','【公司】招聘职位薪酬分布');
+        $list[] = array_merge($init_style,array('name'=>'薪酬分布','radius'=>array(30,100),'center'=>array('70%',180),'data'=>$data));
+        return $this->showPieEcharts($list,$item,'pie1','【同公司】内部整体分析');
     }
 
-    function showWorkYearCP($c_workyear_cp, $salary){
+    function showPie2($c_ct_salary_cp,$ctind_salary_cp, $salary){
+        $item_style = array('normal'=>array('label'=>array('show'=>false),'labelLine'=>array('show'=>false)));
+        $init_style = array('type'=>'pie','roseType'=>'radius','width'=>'38%','max'=>40);
         $data = array();
-        foreach($c_workyear_cp as $salary_id => $cp){
+        foreach($c_ct_salary_cp as $salary_id => $cp){
             $data[] = array('name'=>$salary[$salary_id],'value'=>$cp);
             $item[] = $salary[$salary_id];
         }
-        return $this->showPieEcharts($data,$item,'workyear_cp','【公司】工作年限薪酬分布');
+        $list[] = array_merge($init_style,array('name'=>'同公司','radius'=>array(20,100),'center'=>array('22%',180),'itemStyle'=>$item_style,'data'=>$data));
+        $data = array();
+        foreach($ctind_salary_cp as $salary_id => $cp){
+            $data[] = array('name'=>$salary[$salary_id],'value'=>$cp);
+        }
+        $list[] = array_merge($init_style,array('name'=>'同行业','radius'=>array(30,100),'center'=>array('70%',180),'data'=>$data));
+        return $this->showPieEcharts($list,$item,'pie2','【同城】薪酬分布');
     }
 
+    public function showPositionInfo($info){
+        $mpt = M('zhaopin/DicPositionType',$this->db_num);
+        $mpt_info = $mpt->where(array('id'=>array('in',$info['position_type_id'],$info['position_first_type_id'])))->select();
+        $mpt_info = reIndexArray($mpt_info,'id');
+        $info['position_type_id'] = $mpt_info[$info['position_type_id']]['pos_name'];
+        $info['position_first_type_id'] = $mpt_info[$info['position_first_type_id']]['pos_name'];
+        $info['url'] = CommonController::getUrl($info['position_id'],$info['data_from']);
+        $info['data_from'] = CommonController::getFrom($info['data_from']);
+//        echo '<pre>';var_dump($info);exit;
+        return $info;
+    }
 } 
