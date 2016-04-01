@@ -33,6 +33,14 @@ class CommonController extends Controller {
         return $from;
     }
 
+    public static function getCompanyUrl($cid,$from_type){
+        $url = '';
+        switch($from_type){
+            case 'lagou':$url = "http://www.lagou.com/gongsi/{$cid}.html";break;
+        }
+        return $url;
+    }
+
     //工作年限数据
     public static function showWorkYear(){
         $Dworkyear = M('zhaopin/WorkYear',self::$db_num);

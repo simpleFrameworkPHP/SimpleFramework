@@ -12,10 +12,13 @@ class PositionController extends BaseController {
 
     public function index(){
         $where = $this->getWhere();
+        //获取最后一次抓取数据的时间
+        $where['add_time'] = CommonController::getLastLogTime('model_position');
         $model = M('zhaopin/MPosition',$this->db_num);
         $data = $model->where($where)->limit(1000)->select();
         if(!empty($data)){
-            $data = $this->showData($data);
+            $init_where['add_time'] = $where['add_time'];
+            $this->showData($data,$init_where);
         }
 
         $this->display();
@@ -40,38 +43,43 @@ class PositionController extends BaseController {
             $where['company_id'] = array('in');
             $where['company_id'] = array_merge($where['company_id'],$cids);
         }
-        //获取最后一次抓取数据的时间
-        $where['add_time'] = CommonController::getLastLogTime('model_position');
         $this->assign('where',$_REQUEST);
         return $where;
     }
 
-    public function showData($data){
-        $columns = array();
+    public function showData($data,$init_where){
         foreach($data as $item){
             $position_type_ids[] = $item['position_type_id'];
             $company_ids[] = $item['company_id'];
         }
-        $DicPT = M('zhaopin/DicPositionType',$this->db_num);
-        $position_types = $DicPT->getPNameListInId($position_type_ids);
+//        $DicPT = M('zhaopin/DicPositionType',$this->db_num);
+//        $position_types = $DicPT->getPNameListInId($position_type_ids);
         $DicC = M('zhaopin/MCompany',0);
         $company_list = $DicC->getCNameListInId($company_ids);
+        $init_where['company_id'] = array_merge(array('in'),$company_ids);
+        $company_cp_list = M('zhaopin/MPosition',$this->db_num)->fields('company_id,count(company_id)',false)->where($init_where)->group('company_id')->select();
+        $company_cp = array();
+        foreach($company_cp_list as $row)
+            $company_cp[$row['company_id']] = $row['count(company_id)'];
         foreach($data as $key => $item){
             $row = array();
             $row['序号'] = $key;
-            $row['职位名称'] = "<a href='".CommonController::getUrl($item['position_id'],$item['data_from'])."'>{$item['position_name']}</a>";
+            $row['职位名称'] = "<a target='_black' href='".CommonController::getUrl($item['position_id'],$item['data_from'])."'>{$item['position_name']}</a>";
             $row['城市'] = $item['city'];
 //            $row['职位类型'] = $position_types[$item['position_type_id']];
-            $row['薪酬'] = $item['salary'];
+            $class_str = $item['salary_id'] > 2 ? "class='red'" : '';
+            $row['薪酬'] = "<span {$class_str}>".$item['salary']."</span>";
             $row['工作年限'] = $item['work_year'];
             $row['学历'] = $item['education'];
             $row['创建时间'] = date('Y-m-d',strtotime($item['create_time']));
-
-            $row['公司'] = $company_list[$item['company_id']];
+            $class_str = $company_cp[$item['company_id']] > 5 ? "class='red'" : '';
+            $c_url = CommonController::getCompanyUrl($item['company_id'],$item['data_from']);
+            $s_url = H('',array('company_name'=>$company_list[$item['company_id']]));
+            $row['公司'] = "<a target='_black' {$class_str} href='{$c_url}'>".$company_list[$item['company_id']]."</a><a target='_black' {$class_str} href='{$s_url}'>({$company_cp[$item['company_id']]})</a>";
             $row['职位分析'] = "<a href='".H('zhaopin/position/parsing',array('position_id'=>$item['position_id']))."'>分析详情</a>";
             $row['职位优势'] = $item['position_advantage'];
 //            $row['工作类型'] = $item['job_nature'];
-            $row['直属领导'] = $item['leader_name'];
+//            $row['直属领导'] = $item['leader_name'];
             $list[$key] = $row;
         }
         $columns = array_keys(current($list));
@@ -108,10 +116,10 @@ class PositionController extends BaseController {
             $c_salary_cp = array();
             //同公司工作年限招聘数据准备
             $c_workyear_cp = array();
-            //城市维度数据准备
-            $ct_salary_cp = array();
-            //同行业数据准备
-            $ind_salary_cp = array();
+//            //城市维度数据准备
+//            $ct_salary_cp = array();
+//            //同行业数据准备
+//            $ind_salary_cp = array();
             //同行业&&同城数据准备
             $ctind_salary_cp = array();
             //同公司&&同城数据准备
@@ -130,14 +138,14 @@ class PositionController extends BaseController {
                     //同行业同城薪资分布
                     $ctind_salary_cp[$row['salary_id']]++;
                 }
-                if($row['city'] == $info['city']){
-                    //同城职位数统计
-                    $ct_salary_cp[$row['salary_id']]++;
-                }
-                if($row['position_first_type_id'] == $info['position_first_type_id']){
-                    //同行业职位数统计
-                    $ind_salary_cp[$row['salary_id']]++;
-                }
+//                if($row['city'] == $info['city']){
+//                    //同城职位数统计
+//                    $ct_salary_cp[$row['salary_id']]++;
+//                }
+//                if($row['position_first_type_id'] == $info['position_first_type_id']){
+//                    //同行业职位数统计
+//                    $ind_salary_cp[$row['salary_id']]++;
+//                }
             }
 
 //            echo '<pre>';
@@ -147,6 +155,7 @@ class PositionController extends BaseController {
             $template['pie2'] = $this->showPie2($c_ct_salary_cp,$ctind_salary_cp, $salary);
             $this->assign('template',$template);
             $this->assign('info',$this->showPositionInfo($info));
+            $this->showPositionListByCid($info['company_id']);
             $show = true;
         }
         $this->assign('show',$show);
@@ -183,8 +192,10 @@ class PositionController extends BaseController {
         $data = array();
         foreach($ctind_salary_cp as $salary_id => $cp){
             $data[] = array('name'=>$salary[$salary_id],'value'=>$cp);
+            $item[] = $salary[$salary_id];
         }
         $list[] = array_merge($init_style,array('name'=>'同行业','radius'=>array(30,100),'center'=>array('70%',180),'data'=>$data));
+        $item = array_values(array_unique($item));
         return $this->showPieEcharts($list,$item,'pie2','【同城】薪酬分布');
     }
 
@@ -196,7 +207,26 @@ class PositionController extends BaseController {
         $info['position_first_type_id'] = $mpt_info[$info['position_first_type_id']]['pos_name'];
         $info['url'] = CommonController::getUrl($info['position_id'],$info['data_from']);
         $info['data_from'] = CommonController::getFrom($info['data_from']);
-//        echo '<pre>';var_dump($info);exit;
+        $mc = M('zhaopin/MCompany',$this->db_num);
+        $mc_info = $mc->where(array('id'=>$info['company_id']))->find();
+        $info['company_name'] = $mc_info['company_name'];
+        $info['company_short_name'] = $mc_info['company_short_name'];
+        $info['company_label'] = $mc_info['company_label'];
+        $info['stage_level'] = M('zhaopin/DicCLevel',$this->db_num)->fields('level_title')->where(array('id'=>$mc_info['stage_level_id']))->simple();
+        $info['company_size'] = M('zhaopin/DicCSize',$this->db_num)->fields('size_title')->where(array('id'=>$mc_info['company_size_id']))->simple();
+//        echo '<pre>';var_dump($mc_info);exit;
         return $info;
+    }
+
+    public function showPositionListByCid($cid){
+        //获取最后一次抓取数据的时间
+        $where['add_time'] = CommonController::getLastLogTime('model_position');
+        $where['company_id'] = $cid;
+        $model = M('zhaopin/MPosition',$this->db_num);
+        $data = $model->where($where)->limit(1000)->select();
+        if(!empty($data)){
+            $init_where['add_time'] = $where['add_time'];
+            $this->showData($data,$init_where);
+        }
     }
 } 

@@ -1,35 +1,55 @@
 {:$initHtml('header')}
 <style>
-    .li_pie{height: 350px;width: 50%;display: inline-block;}
+    .li_pie{height: 350px;width: 50%;min-width:600px;display: inline-block;}
     .li_pie div.index_div{height: 100%;}
     .div_content {background-color: #FFFFFF;}
-    .div_content li{float: left;}
+    .div_content .ul_info {width: 100%;display: block;}
+    .div_content .ul_info li{float: left;}
     .div_content .li_info{width: 100%;}
-    .div_content .p_title {font-size: 30px;}
+    .li_info_item {padding: 0px 50px 20px 10px;}
+    .div_content .p_title {font-size: 30px;padding: 20px 5px;}
     .div_content .li_info p{padding: 4px;}
 </style>
 <div class="div_content">
     <?php if($show){ //正常显示职位信息?>
     <script src="__JSROOT__/echarts.js"></script>
     <p class="p_title">职位信息</p>
-    <ul>
+    <ul class="ul_info">
         <li class="li_info">
             <!--<p><?php print_r($info);?></p>-->
-            <p>职位名称:<a href="{$info['url']}">{$info['position_name']}</a></p>
-            <p>城市:{$info['city']}</p>
-            <p>工作年限:{$info['work_year']}</p>
-            <p>学历:{$info['education']}</p>
-            <p>职位优势:<span <?php if(strlen($info['position_advantage']) > 15) echo 'class="red"'; ?>>{$info['position_advantage']}</span></p>
-            <p>直属领导:{$info['leader_name']}</p>
-            <p>薪酬范围:<span <?php if($info['salary_id'] > 4) echo 'class="red"'; ?>>{$info['salary']}</span></p>
-            <p>行业:{$info['position_first_type_id']} - {$info['position_type_id']}</p>
-            <p>发布日期:<span <?php if(time() - strtotime($info['create_time']) < 86400 * 7) echo 'class="red"'; ?>>{$info['create_time']}</span></p>
-            <p>数据来源:{$info['data_from']}</p>
+            <ul>
+                <li class="li_info_item">
+                    <p>职位名称:<a href="{$info['url']}">{$info['position_name']}</a></p>
+                    <p>城市:{$info['city']}</p>
+                    <p>工作年限:{$info['work_year']}</p>
+                    <p>学历:{$info['education']}</p>
+                    <p>职位优势:<span <?php if(strlen($info['position_advantage']) > 15) echo 'class="red"'; ?>>{$info['position_advantage']}</span></p>
+                </li>
+                <li class="li_info_item">
+                    <p>直属领导:{$info['leader_name']}</p>
+                    <p>薪酬范围:<span <?php if($info['salary_id'] > 4) echo 'class="red"'; ?>>{$info['salary']}</span></p>
+                    <p>行业:{$info['position_first_type_id']} - {$info['position_type_id']}</p>
+                    <p>发布日期:<span <?php if(time() - strtotime($info['create_time']) < 86400 * 7) echo 'class="red"'; ?>>{$info['create_time']}</span></p>
+                    <p>数据来源:{$info['data_from']}</p>
+                </li>
+                <li class="li_info_item">
+                    <p>公司名称:{$info['company_name']}</p>
+                    <p>公司全称:{$info['company_short_name']}</p>
+                    <p>公司标签:{$info['company_label']}</p>
+                    <p>投资轮次:{$info['stage_level']}</p>
+                    <p>公司规模:{$info['company_size']}</p>
+                </li>
+            </ul>
         </li>
-        <li class="li_pie">{$template['pie1']}</li>
-        <li class="li_pie">{$template['pie2']}</li>
+        <li class="li_info">
+            <ul>
+                <li class="li_pie">{$template['pie1']}</li>
+                <li class="li_pie">{$template['pie2']}</li>
+            </ul>
+        </li>
     </ul>
 
+    <?php writeHTMLTable("本公司的其他职位",$remark,$columns,0,$data);?>
     <?php } else { //选择查询职位表单?>
     <form action="{:H('')}" method="post">
         <ul>

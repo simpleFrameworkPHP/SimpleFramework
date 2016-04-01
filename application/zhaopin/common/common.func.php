@@ -40,7 +40,7 @@ function writeHTMLTable($title,$remark,$columns,$column_start,$data,$data_rule =
     $count = count($columns);
     $html = '';
     if($title <> ''){
-        $html .= '<p>'.$title.'</p>';
+        $html .= '<p class="p_title">'.$title.'</p>';
     }
     if($remark <> ''){
         $html .='<p>'.$remark.'</p>';
