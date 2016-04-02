@@ -64,7 +64,7 @@ class PositionController extends BaseController {
         foreach($data as $key => $item){
             $row = array();
             $row['序号'] = $key;
-            $row['职位名称'] = "<a target='_black' href='".CommonController::getUrl($item['position_id'],$item['data_from'])."'>{$item['position_name']}</a>";
+            $row['职位名称'] = "<a class='a_position' title='{$item['position_name']}' target='_black' href='".CommonController::getUrl($item['position_id'],$item['data_from'])."'>{$item['position_name']}</a>";
             $row['城市'] = $item['city'];
 //            $row['职位类型'] = $position_types[$item['position_type_id']];
             $class_str = $item['salary_id'] > 2 ? "class='red'" : '';
@@ -79,7 +79,7 @@ class PositionController extends BaseController {
             $row['职位分析'] = "<a href='".H('zhaopin/position/parsing',array('position_id'=>$item['position_id']))."'>分析详情</a>";
             $row['职位优势'] = $item['position_advantage'];
 //            $row['工作类型'] = $item['job_nature'];
-//            $row['直属领导'] = $item['leader_name'];
+            $row['直属领导'] = "<span class='s80'>{$item['leader_name']}</span>";
             $list[$key] = $row;
         }
         $columns = array_keys(current($list));
