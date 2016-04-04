@@ -63,6 +63,7 @@ function addDataByWhere($city = ''){
  * @param $today
  */
 function initData($today){
+    $star_time = time();
     webLongEcho('正在处理拉勾网数据。。。。');
     $db_num = 0;
     $model = M('',$db_num);
@@ -225,6 +226,7 @@ function initData($today){
             if(strstr($row['salary'],'-')){
                 $salary = explode('-',$row['salary']);
                 $min_salary = strstr(current($salary),'k') ? intval(current($salary))*1000 : intval(current($salary));
+                $max_salary = strstr(current($salary),'k') ? intval(end($salary))*1000 : intval(end($salary));
             } else {
                 preg_match_all('/[0-9]+k?/',$row['salary'],$salary);
                 $salary = current(current($salary));
@@ -233,6 +235,8 @@ function initData($today){
             foreach($min_salary_list as $key=>$isalary){
                 if($isalary <= $min_salary){
                     $i_position['salary_id'] = $key;
+                } else if ($isalary <= $max_salary) {
+
                 }
             }
             $id = $MPosition->addKeyUp($i_position);
@@ -241,5 +245,6 @@ function initData($today){
         $i++;
     }
     webLongEcho("|处理完毕");
-    M('zhaopin/DataLog',$db_num)->add(array('type'=>'model_position','content'=>$today,'remark'=>'初始化职位数据'));
+    $run_time = time() - $star_time;
+    M('zhaopin/DataLog',$db_num)->add(array('type'=>'model_position','content'=>$today,'remark'=>'初始化职位数据,运行时间:'.$run_time.'(秒)'));
 }

@@ -72,12 +72,12 @@ class PositionController extends BaseController {
             $row['工作年限'] = $item['work_year'];
             $row['学历'] = $item['education'];
             $row['创建时间'] = date('Y-m-d',strtotime($item['create_time']));
-            $class_str = $company_cp[$item['company_id']] > 5 ? "class='red'" : '';
+            $class_str = $company_cp[$item['company_id']] > 5 ? "class='red a_position'" : "class='a_position'";
             $c_url = CommonController::getCompanyUrl($item['company_id'],$item['data_from']);
             $s_url = H('',array('company_name'=>$company_list[$item['company_id']]));
-            $row['公司'] = "<a target='_black' {$class_str} href='{$c_url}'>".$company_list[$item['company_id']]."</a><a target='_black' {$class_str} href='{$s_url}'>({$company_cp[$item['company_id']]})</a>";
+            $row['公司'] = "<a target='_black' title='{$company_list[$item['company_id']]}' {$class_str} href='{$c_url}'>".$company_list[$item['company_id']]."</a><a target='_black' {$class_str} href='{$s_url}'>({$company_cp[$item['company_id']]})</a>";
             $row['职位分析'] = "<a href='".H('zhaopin/position/parsing',array('position_id'=>$item['position_id']))."'>分析详情</a>";
-            $row['职位优势'] = $item['position_advantage'];
+            $row['职位优势'] = "<span class='a_position' title='{$item['position_advantage']}' >{$item['position_advantage']}</span>";
 //            $row['工作类型'] = $item['job_nature'];
             $row['直属领导'] = "<span class='s80'>{$item['leader_name']}</span>";
             $list[$key] = $row;
@@ -177,7 +177,7 @@ class PositionController extends BaseController {
             $item[] = $salary[$salary_id];
         }
         $list[] = array_merge($init_style,array('name'=>'薪酬分布','radius'=>array(30,100),'center'=>array('70%',180),'data'=>$data));
-        return $this->showPieEcharts($list,$item,'pie1','【同公司】内部整体分析');
+        return $this->showPieEcharts($list,$item,'pie1','【同公司】公司内部整体分析');
     }
 
     function showPie2($c_ct_salary_cp,$ctind_salary_cp, $salary){

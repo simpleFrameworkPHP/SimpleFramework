@@ -23,7 +23,7 @@ div.div_footer .span_foot_title{color: #999999;font-size: smaller;}
 .t_table {display: table;min-width:400px;}
 .t_tr {display: table-row;width: 100%;line-height: 30px;}
 .t_td {display: table-cell;background-color: #FFFFFF; border-bottom: solid 1px #f0f0f0;border-right: solid 1px #EEEEEE;white-space:nowrap;padding: 0px 4px;}
-.t_td .a_position{max-width: 180px;white-space:nowrap;text-overflow:ellipsis;display: block;overflow: hidden;}
+.t_td .a_position{max-width: 180px;white-space:nowrap;text-overflow:ellipsis;display: inline-block;overflow: hidden;}
 .t_td .s80{max-width: 80px;white-space:nowrap;text-overflow:ellipsis;display: block;overflow: hidden;}
 .t_tr .column {background-color: #ccc;color: #333;line-height: 35px;text-align: center;}
 .b_yellow {background-color: #fffa88;}
