@@ -7,13 +7,36 @@
         <div class="div_search">
             <ul class="t_table">
                 <li class="t_tr no_border">
-                    <span class="t_td search">城市</span><span class="t_td search"><input name="city" value="<?php echo isset($where['city'])?$where['city']:'';?>"/></span>
+                    <span class="t_td search">城市</span>
+                    <span class="t_td search">
+                        <input name="city" value="<?php echo isset($where['city'])?$where['city']:'';?>"/>
+                    </span>
+                    <span class="t_td search">职业大类</span>
+                    <span class="t_td search">
+                        <select name="position_first_type">
+                            <?php foreach($pft as $row){ ?>
+                                <option value="{$row['id']}">{$row['pos_name']}</option>;
+                            <?php } ?>
+                        </select>
+                    </span>
+                    <span class="t_td search">职业分类</span>
+                    <span class="t_td search">
+                        <select name="position_type">
+                            <?php foreach($pt as $row){ ?>
+                            <option value="{$row['id']}">{$row['pos_name']}</option>;
+                            <?php } ?>
+                        </select>
+                    </span>
                 </li>
                 <li class="t_tr no_border">
-                    <span class="t_td search">职位</span><span class="t_td search"><input name="position" value="<?php echo isset($where['position'])?$where['position']:'';?>"/></span>
-                </li>
-                <li class="t_tr no_border">
-                    <span class="t_td search">公司名</span><span class="t_td search"><input name="company_name" value="<?php echo isset($where['company_name'])?$where['company_name']:'';?>"/></span>
+                    <span class="t_td search">公司名</span>
+                    <span class="t_td search">
+                        <input name="company_name" value="<?php echo isset($where['company_name'])?$where['company_name']:'';?>"/>
+                    </span>
+                    <span class="t_td search">职位</span>
+                    <span class="t_td search">
+                        <input name="position" value="<?php echo isset($where['position'])?$where['position']:'';?>"/>
+                    </span>
                 </li>
                 <li>
                     <input class="button" type="submit" value="提交">
@@ -23,4 +46,26 @@
     </form>
     <?php writeHTMLTable("",$remark,$columns,0,$data);?>
 </div>
+        <script>
+            $(function(){
+                $('select[name=position_first_type]').on('change',function(){
+                    var pid = $(this).val();
+                    var url = "{:H('zhaopin/position/ajaxPT')}" + "&pid=" + pid;
+                    createRequest();
+                    request.open("POST", url, true);
+                    request.onreadystatechange = add;
+                    request.send(null);
+                });
+                function add(){
+                    if (request.readyState == 4) {
+                        var json = eval(request.responseText);
+                        var str = '';
+                        for(x in json){
+                            str +='<option value="'+json[x].id+'"> '+json[x].pos_name+'</option>';
+                        }
+                        $('select[name=position_type]').html(str);
+                    }
+                }
+            });
+        </script>
 {:$initHtml('footer')}

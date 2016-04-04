@@ -21,7 +21,21 @@ class PositionController extends BaseController {
             $this->showData($data,$init_where);
         }
 
+        $pft = M('zhaopin/DicPositionType',$this->db_num)->getPTListByPid();
+        $this->assign('pft',$pft);
+        $pid = current($pft)['id'];
+        $pt = M('zhaopin/DicPositionType',$this->db_num)->getPTListByPid($pid);
+        $this->assign('pt',$pt);
         $this->display();
+    }
+
+    public function ajaxPT(){
+        $pid = $_REQUEST['pid'];
+        $pt = array();
+        if(intval($pid)){
+            $pt = M('zhaopin/DicPositionType',$this->db_num)->getPTListByPid($pid);
+        }
+        echo JSON($pt);
     }
 
     public function getWhere(){

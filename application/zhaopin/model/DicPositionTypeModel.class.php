@@ -29,4 +29,11 @@ class DicPositionTypeModel extends Model {
         }
         return $result;
     }
+
+    public function getPTListByPid($pid = 0){
+        if(!$pid) $where['pos_type'] = 2;
+        else $where['pid'] = $pid;
+        $result = $this->where($where)->select();
+        return $result;
+    }
 } 
