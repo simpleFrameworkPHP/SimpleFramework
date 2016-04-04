@@ -11,6 +11,7 @@ class DataLogModel extends Model {
     var $var_table = array('d_log'=>'data_log');//model默认表 array('简称'=>'表名');
 
     public function getLastLog($type){
-        return $this->where(array('type'=>$type))->order(array('add_time'=>'desc'))->limit(1)->find();
+        $data = $this->where(array('type'=>$type))->order(array('id'=>'desc'))->limit(1)->find();
+        return $data;
     }
 } 

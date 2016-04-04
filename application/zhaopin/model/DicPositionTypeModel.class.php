@@ -20,4 +20,13 @@ class DicPositionTypeModel extends Model {
         }
         return $result;
     }
+
+    public function getIdListByType($type){
+        $list = $this->where(array('pos_type'=>intval($type)))->select();
+        $result = array();
+        foreach($list as $key=>$value){
+            $result[$value['pos_name']] = $value['id'];
+        }
+        return $result;
+    }
 } 
