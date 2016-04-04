@@ -21,11 +21,6 @@ class PositionController extends BaseController {
             $this->showData($data,$init_where);
         }
 
-        $pft = M('zhaopin/DicPositionType',$this->db_num)->getPTListByPid();
-        $this->assign('pft',$pft);
-        $pid = current($pft)['id'];
-        $pt = M('zhaopin/DicPositionType',$this->db_num)->getPTListByPid($pid);
-        $this->assign('pt',$pt);
         $this->display();
     }
 
@@ -57,6 +52,18 @@ class PositionController extends BaseController {
             $where['company_id'] = array('in');
             $where['company_id'] = array_merge($where['company_id'],$cids);
         }
+        $pft = M('zhaopin/DicPositionType',$this->db_num)->getPTListByPid();
+        $this->assign('pft',$pft);
+        $pid = current($pft)['id'];
+        if($_REQUEST['position_first_type']){
+            foreach($pft as $row){
+                if($row['id'] == intval($_REQUEST['position_first_type'])){
+                    $pid = $row['id'];
+                }
+            }
+        }
+        $pt = M('zhaopin/DicPositionType',$this->db_num)->getPTListByPid($pid);
+        $this->assign('pt',$pt);
         $this->assign('where',$_REQUEST);
         return $where;
     }
