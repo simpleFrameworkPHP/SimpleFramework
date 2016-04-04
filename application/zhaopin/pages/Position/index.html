@@ -13,17 +13,19 @@
                     </span>
                     <span class="t_td search">职业大类</span>
                     <span class="t_td search">
-                        <select name="position_first_type">
+                        <select name="position_first_type_id">
+                            <option value="0">请选择</option>
                             <?php foreach($pft as $row){ ?>
-                                <option value="{$row['id']}" <?php if($row['id'] == $where['position_first_type'])echo 'selected';?>>{$row['pos_name']}</option>;
+                                <option value="{$row['id']}" <?php if($row['id'] == $where['position_first_type_id'])echo 'selected';?>>{$row['pos_name']}</option>;
                             <?php } ?>
                         </select>
                     </span>
                     <span class="t_td search">职业分类</span>
                     <span class="t_td search">
-                        <select name="position_type">
+                        <select name="position_type_id">
+                            <option value="0">请选择</option>
                             <?php foreach($pt as $row){ ?>
-                            <option value="{$row['id']}" <?php if($row['id'] == $where['position_type'])echo 'selected';?>>{$row['pos_name']}</option>;
+                            <option value="{$row['id']}" <?php if($row['id'] == $where['position_type_id'])echo 'selected';?>>{$row['pos_name']}</option>;
                             <?php } ?>
                         </select>
                     </span>

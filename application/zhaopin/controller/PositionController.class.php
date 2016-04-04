@@ -55,12 +55,16 @@ class PositionController extends BaseController {
         $pft = M('zhaopin/DicPositionType',$this->db_num)->getPTListByPid();
         $this->assign('pft',$pft);
         $pid = current($pft)['id'];
-        if($_REQUEST['position_first_type']){
+        if($_REQUEST['position_first_type_id']){
             foreach($pft as $row){
-                if($row['id'] == intval($_REQUEST['position_first_type'])){
+                if($row['id'] == intval($_REQUEST['position_first_type_id'])){
                     $pid = $row['id'];
                 }
             }
+            $where['position_first_type_id'] = $_REQUEST['position_first_type_id'];
+        }
+        if($_REQUEST['position_type_id']){
+            $where['position_type_id'] = $_REQUEST['position_type_id'];
         }
         $pt = M('zhaopin/DicPositionType',$this->db_num)->getPTListByPid($pid);
         $this->assign('pt',$pt);
@@ -71,10 +75,11 @@ class PositionController extends BaseController {
     public function showData($data,$init_where){
         foreach($data as $item){
             $position_type_ids[] = $item['position_type_id'];
+            $position_type_ids[] = $item['position_first_type_id'];
             $company_ids[] = $item['company_id'];
         }
-//        $DicPT = M('zhaopin/DicPositionType',$this->db_num);
-//        $position_types = $DicPT->getPNameListInId($position_type_ids);
+        $DicPT = M('zhaopin/DicPositionType',$this->db_num);
+        $position_types = $DicPT->getPNameListInId($position_type_ids);
         $DicC = M('zhaopin/MCompany',0);
         $company_list = $DicC->getCNameListInId($company_ids);
         $init_where['company_id'] = array_merge(array('in'),$company_ids);
@@ -87,7 +92,7 @@ class PositionController extends BaseController {
             $row['序号'] = $key;
             $row['职位名称'] = "<a class='a_position' title='{$item['position_name']}' target='_black' href='".CommonController::getUrl($item['position_id'],$item['data_from'])."'>{$item['position_name']}</a>";
             $row['城市'] = $item['city'];
-//            $row['职位类型'] = $position_types[$item['position_type_id']];
+            $row['职位类型'] = $position_types[$item['position_first_type_id']]."-".$position_types[$item['position_type_id']];
             $class_str = $item['salary_id'] > 2 ? "class='red'" : '';
             $row['薪酬'] = "<span {$class_str}>".$item['salary']."</span>";
             $row['工作年限'] = $item['work_year'];
