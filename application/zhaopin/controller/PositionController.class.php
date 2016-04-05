@@ -136,7 +136,7 @@ class PositionController extends BaseController {
             //公司维度数据准备
             $where = $init_where;
             $where[] = "company_id={$info['company_id']} or city='{$info['city']}' or position_first_type_id={$info['position_first_type_id']}";
-            $comp_list = $mposition->fields('company_id,city,position_first_type_id,salary_id,workyear_id')
+            $comp_list = $mposition->fields('company_id,city,position_first_type_id,salary_id,workyear_id,position_type_id')
                 ->where($where)->select();
             //同公司薪酬分布数据准备
             $c_salary_cp = array();
@@ -156,11 +156,11 @@ class PositionController extends BaseController {
                     $c_salary_cp[$row['salary_id']]++;
                     $c_workyear_cp[$row['workyear_id']]++;
                 }
-                if($row['company_id'] == $info['company_id'] && $row['city'] == $info['city']){
+                if($row['company_id'] == $info['company_id'] && $row['city'] == $info['city'] && $row['position_type_id'] == $info['position_type_id']){
                     //同城同公司职位数分布
                     $c_ct_salary_cp[$row['salary_id']]++;
                 }
-                if($row['city'] == $info['city'] && $row['position_first_type_id'] == $info['position_first_type_id']){
+                if($row['city'] == $info['city'] && $row['position_type_id'] == $info['position_type_id']){
                     //同行业同城薪资分布
                     $ctind_salary_cp[$row['salary_id']]++;
                 }
@@ -193,16 +193,21 @@ class PositionController extends BaseController {
         $init_style = array('type'=>'pie','roseType'=>'radius','width'=>'38%','max'=>40);
         $data = array();
         foreach($c_workyear_cp as $workyear_id => $cp){
-            $data[] = array('name'=>$workyear[$workyear_id],'value'=>$cp);
-            $item[] = $workyear[$workyear_id];
+            $data[$workyear_id] = array('name'=>$workyear[$workyear_id],'value'=>$cp);
+            $item1[$workyear_id] = $workyear[$workyear_id];
         }
-        $list[] = array_merge($init_style,array('name'=>'年限分布','radius'=>array(20,100),'center'=>array('22%',180),'itemStyle'=>$item_style,'data'=>$data));
+        ksort($data);
+        ksort($item1);
+        $list[] = array_merge($init_style,array('name'=>'年限分布','radius'=>array(20,100),'center'=>array('22%',180),'itemStyle'=>$item_style,'data'=>array_values($data)));
         $data = array();
         foreach($c_salary_cp as $salary_id => $cp){
-            $data[] = array('name'=>$salary[$salary_id],'value'=>$cp);
-            $item[] = $salary[$salary_id];
+            $data[$salary_id] = array('name'=>$salary[$salary_id],'value'=>$cp);
+            $item2[$salary_id] = $salary[$salary_id];
         }
-        $list[] = array_merge($init_style,array('name'=>'薪酬分布','radius'=>array(30,100),'center'=>array('70%',180),'data'=>$data));
+        ksort($data);
+        ksort($item2);
+        $item = array_merge($item1,$item2);
+        $list[] = array_merge($init_style,array('name'=>'薪酬分布','radius'=>array(30,100),'center'=>array('70%',180),'data'=>array_values($data)));
         return $this->showPieEcharts($list,$item,'pie1','【同公司】公司内部整体分析');
     }
 
@@ -211,16 +216,19 @@ class PositionController extends BaseController {
         $init_style = array('type'=>'pie','roseType'=>'radius','width'=>'38%','max'=>40);
         $data = array();
         foreach($c_ct_salary_cp as $salary_id => $cp){
-            $data[] = array('name'=>$salary[$salary_id],'value'=>$cp);
-            $item[] = $salary[$salary_id];
+            $data[$salary_id] = array('name'=>$salary[$salary_id],'value'=>$cp);
+            $item[$salary_id] = $salary[$salary_id];
         }
-        $list[] = array_merge($init_style,array('name'=>'同公司','radius'=>array(20,100),'center'=>array('22%',180),'itemStyle'=>$item_style,'data'=>$data));
+        ksort($data);
+        $list[] = array_merge($init_style,array('name'=>'同公司','radius'=>array(20,100),'center'=>array('22%',180),'itemStyle'=>$item_style,'data'=>array_values($data)));
         $data = array();
         foreach($ctind_salary_cp as $salary_id => $cp){
-            $data[] = array('name'=>$salary[$salary_id],'value'=>$cp);
-            $item[] = $salary[$salary_id];
+            $data[$salary_id] = array('name'=>$salary[$salary_id],'value'=>$cp);
+            $item[$salary_id] = $salary[$salary_id];
         }
-        $list[] = array_merge($init_style,array('name'=>'同行业','radius'=>array(30,100),'center'=>array('70%',180),'data'=>$data));
+        ksort($data);
+        ksort($item);
+        $list[] = array_merge($init_style,array('name'=>'同行业','radius'=>array(30,100),'center'=>array('70%',180),'data'=>array_values($data)));
         $item = array_values(array_unique($item));
         return $this->showPieEcharts($list,$item,'pie2','【同城】薪酬分布');
     }

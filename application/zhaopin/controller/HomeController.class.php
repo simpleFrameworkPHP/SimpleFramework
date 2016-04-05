@@ -145,7 +145,7 @@ class HomeController extends BaseController {
         return $this->showDyEcharts($data,$xAxis,$item,'level_cp','【数据挖掘】按照公司融资阶段统计薪资分布',20);
     }
 
-    public function initIndustryCP($position_list,$salary, $vagSalary,$industry_company, $industrys){
+    public function initIndustryCP($position_list,$salary, $vagSalary,$industry_company, $industry){
 
         //职位统计
         $industry_list = array_flip($industry_company);
@@ -169,7 +169,7 @@ class HomeController extends BaseController {
         krsort($cp_list);
         $industry_ids = array();
         foreach($cp_list as $industry_id){
-            if(count($industry_ids) < 6){
+            if(count($industry_ids) < 5){
                 $industry_ids[] = $industry_id;
             }
         }
@@ -204,7 +204,7 @@ class HomeController extends BaseController {
         return $this->showDyEcharts($data,$xAxis,$item,'industry_cp','【数据挖掘】按照行业需求职位top5统计薪资分布');
     }
 
-    public function initIndustrySalary($position_list, $salary, $vagSalary, $industry_company, $industrys){
+    public function initIndustrySalary($position_list, $salary, $vagSalary, $industry_company, $industry){
 
         //职位统计
         $industry_list = array_flip($industry_company);
@@ -228,7 +228,7 @@ class HomeController extends BaseController {
         krsort($cp_list);
         $industry_ids = array();
         foreach($cp_list as $industry_id){
-            if(count($industry_ids) < 6){
+            if(count($industry_ids) < 5){
                 $industry_ids[] = $industry_id;
             }
         }
