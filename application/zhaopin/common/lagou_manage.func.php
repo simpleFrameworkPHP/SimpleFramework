@@ -11,10 +11,25 @@ function addData(){
     $star_time = time();
     $db_num = 0;
     $citys = M('zhaopin/DicArea',$db_num)->fields('area_name')->where(array('type_name'=>'市'))->select();
+    $big_city = array('北京','上海','深圳','广州','武汉','南京','成都','杭州');
+    $hy = M('zhaopin/DicIndustry',$db_num)->fields('industry_title')->select();
+    $hy = reIndexArray($hy,'industry_title');
+    $hy = array_keys($hy);
+    $count_city = count($citys);
+    $i = 0;
     foreach($citys as $city){
         $i_city = str_replace('市','',$city['area_name']);
-        webLongEcho("|<span class='red'>$i_city 数据处理中。。。。</span>");
-        addDataByWhere($i_city);
+        webLongEcho("|<span class='red'>【{$count_city}:".$i++."】$i_city 数据处理中。。。。已用时".(time() - $star_time)."</span>");
+        if(in_array($i_city,$big_city)){
+            foreach($hy as $ihy){
+                $where = '&city='.$i_city.'&hy='.$ihy;
+                addDataByWhere($where);
+            }
+        } else {
+            $i_city = '&city='.$i_city;
+            addDataByWhere($i_city);
+        }
+
     }
     $end_time = time();
     M('zhaopin/DataLog',$db_num)->add(array('type'=>'view_lagou_position','content'=>$today,'remark'=>'添加拉钩数据,运行时间：'.($end_time - $star_time)));
@@ -22,7 +37,7 @@ function addData(){
 /**
  * 添加拉钩数据
  */
-function addDataByWhere($city = ''){
+function addDataByWhere($url_city){
     $today = date('Y-m-d');
     $num = 0;
     $i = 1;
@@ -33,7 +48,7 @@ function addDataByWhere($city = ''){
 //    webLongEcho("拉勾网数据处理中......");
     while(($json['success'] && !empty($json['content']['result'])) || $i == 1){
         $url = $url_str."$i";
-        $url = $city == '' ? $url : $url . "&city=$city";
+        $url = $url . $url_city;
         $json = getHtmlData($url);
         $json = json_decode($json,true);
         $data = $json['content']['result'];
@@ -51,7 +66,7 @@ function addDataByWhere($city = ''){
             sleep(1);
         }
         if($i > 334){
-            M('zhaopin/DataLog',$db_num)->add(array('type'=>'view_lagou_position','content'=>$city,'remark'=>"{$city}已经超过334页了，需要添加新维度重新分析一下"));
+            M('zhaopin/DataLog',$db_num)->add(array('type'=>'view_lagou_position','content'=>$url_city,'remark'=>"{$url_city}已经超过334页了，需要添加新维度重新分析一下"));
         }
         $i++;
     }
