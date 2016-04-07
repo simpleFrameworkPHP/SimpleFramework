@@ -6,8 +6,8 @@
  * Time: 下午3:34
  */
 return array(
-    'SF_DEFAULT_APP'=>'tools',
-    'SF_DEFAULT_CON'=>'List',
+    'SF_DEFAULT_APP'=>'zhaopin',
+    'SF_DEFAULT_CON'=>'home',
     'SF_DEFAULT_FUN'=>'index',
 //    'SF_REFRESH_PAGES'=>true,  //不读取缓存页面文件
 
@@ -18,7 +18,7 @@ return array(
             'DB_NAME'=>'test',
             'DB_PORT'=>3306,
             'DB_USER'=>'root',
-            'DB_PASS'=>'',
+            'DB_PASS'=>'root',
             'DB_MODE'=>'mysqli',
         ),
         1 => array(

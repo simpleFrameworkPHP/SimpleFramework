@@ -55,12 +55,13 @@ class HomeController extends BaseController {
     public function initData($workyearlist, $salary,$level_list,$industry_company){
         $where['add_time'] = CommonController::getLastLogTime('model_position');
         $i = 0;
-        $page = 50000;
+        $page = 60000;
         $industry_list = array_flip($industry_company);
         $list['WorkYearCP'] = initArray($salary,$workyearlist);
         $list['Level'] = initArray($salary,$level_list);
         $list['IndustryCP'] = initArray($salary,$industry_list);
         while(!$i || !empty($result)){
+            unset($result);
             $result = M('zhaopin/MPosition',$this->db_num)->fields(array('workyear_id','company_id','salary_id'))->where($where)->limit($page,$i * $page)->select();
             foreach($result as $row){
                 $list['WorkYearCP'][$row['salary_id']][$row['workyear_id']]++;

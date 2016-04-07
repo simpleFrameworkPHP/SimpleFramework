@@ -33,6 +33,7 @@ function runController($application,$controller){
     $charset = C('DEFAULT_CHARSET');
     $contentType = C('TMPL_CONTENT_TYPE');
     @header('Content-Type:'.$contentType.'; charset='.$charset);
+    $controller = ucfirst($controller);
     if(is_dir(__PATH__.'/application/'.$application.'/common'))
         loadDirFile(__PATH__.'/application/'.$application.'/common');
     $file_path = __PATH__.'/application/'.$application.'/controller/'.$controller.'Controller.class.php';
@@ -138,7 +139,7 @@ function addDir($file){
     foreach($dir_array as $value){
         $idir .= $value . '/';
         if(!is_dir($idir)){
-            mkdir($idir,0775);
+            mkdir($idir,0777);
         }
     }
     return is_dir($dir);

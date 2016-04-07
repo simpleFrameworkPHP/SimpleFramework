@@ -13,13 +13,15 @@ class BaseController extends Controller {
         $menu = C('MENU');
         $url_str = "{$_REQUEST['a']}/{$_REQUEST['c']}/{$_REQUEST['f']}";
         $menu_list = array();
+        $admin = isset($_REQUEST['is_admin']) ? $_REQUEST['is_admin'] : 0;
         foreach($menu as $url => $menu_item){
+            if($menu_item['role'] == 1 && !$admin)continue;
             if($url_str == $url){
                 $class = 'cur';
             } else {
                 $class = '';
             }
-            $menu_list[] = array('class'=>$class,'title'=>$menu_item,'url'=>H($url));
+            $menu_list[] = array('class'=>$class,'title'=>$menu_item['title'],'url'=>H($url));
         }
         $this->assign('menu_list',$menu_list);
     }
