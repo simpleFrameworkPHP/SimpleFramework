@@ -136,8 +136,6 @@ class PositionController extends BaseController {
             //公司维度数据准备
             $where = $init_where;
             $where[] = "company_id={$info['company_id']} or city='{$info['city']}' or position_first_type_id={$info['position_first_type_id']}";
-            $comp_list = $mposition->fields('company_id,city,position_first_type_id,salary_id,workyear_id,position_type_id')
-                ->where($where)->select();
             //同公司薪酬分布数据准备
             $c_salary_cp = array();
             //同公司工作年限招聘数据准备
@@ -150,20 +148,26 @@ class PositionController extends BaseController {
             $ctind_salary_cp = array();
             //同公司&&同城数据准备
             $c_ct_salary_cp = array();
-            foreach($comp_list as $row){
-                if($row['company_id'] == $info['company_id']){
-                    //同公司职位数分布
-                    $c_salary_cp[$row['salary_id']]++;
-                    $c_workyear_cp[$row['workyear_id']]++;
-                }
-                if($row['company_id'] == $info['company_id'] && $row['city'] == $info['city'] && $row['position_type_id'] == $info['position_type_id']){
-                    //同城同公司职位数分布
-                    $c_ct_salary_cp[$row['salary_id']]++;
-                }
-                if($row['city'] == $info['city'] && $row['position_type_id'] == $info['position_type_id']){
-                    //同行业同城薪资分布
-                    $ctind_salary_cp[$row['salary_id']]++;
-                }
+            $i = 0;
+            $page = 50000;
+            while($i == 0 || !empty($comp_list)){
+                $comp_list = $mposition->fields('company_id,city,position_first_type_id,salary_id,workyear_id,position_type_id')
+                    ->where($where)->limit($page,$i * $page)->select();
+                $i++;
+                foreach($comp_list as $row){
+                    if($row['company_id'] == $info['company_id']){
+                        //同公司职位数分布
+                        $c_salary_cp[$row['salary_id']]++;
+                        $c_workyear_cp[$row['workyear_id']]++;
+                    }
+                    if($row['company_id'] == $info['company_id'] && $row['city'] == $info['city'] && $row['position_type_id'] == $info['position_type_id']){
+                        //同城同公司职位数分布
+                        $c_ct_salary_cp[$row['salary_id']]++;
+                    }
+                    if($row['city'] == $info['city'] && $row['position_type_id'] == $info['position_type_id']){
+                        //同行业同城薪资分布
+                        $ctind_salary_cp[$row['salary_id']]++;
+                    }
 //                if($row['city'] == $info['city']){
 //                    //同城职位数统计
 //                    $ct_salary_cp[$row['salary_id']]++;
@@ -172,7 +176,9 @@ class PositionController extends BaseController {
 //                    //同行业职位数统计
 //                    $ind_salary_cp[$row['salary_id']]++;
 //                }
+                }
             }
+
 
 //            echo '<pre>';
 //            var_dump($ct_salary_cp,$ind_salary_cp,$ctind_salary_cp);

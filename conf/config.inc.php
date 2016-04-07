@@ -18,7 +18,7 @@ return array(
             'DB_NAME'=>'test',
             'DB_PORT'=>3306,
             'DB_USER'=>'root',
-            'DB_PASS'=>'root',
+            'DB_PASS'=>'',
             'DB_MODE'=>'mysqli',
         ),
         1 => array(
