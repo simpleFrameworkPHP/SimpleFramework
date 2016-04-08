@@ -72,21 +72,27 @@ class DictionaryController extends Controller {
     }
 
     public function relateSqlData($model){
-        if($_REQUEST['t'] == 'sql' && $_REQUEST['sql'] <> ''){
+        if($_REQUEST['t'] == 'sql' || $_REQUEST['sql'] <> ''){
             $relate_sql = explode(';',$_REQUEST['sql']);
-            foreach($relate_sql as $key =>$sql){
-                if($sql == ''){continue;}
-                $i_data['title'] = $key;
-                $i_data['remark'] = $sql;
-                $i_data['data'] = $model->select($sql);
-                if(is_array($i_data['data']) && !empty($i_data['data'])){
-                    $i_data['columns'] = $model->getColumns();
-                }
-                $relate_data[] = $i_data;
+        } else {
+            $relate_sql_list = C('relate_sql');
+            $relate_sql_key = array_keys($relate_sql_list);
+            if(in_array($_REQUEST['t'],$relate_sql_key)){
+                $relate_sql = $relate_sql_list[$_REQUEST['t']];
             }
-            $this->assign('sql',$_REQUEST['sql']);
-            $this->assign('relate_data',$relate_data);
         }
+        foreach($relate_sql as $key =>$sql){
+            if($sql == ''){continue;}
+            $i_data['title'] = $key;
+            $i_data['remark'] = $sql;
+            $i_data['data'] = $model->select($sql);
+            if(is_array($i_data['data']) && !empty($i_data['data'])){
+                $i_data['columns'] = $model->getColumns();
+            }
+            $relate_data[] = $i_data;
+        }
+        $this->assign('sql',$_REQUEST['sql']);
+        $this->assign('relate_data',$relate_data);
     }
 
     public function getRelateTable($model,$remark,$relate_table=array()){
