@@ -30,7 +30,9 @@ return array(
             "标题"=>"sql语句",
         ),
         'order'=>array(
-            '测试'=>'select * from order_main;'
+            '测试'=>'select * from order_main;',
+            "订单内的机构id"=>"select DISTINCT organization_id from order_main;",
+            "2016年机构id=1的有效订单"=>"select * from order_main where organization_id = 1 and pay_time > '2016-01-01';",
         )
     ),
 );

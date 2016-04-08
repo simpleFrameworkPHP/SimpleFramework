@@ -9,7 +9,7 @@ return array(
     'SF_DEFAULT_APP'=>'tools',
     'SF_DEFAULT_CON'=>'Dictionary',
     'SF_DEFAULT_FUN'=>'index',
-//    'SF_REFRESH_PAGES'=>true,  //不读取缓存页面文件
+    'SF_REFRESH_PAGES'=>true,  //不读取缓存页面文件
 
 
     'SF_DB_CONNECT'=>array(
