@@ -19,7 +19,7 @@ class Controller extends View {
     public function fetch($fun = ''){
         if($fun == ''){
             $fun = $_REQUEST['f'];
-            $con = $_REQUEST['c'] ;
+            $con = strtolower($_REQUEST['c']);
             $app = $_REQUEST['a'] ;
 
             $this->file_dir = APP_PATH.'/'.$app.'/pages/'.$con;
@@ -33,17 +33,17 @@ class Controller extends View {
 //            $app = (isset($path[$count_url-3]) && $path[$count_url-3] <> '') ? $path[$count_url-3] :  C('SF_DEFAULT_APP');
             $fun = end($path);
             array_pop($path);
-            $con = end($path) ? end($path) : $_REQUEST['c'] ;
+            $con = strtolower(end($path) ? end($path) : $_REQUEST['c']);
             array_pop($path);
             $app = end($path) ? end($path) : $_REQUEST['a'] ;
 
             $this->file_dir = APP_PATH.'/'.$app.'/pages/'.$con;
             $this->cache_file_dir = CACHE_PATH.'/pages/'.$app.'/'.$con;
         }
-        if($this->cache_file_dir != ''){
+        if($this->cache_file_dir != '' && !C('SF_REFRESH_PAGES')){
             $file_path = $this->file_dir.'/'.$fun.'.html';
             $cache_file_path = $this->cache_file_dir.'/'.$fun.'.phtml';
-            if(C('SF_REFRESH_PAGES') || !file_exists($cache_file_path) || !file_exists($file_path) || filemtime($file_path)>=filemtime($cache_file_path)){
+            if(C('SF_DEBUG') || !file_exists($cache_file_path) || !file_exists($file_path) || filemtime($file_path)>=filemtime($cache_file_path)){
                 //生成模板文件不存在或生成模板文件的修改时间比实际模板文件的修改时间早即生成模板文件已过时
                 $contentStr = getFileContent($file_path);
                 //可以实现字符替换以达到函数改写
@@ -51,7 +51,7 @@ class Controller extends View {
                 addDir($cache_file_path);
                 file_put_contents($cache_file_path,$contentStr) or Log::write('CON ERROR',$cache_file_path.'文件写入出错');
             } elseif(file_exists($cache_file_path)){
-
+                $contentStr = file_get_contents($cache_file_path) or Log::write('CON ERROR',$cache_file_path.'文件读取出错');
             } else {
                 //打开文件异常
                 $this->errorPage('这个页面还没做呢，做了再找我！',$file_path.'这个文件还没创建');
@@ -60,6 +60,10 @@ class Controller extends View {
             }
         } else {
             $cache_file_path = $this->file_dir.'/'.$fun.'.html';
+            //生成模板文件不存在或生成模板文件的修改时间比实际模板文件的修改时间早即生成模板文件已过时
+            $contentStr = getFileContent($cache_file_path);
+            //可以实现字符替换以达到函数改写
+            $contentStr = $this->replaceContent($contentStr);
         }
         //controller日志位置
         if(isset($log_title)){
@@ -70,7 +74,7 @@ class Controller extends View {
         // 页面缓存
         ob_start();
         ob_implicit_flush(0);
-        empty($contentStr)?include $cache_file_path:eval('?>'.$contentStr);
+        eval('?>'.$contentStr);
         // 获取并清空缓存
         $content = ob_get_clean();
         return $content;

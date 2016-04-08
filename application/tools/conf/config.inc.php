@@ -9,7 +9,8 @@ return array(
     "type" => array(
         0 =>array("name"=>"表目录","value"=>"table"),
         1 =>array("name"=>"全部","value"=>"all"),
-        2 =>array('name'=>'查询','value'=>'sql')
+        2 =>array('name'=>'查询','value'=>'sql'),
+        3 =>array("name"=>'订单','value'=>'order')
     ),
     "relate_table"=>array(
         //模式=>关联表
@@ -21,11 +22,15 @@ return array(
         'cart'=>array('eb_cart'),
         'sku'=>array('eb_complexattr_sku','eb_product_sku'),
         'home_product'=>array('eb_widget_product','eb_product'),
+        'order'=>array('order_main','order_child')
     ),
     "relate_sql"=>array(
         //模式=>关联表
         "模式"=>array(
             "标题"=>"sql语句",
         ),
+        'order'=>array(
+            '测试'=>'select * from order_main;'
+        )
     ),
 );
