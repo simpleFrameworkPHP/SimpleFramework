@@ -20,4 +20,20 @@ class DicPositionTypeModel extends Model {
         }
         return $result;
     }
+
+    public function getIdListByType($type){
+        $list = $this->where(array('pos_type'=>intval($type)))->select();
+        $result = array();
+        foreach($list as $key=>$value){
+            $result[$value['pos_name']] = $value['id'];
+        }
+        return $result;
+    }
+
+    public function getPTListByPid($pid = 0){
+        if(!$pid) $where['pos_type'] = 2;
+        else $where['pid'] = $pid;
+        $result = $this->where($where)->select();
+        return $result;
+    }
 } 

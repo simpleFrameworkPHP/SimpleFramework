@@ -33,6 +33,7 @@ function runController($application,$controller){
     $charset = C('DEFAULT_CHARSET');
     $contentType = C('TMPL_CONTENT_TYPE');
     @header('Content-Type:'.$contentType.'; charset='.$charset);
+    $controller = ucfirst($controller);
     if(is_dir(__PATH__.'/application/'.$application.'/common'))
         loadDirFile(__PATH__.'/application/'.$application.'/common');
     $file_path = __PATH__.'/application/'.$application.'/controller/'.$controller.'Controller.class.php';
@@ -80,10 +81,11 @@ function H($path='',$params='',$redirect = false){
     if(is_string($path)){
         $url =  __ROOT__ . '/index.php?';
         $path = explode('/',$path);
-        $count_url = count($path);
-        $fun = (isset($path[$count_url-1]) && $path[$count_url-1] <> '') ? $path[$count_url-1] : $_REQUEST['f'];
-        $con = (isset($path[$count_url-2]) && $path[$count_url-2] <> '') ? $path[$count_url-2] : $_REQUEST['c'];
-        $app = (isset($path[$count_url-3]) && $path[$count_url-3] <> '') ? $path[$count_url-3] : $_REQUEST['a'];
+        $fun = end($path) ? end($path) : $_REQUEST['f'];
+        array_pop($path);
+        $con = end($path) ? end($path) : $_REQUEST['c'] ;
+        array_pop($path);
+        $app = end($path) ? end($path) : $_REQUEST['a'] ;
         $url .='a='.$app.'&c='.$con.'&f='.$fun;
     }
     if(is_array($params)){
@@ -137,7 +139,7 @@ function addDir($file){
     foreach($dir_array as $value){
         $idir .= $value . '/';
         if(!is_dir($idir)){
-            mkdir($idir,0775);
+            mkdir($idir,0777);
         }
     }
     return is_dir($dir);

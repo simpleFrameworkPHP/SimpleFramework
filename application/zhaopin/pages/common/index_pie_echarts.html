@@ -1,0 +1,44 @@
+<div class="index_div" id="{$id}"></div>
+<script type="text/javascript">
+    require.config({
+        paths: {
+            echarts: '__JSROOT__'
+        }
+    });
+    require(
+            [
+                'echarts',
+                'echarts/chart/pie'
+            ],
+            function (ec) {
+                //--- 折柱 ---
+                var myChart = ec.init(document.getElementById('{$id}'));
+
+                myChart.setOption({
+                    title:{text:'{$title}',x:"center"},
+                    tooltip : {
+                        trigger: 'item',
+                        formatter: "{a} <br/>{b} : {c} ({d}%)"
+                    },
+                    legend: {
+//                        orient : 'vertical',
+                        y:'bottom',
+                        data:{$item}
+                    },
+                    calculable : true,
+//                    toolbox: {
+//                        show : true,
+//                        feature : {
+//                            //mark : {show: true},
+//                            //dataView : {show: true, readOnly: false},
+//                            restore : {show: true}
+//                            //saveAsImage : {show: true}
+//                        }
+//                    },
+                    series : {$json},
+                    backgroundColor:"#FFFFFF"
+                });
+            }
+    );
+
+</script>

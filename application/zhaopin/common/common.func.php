@@ -40,7 +40,7 @@ function writeHTMLTable($title,$remark,$columns,$column_start,$data,$data_rule =
     $count = count($columns);
     $html = '';
     if($title <> ''){
-        $html .= '<p>'.$title.'</p>';
+        $html .= '<p class="p_title">'.$title.'</p>';
     }
     if($remark <> ''){
         $html .='<p>'.$remark.'</p>';
@@ -85,5 +85,27 @@ function getBodyHTML($data,$columns,$data_rule,$column_start){
         $str .= "</li>";
     }
     return $str;
+}
+function getHtmlData($url){
+    return file_get_contents($url);
+}
+function reIndexArray($array,$key){
+    foreach($array as $item){
+        if(isset($item[$key]))
+            $data[$item[$key]] = $item;
+    }
+    return $data;
+}
+
+function initArray($array1,$array2 = array(),$default = 0){
+    $list = array();
+    if(!empty($array2))
+        foreach($array1 as $k=>$v)
+            foreach($array2 as $kk=>$vv)
+                $list[$k][$kk] = $default;
+    else
+        foreach($array1 as $k=>$v)
+                $list[$k] = $default;
+    return $list;
 }
 ?>

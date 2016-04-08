@@ -13,9 +13,7 @@ class PullLagouDataController extends BaseController {
     }
 
     public function addData(){
-        addData('北京');
-        addData('大连');
-        addData('杭州');
+        addData();
     }
 
     public function initData(){

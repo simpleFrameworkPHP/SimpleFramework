@@ -6,10 +6,38 @@
  * Time: 下午3:51
  */
 
+function addData(){
+    $today = date('Y-m-d');
+    $star_time = time();
+    $db_num = 0;
+    $citys = M('zhaopin/DicArea',$db_num)->fields('area_name')->where(array('type_name'=>'市'))->select();
+    $big_city = array('北京','上海','深圳','广州','武汉','南京','成都','杭州');
+    $hy = M('zhaopin/DicIndustry',$db_num)->fields('industry_title')->select();
+    $hy = reIndexArray($hy,'industry_title');
+    $hy = array_keys($hy);
+    $count_city = count($citys);
+    $i = 0;
+    foreach($citys as $city){
+        $i_city = str_replace('市','',$city['area_name']);
+        webLongEcho("|<span class='red'>【{$count_city}:".$i++."】$i_city 数据处理中。。。。已用时".(time() - $star_time)."</span>");
+        if(in_array($i_city,$big_city)){
+            foreach($hy as $ihy){
+                $where = '&city='.$i_city.'&hy='.$ihy;
+                addDataByWhere($where);
+            }
+        } else {
+            $i_city = '&city='.$i_city;
+            addDataByWhere($i_city);
+        }
+
+    }
+    $end_time = time();
+    M('zhaopin/DataLog',$db_num)->add(array('type'=>'view_lagou_position','content'=>$today,'remark'=>'添加拉钩数据,运行时间：'.($end_time - $star_time)));
+}
 /**
  * 添加拉钩数据
  */
-function addData($city = ''){
+function addDataByWhere($url_city){
     $today = date('Y-m-d');
     $num = 0;
     $i = 1;
@@ -17,15 +45,15 @@ function addData($city = ''){
     $url_str = "http://www.lagou.com/jobs/positionAjax.json?px=new&first=false&pn=";
     $db_num = 0;
     $model = M('',$db_num);
-    webLongEcho("拉勾网数据处理中......");
+//    webLongEcho("拉勾网数据处理中......");
     while(($json['success'] && !empty($json['content']['result'])) || $i == 1){
         $url = $url_str."$i";
-        $url = $city == '' ? $url : $url . "&city=$city";
+        $url = $url . $url_city;
         $json = getHtmlData($url);
         $json = json_decode($json,true);
         $data = $json['content']['result'];
         foreach($data as $row){
-            $row['companyLabelList'] = implode(' ',trim($row['companyLabelList']));
+            $row['companyLabelList'] = implode(' ',$row['companyLabelList']);
             foreach($row as $column=>$value){
                 $row[$column] = trim($value);
             }
@@ -33,11 +61,15 @@ function addData($city = ''){
             $model->table(array("view_lagou_position"))->addKeyUp($row);
         }
         $num += count($data);
-        webLongEcho('|处理页数:'.$i." 已数据处理:".$num."条");
-        if(!($i%4))sleep(1);
+        if(!($i%10)){
+            webLongEcho('|处理页数:'.$i." 已数据处理:".$num."条");
+            sleep(1);
+        }
+        if($i > 334){
+            M('zhaopin/DataLog',$db_num)->add(array('type'=>'view_lagou_position','content'=>$url_city,'remark'=>"{$url_city}已经超过334页了，需要添加新维度重新分析一下"));
+        }
         $i++;
     }
-    M('zhaopin/DataLog',$db_num)->add(array('type'=>'view_lagou_position','content'=>$today,'remark'=>'添加拉钩数据'));
     echo "|数据拉取任务处理完毕";
 }
 
@@ -46,6 +78,7 @@ function addData($city = ''){
  * @param $today
  */
 function initData($today){
+    $star_time = time();
     webLongEcho('正在处理拉勾网数据。。。。');
     $db_num = 0;
     $model = M('',$db_num);
@@ -54,7 +87,7 @@ function initData($today){
     $model->table(array("view_lagou_position"));
     $i = 0;
     $num = 0;
-    $limit = 100;
+    $limit = 1000;
     $data = array();
     $MPosition = M('zhaopin/MPosition',$db_num);
     $MCompany = M('zhaopin/MCompany',$db_num);
@@ -87,12 +120,15 @@ function initData($today){
         $industry_list[$i_ind['industry_title']] = $i_ind['id'];
     }
     $MPositionType = M('zhaopin/DicPositionType',$db_num);
+    $p_type_list = $MPositionType->getIdListByType(3);
+    $p_first_type_list = $MPositionType->getIdListByType(2);
+//    webLongEcho(var_dump($p_first_type_list).var_dump($p_type_list));exit;
     while($i == 0 || !empty($data)){
         $data = $model->where($where)->limit($limit,$i*$limit)->select();
         foreach($data as $row){
             $num++;
             //公司发展层级处理
-            $level_id = isset($level_array[$row['financeStage']]) ? $level_array[$row['financeStage']] : 0 ;
+            $level_id = isset($level_array[$row['financeStage']]) ? $level_array[$row['financeStage']] : 11 ;//默认不需要融资
             if(!$level_id){
                 $level_id = $level->addKeyUp(array('title'=>$row['financeStage']));
                 $level_array[$row['financeStage']] = $level_id;
@@ -134,9 +170,10 @@ function initData($today){
             foreach($industrys as $v){
                 $industry = array('industry_title'=>trim($v));
                 $ind_id = isset($industry_list[trim($v)]) ? $industry_list[trim($v)] : 0;
-                if(!intval($ind_id)){
+                if(!intval($ind_id) && $v != ''){
                     //添加新行业
                     $ind_id = $dic_industry->addKeyUp($industry);
+                    $industry_list[trim($v)] = $ind_id;
                 }
                 $ind_ids[] = $ind_id;
             }
@@ -144,16 +181,35 @@ function initData($today){
                 foreach($ind_ids as $ind_id){
                     //添加公司&行业关系表数据
                     $ind_comp = array('industry_id'=>$ind_id,'company_id'=>$company_id);
-                    $ind_company->addKeyUp($ind_comp);
+                    $find = $ind_company->where($ind_comp)->find();
+                    if(empty($find)){
+                        $ind_company->addKeyUp($ind_comp);
+                    }
                 }
             }
             $i_position['company_id'] = $company_id;
             $i_position['education'] = $row['education'];
             $i_position['position_first_type_id'] = 0;
             if($row['positionFirstType'] <> ''){
-                $i_position['position_first_type_id'] = $MPositionType->addKeyUp(array('pos_name'=>$row['positionFirstType'],'pos_type'=>2));
+                $ipt = array('pos_name'=>$row['positionFirstType'],'pos_type'=>2);
+//                $i_position['position_first_type_id'] = $MPositionType->fields('id')->where($ipt)->simple();
+                if(!isset($p_first_type_list[$row['positionFirstType']])){
+                    $i_position['position_first_type_id'] = $MPositionType->addKeyUp($ipt);
+                    $p_first_type_list[$row['positionFirstType']] = $i_position['position_first_type_id'];
+                }
+                $i_position['position_first_type_id'] = $p_first_type_list[$row['positionFirstType']];
             }
-            $i_position['position_type_id'] = $MPositionType->addKeyUp(array('pos_name'=>$row['positionType'],'pos_type'=>3,'pid'=>$i_position['position_first_type_id']));
+            $i_position['position_type_id'] = 0;
+            if($row['positionType'] <> ''){
+                $ipt = array('pos_name'=>$row['positionType'],'pid'=>$i_position['position_first_type_id'],'pos_type'=>3);
+//                $i_position['position_type_id'] = $MPositionType->fields('id')->where($ipt)->simple();
+                if(!isset($p_type_list[$row['positionType']])){
+                    $i_position['position_type_id'] = $MPositionType->addKeyUp($ipt);
+                    $p_type_list[$row['positionType']] = $i_position['position_type_id'];
+                }
+//                webLongEcho(var_dump($p_first_type_list).var_dump($p_type_list));exit;
+                $i_position['position_type_id'] = $p_type_list[$row['positionType']];
+            }
             //工作年限处理
             $i_position['work_year'] = $row['workYear'];
             if(strstr($row['workYear'],'-')){
@@ -185,6 +241,7 @@ function initData($today){
             if(strstr($row['salary'],'-')){
                 $salary = explode('-',$row['salary']);
                 $min_salary = strstr(current($salary),'k') ? intval(current($salary))*1000 : intval(current($salary));
+                $max_salary = strstr(current($salary),'k') ? intval(end($salary))*1000 : intval(end($salary));
             } else {
                 preg_match_all('/[0-9]+k?/',$row['salary'],$salary);
                 $salary = current(current($salary));
@@ -193,6 +250,8 @@ function initData($today){
             foreach($min_salary_list as $key=>$isalary){
                 if($isalary <= $min_salary){
                     $i_position['salary_id'] = $key;
+                } else if ($isalary <= $max_salary) {
+
                 }
             }
             $id = $MPosition->addKeyUp($i_position);
@@ -201,5 +260,6 @@ function initData($today){
         $i++;
     }
     webLongEcho("|处理完毕");
-    M('zhaopin/DataLog',$db_num)->add(array('type'=>'model_position','content'=>$today,'remark'=>'初始化职位数据'));
+    $run_time = time() - $star_time;
+    M('zhaopin/DataLog',$db_num)->add(array('type'=>'model_position','content'=>$today,'remark'=>'初始化职位数据,运行时间:'.$run_time.'(秒)'));
 }

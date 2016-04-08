@@ -1,6 +1,6 @@
 .main_echarts_ul{list-style: none;width: 100%;}
-.main_echarts_ul li{float: left;display: block; width:50%; height: 420px;}
-.index_div{margin: 10px;height: 390px;padding-top: 10px;}
+.main_echarts_ul li{float: left;display: block; width:50%; height: 380px;}
+.index_div{margin: 10px;height: 350px;padding-top: 10px;}
 
 
 @media screen and (max-width: 800px) {

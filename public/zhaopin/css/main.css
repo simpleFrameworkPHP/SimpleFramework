@@ -5,7 +5,7 @@ a{text-decoration:none;color: #4488DD;}
 a:hover{text-decoration:none;color: #1155AA;}
 
 div.div_menu{width: 100%;height: 60px;background-color: lightskyblue;}
-div.div_content{min-height: 400px;padding: 0 20px;}
+div.div_content{min-height: 900px;padding: 0 20px;}
 div.div_footer {min-height: 200px;margin-bottom: 20px;padding-top: 20px;text-align: center; clear: both;}
 div.div_footer .span_foot_link{margin: 0px 10px 0px 10px;}
 div.div_footer .span_foot_link a{text-decoration: none;}
@@ -23,9 +23,12 @@ div.div_footer .span_foot_title{color: #999999;font-size: smaller;}
 .t_table {display: table;min-width:400px;}
 .t_tr {display: table-row;width: 100%;line-height: 30px;}
 .t_td {display: table-cell;background-color: #FFFFFF; border-bottom: solid 1px #f0f0f0;border-right: solid 1px #EEEEEE;white-space:nowrap;padding: 0px 4px;}
+.t_td .a_position{max-width: 180px;white-space:nowrap;text-overflow:ellipsis;display: inline-block;overflow: hidden;}
+.t_td .s80{max-width: 80px;white-space:nowrap;text-overflow:ellipsis;display: block;overflow: hidden;}
 .t_tr .column {background-color: #ccc;color: #333;line-height: 35px;text-align: center;}
-.t_tr .yellow {background-color: #fffa88;}
-.t_tr .red {background-color: #ff3388;}
+.b_yellow {background-color: #fffa88;}
+.b_red {background-color: #ff3388;}
+.red {color: #ff3388;}
 .t_tr .search {background-color: #FFFFFF;}
 .t_td.search {background-color: #FFFFFF;border: none;}
 .t100{width:100%;}
