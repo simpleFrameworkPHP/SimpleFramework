@@ -149,7 +149,7 @@ class PositionController extends BaseController {
             //同公司&&同城数据准备
             $c_ct_salary_cp = array();
             $i = 0;
-            $page = 50000;
+            $page = 40000;
             while($i == 0 || !empty($comp_list)){
                 $comp_list = $mposition->fields('company_id,city,position_first_type_id,salary_id,workyear_id,position_type_id')
                     ->where($where)->limit($page,$i * $page)->select();
