@@ -3,7 +3,7 @@
 .div_search {width: 100%;background-color: #FFF;}
 </style>
 <div class="div_content">
-    <form  action="{:H('zhaopin/position/index')}" method="post">
+    <form  action="{:H('zhaopin/positionlist/index')}" method="post">
         <div class="div_search">
             <ul class="t_table">
                 <li class="t_tr no_border">
@@ -16,7 +16,7 @@
                         <select name="position_first_type_id">
                             <option value="0">请选择</option>
                             <?php foreach($pft as $row){ ?>
-                                <option value="{$row['id']}" <?php if($row['id'] == $where['position_first_type_id'])echo 'selected';?>>{$row['pos_name']}</option>;
+                                <option value="{$row['id']}" <?php if($row['id'] == $where['position_first_type_id'])echo 'selected';?>>{$row['pos_name']}</option>
                             <?php } ?>
                         </select>
                     </span>
@@ -25,7 +25,7 @@
                         <select name="position_type_id">
                             <option value="0">请选择</option>
                             <?php foreach($pt as $row){ ?>
-                            <option value="{$row['id']}" <?php if($row['id'] == $where['position_type_id'])echo 'selected';?>>{$row['pos_name']}</option>;
+                            <option value="{$row['id']}" <?php if($row['id'] == $where['position_type_id'])echo 'selected';?>>{$row['pos_name']}</option>
                             <?php } ?>
                         </select>
                     </span>
@@ -50,9 +50,9 @@
 </div>
         <script>
             $(function(){
-                $('select[name=position_first_type]').on('change',function(){
+                $('select[name=position_first_type_id]').on('change',function(){
                     var pid = $(this).val();
-                    var url = "{:H('zhaopin/position/ajaxPT')}" + "&pid=" + pid;
+                    var url = "{:H('zhaopin/positionlist/ajaxPT')}" + "&pid=" + pid;
                     createRequest();
                     request.open("POST", url, true);
                     request.onreadystatechange = add;
@@ -61,11 +61,11 @@
                 function add(){
                     if (request.readyState == 4) {
                         var json = eval(request.responseText);
-                        var str = '';
+                        var str = '<option value="0">请选择</option>';
                         for(x in json){
                             str +='<option value="'+json[x].id+'"> '+json[x].pos_name+'</option>';
                         }
-                        $('select[name=position_type]').html(str);
+                        $('select[name=position_type_id]').html(str);
                     }
                 }
             });

@@ -10,68 +10,6 @@ class PositionController extends BaseController {
 
     var $db_num = 0;
 
-    public function index(){
-        $where = $this->getWhere();
-        //获取最后一次抓取数据的时间
-        $where['add_time'] = CommonController::getLastLogTime('model_position');
-        $model = M('zhaopin/MPosition',$this->db_num);
-        $data = $model->where($where)->limit(1000)->select();
-        if(!empty($data)){
-            $init_where['add_time'] = $where['add_time'];
-            $this->showData($data,$init_where);
-        }
-
-        $this->display();
-    }
-
-    public function ajaxPT(){
-        $pid = $_REQUEST['pid'];
-        $pt = array();
-        if(intval($pid)){
-            $pt = M('zhaopin/DicPositionType',$this->db_num)->getPTListByPid($pid);
-        }
-        echo JSON($pt);
-    }
-
-    public function getWhere(){
-        if($_REQUEST['city']){
-            $where['city'] = array('like',"%{$_REQUEST['city']}%");
-        }
-        if($_REQUEST['position']){
-            $where['position_name'] = array('like',"%{$_REQUEST['position']}%");
-        }
-        //公司条件搜索
-        if($_REQUEST['company_name']){
-            $c_where['company_name'] = array('like',"%{$_REQUEST['company_name']}%");
-            $list = M('zhaopin/MCompany',$this->db_num)->fields('id')->where($c_where)->select();
-            $cids = array();
-            if(!empty($list)){
-                $cids = reIndexArray($list,'id');
-                $cids = array_keys($cids);
-            }
-            $where['company_id'] = array('in');
-            $where['company_id'] = array_merge($where['company_id'],$cids);
-        }
-        $pft = M('zhaopin/DicPositionType',$this->db_num)->getPTListByPid();
-        $this->assign('pft',$pft);
-        $pid = current($pft)['id'];
-        if($_REQUEST['position_first_type_id']){
-            foreach($pft as $row){
-                if($row['id'] == intval($_REQUEST['position_first_type_id'])){
-                    $pid = $row['id'];
-                }
-            }
-            $where['position_first_type_id'] = $_REQUEST['position_first_type_id'];
-        }
-        if($_REQUEST['position_type_id']){
-            $where['position_type_id'] = $_REQUEST['position_type_id'];
-        }
-        $pt = M('zhaopin/DicPositionType',$this->db_num)->getPTListByPid($pid);
-        $this->assign('pt',$pt);
-        $this->assign('where',$_REQUEST);
-        return $where;
-    }
-
     public function showData($data,$init_where){
         foreach($data as $item){
             $position_type_ids[] = $item['position_type_id'];
