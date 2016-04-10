@@ -194,12 +194,11 @@ class HomeController extends BaseController {
         //数据筛选
         foreach($list as $ksalary=>$value){
             $itemkey[] = $ksalary;
-            foreach($list[$ksalary] as $industry_id=>$cp){
-                if(!in_array($industry_id,$industry_ids))
-                    unset($list[$ksalary][$industry_id]);
+            foreach($industry_ids as $id){
+                $new_list[$ksalary][] = isset($list[$ksalary][$id]) ? $list[$ksalary][$id] : 0;
             }
-            ksort($list[$ksalary]);
         }
+        $list = $new_list;
         sort($itemkey);
         $data = array();
         $item = array();
@@ -224,11 +223,6 @@ class HomeController extends BaseController {
     public function initIndustrySalary($list, $salary, $vagSalary, $industry_company, $industry){
 
         //职位统计
-//        $industry_list = array_flip($industry_company);
-//        $list = initArray($salary,$industry_list);
-//        foreach($position_list as $i_position){
-//            $list[$i_position['salary_id']][$industry_company[$i_position['company_id']]]++;
-//        }
 
         //计算各个行业平均工资(找出top5)
         $icp = array();
@@ -253,12 +247,11 @@ class HomeController extends BaseController {
         //数据筛选
         foreach($list as $ksalary=>$value){
             $itemkey[] = $ksalary;
-            foreach($list[$ksalary] as $industry_id=>$cp){
-                if(!in_array($industry_id,$industry_ids))
-                    unset($list[$ksalary][$industry_id]);
+            foreach($industry_ids as $id){
+                $new_list[$ksalary][] = isset($list[$ksalary][$id]) ? $list[$ksalary][$id] : 0;
             }
-            ksort($list[$ksalary]);
         }
+        $list = $new_list;
         sort($itemkey);
         $data = array();
         $item = array();
