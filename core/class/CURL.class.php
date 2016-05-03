@@ -38,25 +38,28 @@ class CURL {
     }
 
     /**
-     * @param string $url  请求url
-     * @param int $port     端口号
-     * @param string $proxy 代理参数 结构如本类中$proxy_opt
+     * @param string  $url      请求url
+     * @param integer $port     端口号
+     * @param string  $proxy    代理参数 结构如本类中$proxy_opt
+     * @param integer $time_out 超时时间
      * @return mixed        数据
      */
-    public static function get($url, $port = 80, $proxy ='',$timeout = 5){
-        $ch = self::init($url,$port,$proxy,$timeout);
+    public static function get($url, $port = 80, $proxy ='',$time_out = 5){
+        $ch = self::init($url,$port,$proxy,$time_out);
         return self::runCURL($ch);
     }
 
     /**
-     * @param string $url  请求url
-     * @param array $param  参数  array('key'=>'value')
-     * @param int $port     端口号
-     * @param string $proxy 代理参数 结构如本类中$proxy_opt
+     * @param string  $url      请求url
+     * @param array   $param    参数  array('key'=>'value')
+     * @param integer $port     端口号
+     * @param string  $proxy    代理参数 结构如本类中$proxy_opt
+     * @param integer $time_out 超时时间
+     * @param array   $header   报文头
      * @return mixed        数据
      */
-    public static function post($url, $param, $port = 80, $proxy = '',$timeout = 5){
-        $ch = self::init($url,$port,$proxy,$timeout);
+    public static function post($url, $param, $port = 80, $proxy = '',$time_out = 5,$header = array()){
+        $ch = self::init($url,$port,$proxy,$time_out);
         curl_setopt($ch,CURLOPT_POST,true);
         $param_str = '';
         if(is_array($param) && count($param)){
@@ -65,6 +68,10 @@ class CURL {
             }
             $param_str = implode('&',$data);
         }
+        if(!empty($header)){
+            curl_setopt ( $ch, CURLOPT_HTTPHEADER, $header);//array ('X-ptype: like me')
+        }
+
         curl_setopt($ch,CURLOPT_POSTFIELDS,$param_str);
         return self::runCURL($ch);
     }
