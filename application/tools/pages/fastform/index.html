@@ -1,0 +1,36 @@
+{:initH('item_header')}
+<style>
+    .data{color:#0656A9}
+</style>
+<script type="text/javascript">
+    function select(){
+        var t = $(this).val();
+        window.location.href = "{:H('tools/FastForm/index')}&t="+ t;
+    }
+</script>
+<div class="div_content">
+    <select onchange="select()">
+        <?php foreach($url_list as $name=>$i_url){ ?>
+            <option value="{$i_url}">{$name}</option>
+        <?php } ?>
+    </select>
+    <div class="div_hline"></div>
+    <form action="{:H('tools/FastForm/index',array('t'=>$cur))}" method="post">
+        {$form_str}
+        <input type="submit" value="提交"/>
+    </form>
+    <!--数据返回-->
+    <div class="div_content" id="tagContent0">
+    <?php
+    if(!empty($data))
+       writeHTMLTable('','',array_keys(current($data)),0,$data);
+       //var_export($data);
+       echo 'url:<span class="data">'.$url.'</span><br/>';
+        echo 'post_data:';
+        echo '<pre class="data">';
+        var_export($post_data);
+        echo '</pre>';
+       ?>
+    </div>
+</div>
+{:initH('item_footer')}
