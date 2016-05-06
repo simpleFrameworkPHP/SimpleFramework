@@ -14,13 +14,15 @@ class CURL {
         'port'=>CURLOPT_PROXYPORT,                       //代理机端口号
     );
 
-    static  $_timeout = 5;
+    static $_timeout = 5;
+    static $opt;
 
-    static function init($url, $port, $proxy,$timeout){
+    static function init($url, $port, $proxy,$timeout = 0){
         $ch = curl_init();
         curl_setopt($ch,CURLOPT_URL,$url);
         curl_setopt($ch,CURLOPT_PORT ,$port);
-        curl_setopt($ch,CURLOPT_TIMEOUT,self::$_timeout);
+        $timeout = $timeout ? $timeout : self::$_timeout;
+        curl_setopt($ch,CURLOPT_TIMEOUT,$timeout);
         curl_setopt($ch, CURLOPT_HEADER, 0);//设置header
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);//要求结果为字符串且输出到屏幕上
         curl_setopt($ch, CURLOPT_VERBOSE, 1);
@@ -63,6 +65,7 @@ class CURL {
         curl_setopt($ch,CURLOPT_POST,true);
         $param_str = '';
         if(is_array($param) && count($param)){
+            $data = array();
             foreach($param as $key=>$value){
                 $data[] = $key.'='.urlencode($value);
             }
