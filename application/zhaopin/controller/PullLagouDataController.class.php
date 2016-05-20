@@ -13,11 +13,11 @@ class PullLagouDataController extends BaseController {
     }
 
     public function addData(){
-        addData();
+        lagou::addData();
     }
 
     public function initData(){
         $today = CommonController::getLastLogTime('view_lagou_position');
-        initData($today);
+        lagou::initData($today);
     }
 } 

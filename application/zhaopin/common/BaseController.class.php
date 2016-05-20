@@ -8,6 +8,8 @@
 
 class BaseController extends Controller {
 
+    var $db_num = 0;
+
     public function __construct(){
         parent::__construct();
         $menu = C('MENU');
