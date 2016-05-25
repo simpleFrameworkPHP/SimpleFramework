@@ -21,9 +21,15 @@ class FastFormController extends Controller
         if($_REQUEST['url']) {
             $url = $_REQUEST['url'];
             unset($_POST['url']);
-            $data = $this->curl($url, $_POST);
-            $data = json_decode($data,true);
-            $data = $data['data'];
+            $json = $this->curl($url, $_POST);
+            $data = json_decode($json,true);
+            if(!empty($data) && isset($data['data'])){
+                $data = $data['data'];
+            }elseif(!empty($data) && !isset($data['data'])){
+                var_export($data);
+            } else {
+                echo $json;
+            }
         }
         $this->assign('data',$data);
         $this->assign('cur',$cur);
@@ -113,6 +119,13 @@ class FastFormController extends Controller
                     'search_direction'=>array('type'=>'select','remark'=>'专业方向id','data'=>array('请选择'=>'','商科'=>8,'工科'=>36,'理科'=>37,'护理'=>38,'艺术'=>39,'人文科学'=>40)),
                     'search_degree'=>array('type'=>'input','remark'=>'学位id'),
                     'search_de_course'=>array('type'=>'select','remark'=>'意向课程id','data'=>array('请选择'=>'','本科预科'=>502,'本科'=>503,'硕士预科'=>504,'硕士'=>505,'文凭课程'=>511,'博士'=>512)),
+                )
+            ),
+            array(
+                'name'=>'城市列表获取',
+                'url'=>'http://localhost/school/List/getCity',
+                'form'=>array(
+                    'area_id'=>array('type'=>'input','remark'=>'地区ID')
                 )
             )
         );
