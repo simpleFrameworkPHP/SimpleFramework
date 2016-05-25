@@ -9,7 +9,7 @@ return array(
     'SF_DB_CONNECT'=>array(
         0 => array(
             'DB_HOST'=>'127.0.0.1',
-            'DB_NAME'=>'test',
+            'DB_NAME'=>'note',
             'DB_PORT'=>3306,
             'DB_USER'=>'root',
             'DB_PASS'=>'',

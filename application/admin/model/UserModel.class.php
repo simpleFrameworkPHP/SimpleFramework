@@ -8,10 +8,13 @@
 
 class UserModel extends Model {
 
-    var $var_table = array('user'=>'sf_user');
+    var $var_table = array('user'=>'n_user');
 
-    public function addUser(){
-//        echo 'add';
+    public function addUser($user_name,$password){
+        $add['user_name'] = $user_name;
+        $add['password'] = $this->getPass($password);
+        $uid = $this->add($add);
+        return $uid;
     }
 
     public function setUser(){
@@ -19,12 +22,21 @@ class UserModel extends Model {
     }
 
     public function login($where){
-        $map['username'] = $where['username'];
-        $map['password'] = $where['password'];
+        $map['user_name'] = $where['username'];
+        $map['password'] = $this->getPass($where['password']);
         $user = $this->where($map)->find();
-        if($user['id']){
+        if(isset($user['id'])){
             $_SESSION['uid'] = $user['id'];
+            $_SESSION['nike_name'] = $user['nike_name'];
         }
         return $user;
+    }
+
+    public function logout(){
+        logout();
+    }
+
+    private function getPass($password){
+        return md5($password.'note');
     }
 } 
