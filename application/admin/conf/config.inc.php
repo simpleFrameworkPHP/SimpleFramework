@@ -6,6 +6,7 @@
  * Time: 下午1:45
  */
 return array(
+    'SF_THEME_DEFAULT'=>'home',
     'SF_DB_CONNECT'=>array(
         0 => array(
             'DB_HOST'=>'127.0.0.1',
@@ -15,5 +16,16 @@ return array(
             'DB_PASS'=>'',
             'DB_MODE'=>'mysqli',
         )
+    ),
+    'ADMIN_MENU' => array(
+        array('class'=>'index','name'=>'系统','url'=>'http://www.baidu.com'),
+        array('class'=>'admin','name'=>'用户','url'=>'admin/User/selectUser'),
+        array('class'=>'content','name'=>'内容','url'=>'http://www.baidu.com')
+    ),
+    'ADMIN_SUB_MENU' => array(
+        array('class'=>'index','name'=>'系统介绍','url'=>'http://www.baidu.com'),
+        array('class'=>'user','name'=>'用户管理','url'=>'admin/User/selectUser'),
+        array('class'=>'content','name'=>'板块管理','url'=>'admin/category/index'),
+        array('class'=>'content','name'=>'内容管理','url'=>'admin/content/index')
     )
 );

@@ -1,0 +1,32 @@
+/*css reset*/
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, em, p, font, img, small, strong, center, dl, dt, dd, ol, ul, li, form, label, table, caption, tbody, tr, th, td {margin:0;padding:0;border:0;outline:0;font-size:16px;}
+ol, ul {list-style:none}
+a{text-decoration:none;color: #4488DD;}
+a:hover{text-decoration:none;color: #1155AA;}
+.hidden{position: absolute;left: -99999px;}
+.btn{line-height: 30px;padding: 2px 15px;background-color: #3da3f5;color: #FFFFFF;display: block;border-radius: 5px;}
+.btn:hover{cursor: pointer;background-color: #1f8ce8;}
+
+
+.div_top{display: block;width: 100%;height: 100px;background-color: #6cf;}
+.div_menu{display: block;width: 100%;height: 30px;background-color: #0cf;border-bottom: #0055aa solid 3px;clear:both}
+.div_menu ul{padding-left: 40px;}
+.div_menu ul li{float: left;padding: 5px;font-size: x-large;}
+.div_menu ul li:hover{background-color: #55ccff;color: #000000;}
+.div_menu ul li .selected{background-color: #0055aa;color: #00ccff;}
+
+.div_main{display: block;width: 100%;background-color:  #9ff;}
+.div_main div{min-height: 750px;}
+.div_main iframe{min-height: 750px;}
+.div_main .div_left{background: none repeat scroll 0 0;
+    float: left;
+    width: 200px;}
+.div_main .div_left ul li{padding-left: 20px; line-height: 28px;}
+.div_main .div_left ul li:hover{background-color: #00b7ee;}
+.div_main .div_left ul li.active{background-color: #00b7ee;}
+.div_main .div_right{background: none repeat scroll 0 0 #cff;
+    height: auto !important;
+    margin-left: 200px !important;}
+.div_main .div_right iframe{width: 100%;height: auto !important;}
+.div_foot{display: block;width: 100%;height: 80px;background-color: #6cf;}
+

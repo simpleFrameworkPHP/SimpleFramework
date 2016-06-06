@@ -9,6 +9,8 @@
 class IndexController extends AdminController {
 
     function index(){
+        $this->assign('admin_menu',C('ADMIN_MENU'));
+        $this->assign('sub_menu',C('ADMIN_SUB_MENU'));
         $this->display();
     }
 
