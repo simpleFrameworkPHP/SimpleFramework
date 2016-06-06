@@ -14,13 +14,13 @@
         <?php } ?>
     </ul>
 </div>
-<div class="div_login">
+<div class="div_login hidden">
     <form action="<?php echo H('home/index/login')?>" method="POST">
         <table>
             <tr><th colspan="2">&nbsp;</th></tr>
             <tr><th>用户名：</th><td><input name="username"/></td></tr>
             <tr><th>密&nbsp;&nbsp;码：</th><td><input type="password" name="password"/></td></tr>
-            <tr><th>&nbsp;&nbsp;</th><td><span class="btn">登 录</span>&nbsp;&nbsp;<span class="btn" onclick="window.location='<?php echo H('register');?>';">注 册</span></td></tr>
+            <tr><th>&nbsp;&nbsp;</th><td><span class="btn submit">登 录</span>&nbsp;&nbsp;<span class="btn" onclick="window.location='<?php echo H('register');?>';">注 册</span></td></tr>
         </table>
     </form>
 </div>
