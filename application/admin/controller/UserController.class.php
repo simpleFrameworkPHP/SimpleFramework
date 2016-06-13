@@ -9,6 +9,8 @@
 class UserController extends AdminController {
 
     public function selectUser(){
+        $data = M('User')->select();
+        $this->assign('data',$data);
         $this->display();
     }
 } 

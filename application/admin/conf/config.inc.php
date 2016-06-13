@@ -19,13 +19,13 @@ return array(
     ),
     'ADMIN_MENU' => array(
         array('class'=>'index','name'=>'系统','url'=>'http://www.baidu.com'),
-        array('class'=>'admin','name'=>'用户','url'=>'admin/User/selectUser'),
+        array('class'=>'user','name'=>'用户','url'=>'admin/User/selectUser'),
         array('class'=>'content','name'=>'内容','url'=>'http://www.baidu.com')
     ),
     'ADMIN_SUB_MENU' => array(
         array('class'=>'index','name'=>'系统介绍','url'=>'http://www.baidu.com'),
         array('class'=>'user','name'=>'用户管理','url'=>'admin/User/selectUser'),
-        array('class'=>'content','name'=>'板块管理','url'=>'admin/category/index'),
-        array('class'=>'content','name'=>'内容管理','url'=>'admin/content/index')
+        array('class'=>'content','name'=>'板块管理','url'=>'admin/Category/index'),
+        array('class'=>'content','name'=>'内容管理','url'=>'admin/Content/index')
     )
 );

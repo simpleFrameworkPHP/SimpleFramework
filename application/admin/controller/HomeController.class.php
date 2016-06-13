@@ -22,4 +22,8 @@ class HomeController extends Controller {
         $this->display();
     }
 
+    function index(){
+        echo '欢迎光临';
+    }
+
 } 
