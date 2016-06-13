@@ -1,29 +1,38 @@
-{:initH('admin_header')}
+{:$initHtml('admin_header')}
 <div class="div_top"></div>
 <div class="div_menu">
     <ul class="ul_main_menu">
-        <?php echo getMenu('admin_main','main');?>
+        <?php foreach($admin_menu as $item){ ?>
+        <li class="{$item['class']}" data-value="{$item['url']}">{$item['name']}</li>
+        <?php } ?>
     </ul>
 </div>
 <div class="div_main">
     <div class="div_left">
-        <span></span>
+        <ul class="ul_sub_menu">
+            <?php foreach($sub_menu as $item){ ?>
+            <li class="{$item['class']}" data-value="{:H($item['url'])}">{$item['name']}</li>
+            <?php } ?>
+        </ul>
     </div>
-    <div class="div_right"><iframe name="main"></iframe></div>
+    <div class="div_right"><iframe id="main_iframe" src="{:H('admin/Home/index')}" width="100%" height="100%"></iframe></div>
 </div>
-        <script>
-            clickMenu('{$_REQUEST["c"]}');
-            function clickMenu(type){
-                var dom = '#'+type;
-                $('li a').removeClass("selected");
-                $(dom).addClass("selected");
-                var json = eval('(<?php echo getMenu("admin","main");?>)');
-                var html = "<ul>";
-                for(var i=0;i<json[type].length;i++){
-                    html += "<li><a href='"+json[type][i].url+"' target='main'>"+json[type][i].name+"</a></li>";
-                }
-                html += "</ul>";
-                $('.div_left').html(html);
-            }
-        </script>
-{:initH('admin_footer')}
+{:$initHtml('admin_footer')}
+<script>
+
+    $(function(){
+       $(".ul_main_menu li").on('click',function(){
+           var type = $(this).attr('class');
+           $('.ul_sub_menu li').addClass('hidden');
+           $('.ul_sub_menu .' + type).removeClass('hidden');
+       });
+        $(".ul_sub_menu li").on('click',function(){
+            var url = $(this).attr('data-value');
+            var iframe = document.getElementById('main_iframe');
+            iframe.src = url;
+        });
+        $(".ul_main_menu li")[0].click();
+        $('#main_iframe').css('height',$('.div_foot').offset().top - $('.div_main').offset().top + 'px');
+
+    });
+</script>

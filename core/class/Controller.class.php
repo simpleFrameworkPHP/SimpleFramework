@@ -80,8 +80,13 @@ class Controller extends View {
         return $content;
     }
 
-    public function initHtml($file){
-        $path = THEME_PATH . '/html/' . $file . '.html';
+    public function initHtml($file,$path = ''){
+        if($path == ''){
+            $path = THEME_PATH . '/html/';
+        } else {
+            $path = APP_PATH . '/' . $_REQUEST['a'] . '/pages/' . $path . '/';
+        }
+        $path .= $file . '.html';
         if(file_exists($path)){
             // 模板阵列变量分解成为独立变量
             extract($this->params, EXTR_OVERWRITE);

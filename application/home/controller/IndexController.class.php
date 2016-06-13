@@ -9,8 +9,6 @@
 class IndexController extends Controller {
 
     public function index(){
-        $user_model = M('admin/User');
-        $user_model->addUser();
         $this->display();
     }
 
@@ -34,6 +32,6 @@ class IndexController extends Controller {
 
     public function logout(){
         Log::write('LOGOUT',$_SESSION['username'].'logout ','login');
-        logout();
+        M('admin/User')->logout();
     }
 } 

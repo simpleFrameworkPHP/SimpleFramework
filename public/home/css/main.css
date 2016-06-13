@@ -1,10 +1,29 @@
-*{margin: 0px;}
-div.div_menu{width: 100%;height: 60px;background-color: lightskyblue;}
+/*css reset*/
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, em, p, font, img, small, strong, center, dl, dt, dd, ol, ul, li, form, label, table, caption, tbody, tr, th, td {margin:0;padding:0;border:0;outline:0;font-size:16px;}
+ol, ul {list-style:none}
+a{text-decoration:none;color: #4488DD;}
+a:hover{text-decoration:none;color: #1155AA;}
+.hidden{position: absolute;left: -99999px;}
+.btn{line-height: 30px;padding: 2px 15px;background-color: #3da3f5;color: #FFFFFF;display: block;border-radius: 5px;}
+.btn:hover{cursor: pointer;background-color: #1f8ce8;}
+
+/*header*/
+div.div_menu{width: 100%;height: 60px;background-color: #3da3f5;color: #FFFFFF;}
+div.div_menu ul{display: block;width: 1000px;margin: auto;}
+div.div_menu ul li{display: block;float: right;padding: 0px 20px;line-height: 60px;}
+div.div_menu ul li:hover{cursor: pointer;background-color: #1f8ce8;}
+.div_login{border:3px solid #f00;border-radius: 5px;width: 350px;margin: 50px auto;padding: 30px;height: 150px;}
+.div_login .btn{float: left;margin-left: 5px;}
+
+/*content*/
 div.div_page {width: 1000px;display: block;margin: auto;}
 div.div_page div.div_content{min-height: 400px;}
+
+/*footer*/
 div.div_footer {min-height: 200px;margin-bottom: 20px;padding-top: 20px;text-align: center;}
 div.div_footer .span_foot_link{margin: 0px 10px 0px 10px;}
 div.div_footer .span_foot_link a{text-decoration: none;}
 div.div_footer .span_foot_title{color: #999999;font-size: smaller;}
+
 /*图片标签毛玻璃效果*/
 .blue{filter: url(blur.svg#blur); /* FireFox, Chrome, Opera */     -webkit-filter: blur(5px); /* Chrome, Opera */        -moz-filter: blur(5px);         -ms-filter: blur(5px);                filter: blur(5px);     filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=5, MakeShadow=false); /* IE6~IE9 */}

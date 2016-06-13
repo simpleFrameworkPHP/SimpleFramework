@@ -12,11 +12,11 @@ class DictionaryController extends Controller {
         if(!isset($_REQUEST['t'])){
             $_REQUEST['t'] =  'all';
         }
+        $data_list = C('SF_DB_CONNECT');
         if(!isset($_REQUEST['db'])){
-            $_REQUEST['db'] =  0;
+            $_REQUEST['db'] =  current(array_keys($data_list));
         }
-        $datalist = C('SF_DB_CONNECT');
-        foreach($datalist as $k=>$v){
+        foreach($data_list as $k=>$v){
             $database[] = array('name'=>$v['DB_NAME'],'value'=>$k);
         }
         C('db',$database);

@@ -80,7 +80,7 @@ function getBodyHTML($data,$columns,$data_rule,$column_start){
         $str .= '<li class="t_tr">';
         for ($i=$column_start; $i<$sum_column; $i++ )
         {
-            $str .= '<span class="t_td '.$rule_str.'">'.$row[$columns[$i]].'</span>';
+            $str .= '<span class="t_td '.$rule_str.'">'.(is_array($row[$columns[$i]])?json_encode($row[$columns[$i]],JSON_UNESCAPED_UNICODE):$row[$columns[$i]]).'</span>';
         }
         $str .= "</li>";
     }
