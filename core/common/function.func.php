@@ -104,19 +104,18 @@ function H($path='',$params='',$redirect = false){
 }
 
 /** 缓存方法
- * @param $key
+ * @param $super_key
  * @param string $value
- * @param string $type  缓存的大类型
  * @param int $time     缓存过期时长
  * @return bool|mixed   返回缓存值   false为失败
  */
-function S($key,$value = '',$time = 86400){
+function S($super_key,$value = '',$time = 86400){
     $cache = Cache::initCacheMode(C('SF_CACHE_MODE'));
     $result = false;
-    if(strstr($key,'/')){
-        $key = explode('/',$key);
-        $type = $key[0];
-        $key = $key[1];
+    if(strstr($super_key,'/')){
+        $key_array = explode('/',$super_key);
+        $key = end($key_array);
+        $type = trim($super_key,'/'.$key);
     } else {
         $type = 'system';
     }
