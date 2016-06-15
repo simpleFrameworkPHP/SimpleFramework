@@ -54,26 +54,36 @@ function sflog($str,$type,$mode){
 }
 //创建模型方法（数据库处理）
 function M($path='',$link_ID = 0){
+    $table_name = '';
     if($path != ''){
         if(strstr($path,'/')){
             $path = explode('/',$path);
             $app = $path[0];
+            $table_name = $path[1];
             $model = $path[1].'Model';
         } else {
             $app = $_REQUEST['a'];
+            $table_name = $path;
             $model = $path.'Model';
         }
         loadFile_once(APP_PATH.'/'.$app.'/model/'.$model.'.class.php', $model, 'CLASS');
     } else {
+        $table_name = $path;
         $model = 'Model';
     }
     $config = C('SF_DB_CONNECT');
-    if(class_exists($model) && isset($config[$link_ID])){
+    if(isset($config[$link_ID])){
         $link = $config[$link_ID];
-        return new $model($link['DB_HOST'],$link['DB_USER'],$link['DB_PASS'],$link['DB_NAME'],$link['DB_PORT'],$link['DB_MODE'],$link_ID,C('SF_DB_CHARSET'));
-    } else {
-        return false;
+        if(class_exists($model)){
+            $model = new $model($link['DB_HOST'],$link['DB_USER'],$link['DB_PASS'],$link['DB_NAME'],$link['DB_PORT'],$link['DB_MODE'],$link_ID,C('SF_DB_CHARSET'));
+            return $model;
+        } else {
+            $model = new Model($link['DB_HOST'],$link['DB_USER'],$link['DB_PASS'],$link['DB_NAME'],$link['DB_PORT'],$link['DB_MODE'],$link_ID,C('SF_DB_CHARSET'));
+            $model->table($table_name);
+            return $model;
+        }
     }
+
 }
 //创建url以及跳转方法
 function H($path='',$params='',$redirect = false){
