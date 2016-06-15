@@ -1,0 +1,35 @@
+{:$initHtml('header','common')}
+<div class="page_title">
+    <p class="admin_title">
+        <span><a>内容</a></span>><span><a>版块管理</a></span>><span><a>添加栏目</a></span>
+    </p>
+</div>
+<div class="page_content">
+<form action="{:H('')}" method="post">
+    <p class="p_title">添加栏目</p>
+    <ul class="ul_table auto_width">
+        <li class="table_body">
+            <span>栏目名称：</span><span><input name="category_name" value=""></span>
+        </li>
+        <li class="table_body">
+            <span>父级栏目：</span>
+            <span>
+                <select name="category_sid">
+                    <option value="0">--请选择--</option>
+                    <?php foreach($category as $row){ ?>
+                    <option value="{$row['id']}">{$row['category_name']}</option>
+                    <?php } ?>
+                </select>
+            </span>
+        </li>
+        <li class="table_body">
+            <span>栏目路径：</span><span><input name="category_str" value=""></span>
+        </li>
+    </ul>
+    <p class="p_title"><input type="submit" value="提交"/></p>
+</form>
+</div>
+<div class="page_footer">
+
+</div>
+{:$initHtml('footer','common')}

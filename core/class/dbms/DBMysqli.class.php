@@ -90,6 +90,8 @@ class DBMysqli extends Db {
             switch($type){
                 case "add"://返回添加的id
                     $result = mysqli_insert_id($this->con);break;
+                case "delete":
+                    break;
                 default://返回影响行数
                     $result = mysqli_affected_rows($this->con);
             }

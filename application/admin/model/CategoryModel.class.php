@@ -16,6 +16,11 @@ class CategoryModel extends Model
         return $this->getDataByWhere($where);
     }
 
+    public function getFristCategory(){
+        $where['category_sid'] = 0;
+        return $this->getDataByWhere($where);
+    }
+
     protected function getDataByWhere($where){
         if(!empty($where)){
             $this->where($where);

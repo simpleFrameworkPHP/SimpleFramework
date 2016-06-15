@@ -7,6 +7,7 @@ a:hover{text-decoration:none;color: #1155AA;}
 .btn{line-height: 30px;padding: 2px 15px;background-color: #3da3f5;color: #FFFFFF;border-radius: 5px;}
 .btn:hover{cursor: pointer;background-color: #1f8ce8;}
 
+
 body,html{height: 100%;width: 100%;}
 .div_top{height: 100px;width: 100%;background: #6cf; position:relative;z-index: 1;}
 .div_menu{display: block;background-color: #0cf;border-bottom: #0055aa solid 3px;height: 37px;width: 100%; position:relative;z-index: 1;}
@@ -29,8 +30,11 @@ body,html{height: 100%;width: 100%;}
 .page_content{padding: 0 10px;}
 .page_content .p_tools a{float: right;margin-bottom: 10px;}
 .page_content .ul_table{list-style: none; display: table;width: 100%;}
+.page_content form .ul_table{width: auto;margin: auto;min-width: 600px;}
+.page_content form .p_title{text-align: center;}
 .page_content .ul_table li{display: table-row;}
+.page_content form .ul_table li{border: #DDDDDD solid 1px;line-height: 34px;vert-align: top;}
 .page_content .ul_table li.table_th b{display: table-cell;background-color: #DDDDDD;line-height: 28px;}
 .page_content .ul_table li.table_body:nth-child(2n+1){background-color: #EEEEEE;}
 .page_content .ul_table li span{display: table-cell;border-bottom: #DDDDDD solid 1px;}
-
+.page_content form .ul_table li span:nth-child(1){text-align: right;}
