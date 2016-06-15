@@ -28,13 +28,15 @@ class Model{
     var $cache_str = '';//数据库缓存字符串
 
     /**
-     * @param $host 数据库域名或ip
-     * @param $user 用户名
-     * @param $pass 密码
-     * @param $db_name  数据库名
-     * @param $port 端口号
-     * @param $mode 链接模式
-     * @param int $no   链接id
+     * 创建链接
+     * @param string $host      数据库域名或ip
+     * @param string $user      用户名
+     * @param string $pass      密码
+     * @param string $db_name   数据库名
+     * @param string $port      端口号
+     * @param string $mode      链接模式
+     * @param int    $no        链接id
+     * @param string $chart_set 编码方式
      */
     public function __construct($host = '',$user = '',$pass = '',$db_name = '',$port = '',$mode = '',$no = 0,$chart_set = 'utf8'){
         $con = $this->initDBConnect($host,$user,$pass,$db_name,$port,$mode,$no,$chart_set);
@@ -47,6 +49,18 @@ class Model{
         return $this;
     }
 
+    /**
+     * 初始化数据库链接
+     * @param string $host      数据库域名或ip
+     * @param string $user      用户名
+     * @param string $pass      密码
+     * @param string $db_name   数据库名
+     * @param string $port      端口号
+     * @param string $mode      链接模式
+     * @param int    $no        链接id
+     * @param string $chart_set 编码方式
+     * @return array|DBMysql|DBMysqli
+     */
     public function initDBConnect($host,$user,$pass,$db_name,$port,$mode,$no,$chart_set){
         if($host == ''){
             return array('error'=>"Can't connect DB.");
@@ -75,20 +89,24 @@ class Model{
         return $data;
     }
 
+    /**
+     * 获取某一单元的值
+     * @param string $sql
+     * @return bool|mixed
+     */
     public function simple($sql = ''){
         $data = false;
-        if($sql == ''){
-            $sql = $this->option;
-        }
-        $result = $this->db->select($sql,1);
+        $result = $this->find($sql);
         if(!empty($result)){
             $data = current($result);
         }
         return $data;
     }
 
-
-    function initTableInfo($link_ID = 0){
+    /**
+     * 初始化表信息
+     */
+    function initTableInfo(){
         $cache_str = 'DB_INFO_'.$this->cache_str.'/DB_INFO';
         $this->tables_info = S($cache_str);
         if(!empty($this->var_table)){
@@ -114,7 +132,12 @@ class Model{
             }
         }
     }
-    function getColumnInfo($table_name,$link_ID = 0){
+
+    /**
+     * 获取某表的列信息
+     * @param $table_name
+     */
+    function getColumnInfo($table_name){
         $sql = 'SHOW COLUMNS FROM '.$table_name;
         $columns = $this->db->select($sql);
         if($columns && is_array($columns)){
@@ -129,7 +152,7 @@ class Model{
      * @return string
      */
     public function filterTable($table_name){
-        $this->initTableInfo($this->link_ID);
+        $this->initTableInfo();
         if(is_array($this->tables_info) && array_key_exists($table_name,$this->tables_info)){
             //该表名有效
             return $table_name;
@@ -145,7 +168,7 @@ class Model{
      * @return mixed
      */
     public function filterColumn($column,array $table_list){
-        $this->initTableInfo($this->link_ID);
+        $this->initTableInfo();
         $tables = array();
         if(strstr($column,'.')){
             //待优化--带表名的列名未过滤
@@ -222,7 +245,7 @@ class Model{
             }
         }
         $this->var_table = $tables;
-        $this->initTableInfo($this->link_ID);
+        $this->initTableInfo();
         if(isset($table_array)){
             $this->option['TABLE'] = implode(',',$table_array);
         }
