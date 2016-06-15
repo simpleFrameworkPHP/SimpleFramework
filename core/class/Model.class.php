@@ -502,9 +502,16 @@ class Model{
         if(!isset($this->option['TABLE'])){
             $this->table();
         }
-        $delete_sql = 'DELETE FROM '.$this->option['TABLE'];
+        $table = $this->option['TABLE'];
+        if(strstr($table,' AS ')){
+            $table = explode(' AS ',$table);
+            $table = current($table);
+        }
+        $delete_sql = 'DELETE FROM ' . $table;
         if(isset($this->option['WHERE'])){
-            $delete_sql .= ' WHERE '.$this->option['WHERE'];
+            $tables = array_keys($this->var_table);
+            $where = str_replace(current($tables).'.','',$this->option['WHERE']);
+            $delete_sql .= ' WHERE ' . $where;
         }
         return $this->db->delete($delete_sql);
     }
