@@ -91,22 +91,17 @@ class Model{
     function initTableInfo($link_ID = 0){
         $cache_str = 'DB_INFO_'.$this->cache_str.'/DB_INFO';
         $this->tables_info = S($cache_str);
-        $init_table = false;
         if(!empty($this->var_table)){
             foreach($this->var_table as $table){
                 if(!isset($this->tables_info[$table]) || empty($this->tables_info[$table])){
-                    $init_table = true;
+                    //按照标出的表进行过滤处理
+                    $this->getColumnInfo($table);
                 }
             }
-        }
-        if(empty($this->tables_info) || $init_table){
-            if(!empty($this->var_table)){
-                foreach($this->var_table as $value){
-                    $this->getColumnInfo($value);
-                }
-                //存储数据结构
-                S($cache_str,$this->tables_info);
-            } else {
+            //存储数据结构
+            S($cache_str,$this->tables_info);
+        } else {
+            if(empty($this->tables_info) && empty($this->var_table)){
                 $sql = 'SHOW TABLES';
                 $tables = $this->db->select($sql);
                 if(is_array($tables) && isset($this->db_name)){
@@ -117,7 +112,6 @@ class Model{
                     S($cache_str,$this->tables_info);
                 }
             }
-
         }
     }
     function getColumnInfo($table_name,$link_ID = 0){
