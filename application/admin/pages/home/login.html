@@ -1,8 +1,13 @@
-{:$initHtml('admin_header')}
-<link rel="stylesheet" href="__THEME__/css/admin.login.css" type="text/css"/>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <link rel="stylesheet" href="__THEME__/css/admin.login.css" type="text/css"/>
+</head>
+<body>
 <div class="div_center">
     <div class="div_login">
-        <form action="admin.php?a=admin&c=home&f=login" method="post">
+        <form name="form" action="{:H('admin/home/login')}" method="post">
             <p class="p_title">登 陆</p>
             <div class="div_form">
                 <p class="p_form_key">用户名</p>

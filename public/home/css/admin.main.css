@@ -8,7 +8,6 @@ a:hover{text-decoration:none;color: #1155AA;}
 .btn:hover{cursor: pointer;background-color: #1f8ce8;}
 
 
-body,html{height: 100%;width: 100%;}
 .div_top{background: #66CCFF;height: 100px;width: 100%;background: #ccc; position:relative;z-index: 1;}
 .div_menu{background: #00CCFF;border-bottom: #0055aa solid 3px;height: 37px;width: 100%;background: #ccc; position:relative;z-index: 1;}
 .div_menu ul{padding-left: 40px;}
