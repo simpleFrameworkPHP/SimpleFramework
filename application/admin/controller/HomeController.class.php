@@ -12,7 +12,7 @@ class HomeController extends Controller {
         if($_POST){
             $where['username'] = $_POST['username'];
             $where['password'] = $_POST['password'];
-            $user = M('admin/User')->login($where);
+            $user = M('admin/User')->login($where,1);
             if($user['id']){
                 redirect(H('admin/index/index'));
             } else {

@@ -21,13 +21,21 @@ class UserModel extends Model {
 
     }
 
-    public function login($where){
+    public function login($where,$admin = 0){
         $map['user_name'] = $where['username'];
         $map['password'] = $this->getPass($where['password']);
+        $map['user_status'] = 1;
+        if(intval($admin)){
+            //管理员登录
+            $map['role_id'] = intval($admin);
+        }
         $user = $this->where($map)->find();
         if(isset($user['id'])){
             $_SESSION['uid'] = $user['id'];
             $_SESSION['nike_name'] = $user['nike_name'];
+            if(intval($admin)){
+                $_SESSION['admin'] = $user['role_id'];
+            }
         }
         return $user;
     }
