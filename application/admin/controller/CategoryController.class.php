@@ -38,9 +38,14 @@ class CategoryController extends AdminController
         }
     }
 
+    public function set(){
+
+    }
+
     public function delete(){
         $where['id'] = intval($_GET['id']);
-        $result = M('Category')->where($where)->delete();
+        $data['cate_status'] = 1;
+        $result = M('Category')->where($where)->set($data);
         if($result){
             $this->index();
         }
