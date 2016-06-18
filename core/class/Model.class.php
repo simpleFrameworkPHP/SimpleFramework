@@ -291,7 +291,7 @@ class Model{
             $this->table();
         }
         if(!isset($this->option['TABLE'])){
-            errorPage('没有表格啦','你需要先使用table方法或设置Model中的$table值来设置查询的表格');
+            errorPage('没有表格啦',"你需要先使用table方法或设置Model中的 $table 值来设置查询的表格");
         } else {
             if(strstr($this->option['TABLE'],',')){
                 $table_list = explode(',',$this->option['TABLE']);

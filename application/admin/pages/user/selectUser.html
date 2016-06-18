@@ -14,7 +14,9 @@
         </li>
         <?php foreach($data as $item){ ?>
         <li class="table_body">
-            <span>{$item['id']}</span><span>{$item['user_name']}</span><span>{$item['nike_name']}</span><span>{$item['is_admin']}</span><span><a>修改</a>&nbsp;<a>删除</a></span>
+            <span>{$item['id']}</span><span>{$item['user_name']}</span>
+            <span>{$item['nike_name']}</span><span>{$item['role_id']}</span>
+            <span><i class="btn">修改</i>&nbsp;<i class="btn">删除</i></span>
         </li>
         <?php } ?>
     </ul>

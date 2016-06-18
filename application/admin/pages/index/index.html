@@ -22,10 +22,14 @@
     $(function(){
        $(".ul_main_menu li").on('click',function(){
            var type = $(this).attr('class');
+           $(".ul_main_menu li").removeClass('active');
+           $(this).addClass('active');
            $('.ul_sub_menu li').addClass('hidden');
            $('.ul_sub_menu .' + type).removeClass('hidden');
        });
         $(".ul_sub_menu li").on('click',function(){
+            $(".ul_sub_menu li").removeClass('active');
+            $(this).addClass('active');
             var url = $(this).attr('data-value');
             var iframe = document.getElementById('main_iframe');
             iframe.src = url;

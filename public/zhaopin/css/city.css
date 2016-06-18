@@ -1,0 +1,10 @@
+.main_echarts_ul{list-style: none;width: 100%;}
+.main_echarts_ul li{float: left;display: block; width:50%; height: 380px;}
+.index_div{margin: 10px;height: 350px;padding-top: 10px;}
+
+.div_search {width: 100%;background-color: #FFF;}
+.p_title {font-size: 30px;padding: 20px 5px;}
+
+@media screen and (max-width: 800px) {
+    .main_echarts_ul li{ width: 100%;}
+}

@@ -1,0 +1,47 @@
+{:$initHtml('header')}
+<script src="__JSROOT__/echarts.js"></script>
+<link rel="stylesheet" href="__THEME__/css/city.css" type="text/css"/>
+<form  action="{:H('zhaopin/city/index')}" method="post">
+    <div class="div_search">
+        <ul class="t_table">
+            <li class="t_tr no_border">
+                <p>
+                    <span class="t_td search">城市</span>
+                    <span class="t_td search"><input type="input" name="city" value="{$where['city']}"></span>
+                    <span class="t_td search">职业大类</span>
+                    <span class="t_td search">
+                        <select name="position_first_type_id">
+                            <option value="0">请选择</option>
+                            <?php foreach($pft as $row){ ?>
+                            <option value="{$row['id']}" <?php if($row['id'] == $where['position_first_type_id'])echo 'selected';?>>{$row['pos_name']}</option>
+                            <?php } ?>
+                        </select>
+                    </span>
+                    <span class="t_td search">职位</span>
+                    <span class="t_td search">
+                        <input name="position" value="<?php echo isset($where['position'])?$where['position']:'';?>"/>
+                    </span>
+                </p>
+                <p><span class="t_td search red">{$error_info}</span></p>
+            </li>
+            <li>
+                <input class="button" type="submit" value="提交">
+            </li>
+        </ul>
+    </div>
+</form>
+<?php if(isset($where['city'])){ ?>
+<ul class="main_echarts_ul">
+    <!--<li>-->
+        <!--<p><span>{$info['ALLCP']}{$where['city']}{$info['CITYCP']}</span></p>-->
+    <!--</li>-->
+    <?php
+    foreach($template as $value){
+        echo '<li>'.$value.'</li>';
+    }
+    ?>
+</ul>
+        <p class="p_title">相关职位数据({$cp})：</p>
+<?php writeHTMLTable("",$remark,$columns,0,$data);?>
+<?php } ?>
+{:$initHtml('footer')}
