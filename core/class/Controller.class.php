@@ -65,6 +65,7 @@ class Controller extends View {
             //可以实现字符替换以达到函数改写
             $contentStr = $this->replaceContent($contentStr);
         }
+        $contentStr = $this->initDefinde($contentStr);
         //controller日志位置
         if(isset($log_title)){
             Log::write($log_title,$log_info);
@@ -94,6 +95,7 @@ class Controller extends View {
             include $path;
             $content = ob_get_clean();
             $content = $this->replaceContent($content);
+            $content = $this->initDefinde($content);
             return $content;
         } else {
             $this->errorPage('no page','没有找到'.$path.'这个模板');

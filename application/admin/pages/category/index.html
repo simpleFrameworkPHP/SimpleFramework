@@ -14,12 +14,29 @@
         </li>
         <?php foreach($data as $item){ ?>
         <li class="table_body">
-            <span>{$item['id']}</span><span>{$item['category_name']}</span><span>{$item['category_sid']}</span><span>{$item['category_str']}</span><span><a>修改</a>&nbsp;<a href="{:H('delete',array('id'=>$item['id']))}">删除</a></span>
+            <span>{$item['id']}</span><span>{$item['category_name']}</span><span>{$item['category_sid']}</span><span>{$item['category_str']}</span>
+            <span><i class="btn set" data-value="{$item['id']}">修改</i>&nbsp;<i class="btn delete" data-value="{$item['id']}">删除</i></span>
         </li>
         <?php } ?>
     </ul>
 </div>
-<div class="page_footer">
-
-</div>
 {:$initHtml('footer','common')}
+<script>
+    $(function(){
+        $('em.set').on('click',function(){
+            var id = $(this).attr('data-value');
+            var url = '{:H("set")}' + '&id=' + id;
+        });
+        $('em.delete').on('click',function(){
+            var id = $(this).attr('data-value');
+            var url = '{:H("delete")}' + '&id=' + id;
+            var mes=confirm("您确定要删除这条信息吗？");
+            if(mes){
+                $.get(url,function(data){
+
+                    }
+                );
+            }
+        });
+    });
+</script>

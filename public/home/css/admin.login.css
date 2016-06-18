@@ -1,0 +1,18 @@
+/*css reset*/
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, em, p, font, img, small, strong, center, dl, dt, dd, ol, ul, li, form, label, table, caption, tbody, tr, th, td {margin:0;padding:0;border:0;outline:0;font-size:16px;}
+ol, ul {list-style:none}
+a{text-decoration:none;color: #4488DD;}
+a:hover{text-decoration:none;color: #1155AA;}
+.hidden{position: absolute;left: -99999px;}
+.btn{line-height: 30px;padding: 2px 15px;background-color: #3da3f5;color: #FFFFFF;border-radius: 5px;}
+.btn:hover{cursor: pointer;background-color: #1f8ce8;}
+
+
+.div_center{height: 740px;margin-top: 150px;padding-right: 270px;background-image: url('../images/login_bg.png');background-size: cover;}
+.div_login{width: 380px;height:320px;float: right;margin-top: 190px;padding-top: 40px;background-color: #FFFFFF;}
+.div_login p{width: 100%;display: block;}
+.div_login .p_title{text-align: center;font-size: 28px;line-height:28px;margin-bottom: 35px;color: #303030;font-weight:600;font-family: "微软雅黑", Microsoft Yahei;}
+.div_login .div_form{margin-left: 40px;}
+.div_login .div_form .p_form_key {font-size:12px;line-height:12px;color: #606060;margin-bottom: 8px;}
+.div_login .div_form input{width: 290px;line-height: 30px;font-size: 18px;margin-bottom: 20px;border: solid #DDDDDD 1px;padding: 5px;color: #FFA25F;}
+.div_login .p_title a{background-color: #FFA25F;font-size: 18px;line-height: 40px;width:180px;color: #FFFFFF;display: block;margin: 15px auto;}
