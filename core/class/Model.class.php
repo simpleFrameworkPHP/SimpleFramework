@@ -26,6 +26,7 @@ class Model{
     var $column_str = '###column####';//如果值为列名时，需要标明前缀
     var $con_str = '';//数据库链接字符串
     var $cache_str = '';//数据库缓存字符串
+    var $update_info = false; //false允许更新缓存数据结构
 
     /**
      * 创建链接
@@ -105,13 +106,14 @@ class Model{
 
     /**
      * 初始化表信息
+     * @param bool $is_cache true使用缓存，false不适用缓存
      */
-    function initTableInfo(){
+    function initTableInfo($is_cache = true){
         $cache_str = 'DB_INFO_'.$this->cache_str.'/DB_INFO';
         $this->tables_info = S($cache_str);
         if(!empty($this->var_table)){
             foreach($this->var_table as $table){
-                if(!isset($this->tables_info[$table]) || empty($this->tables_info[$table])){
+                if(!isset($this->tables_info[$table]) || empty($this->tables_info[$table]) || !$is_cache){
                     //按照标出的表进行过滤处理
                     $this->getColumnInfo($table);
                 }
@@ -119,7 +121,7 @@ class Model{
             //存储数据结构
             S($cache_str,$this->tables_info);
         } else {
-            if(empty($this->tables_info) && empty($this->var_table)){
+            if((empty($this->tables_info) && empty($this->var_table)) || !$is_cache){
                 $sql = 'SHOW TABLES';
                 $tables = $this->db->select($sql);
                 if(is_array($tables) && isset($this->db_name)){
@@ -187,28 +189,40 @@ class Model{
             }
             return $this->filterColumn($i_column[1],$tables);
         }else{
-            //获取查询的表
-            if(!count($table_list)){
-                $table_list = $this->getAllTable();
+            //通过缓存方式检查字段检查字段
+            $t_column = $this->filterColumnNo($column, $table_list);
+            if(!$t_column && !$this->update_info){
+                //没检查出来的话更新缓存再查一遍
+                $this->initTableInfo(false);
+                $this->update_info = true;
+                $t_column = $this->filterColumnNo($column, $table_list);
             }
-                foreach($table_list as $k =>$v){
-                    if(is_int($k)){
-                        $tables[$v] = $this->tables_info[$v];
-                    } else {
-                        $tables[$k] = $this->tables_info[$k];
-                    }
-                }
-            foreach($tables as $table_name => $value){
-                if(array_key_exists($column,$value)){
-                    //该列名有效
-                    $column = (isset($table_list[$table_name]) ? $table_list[$table_name] : $table_name).'.'.$column;
-                    break;
-                }
+            $column = $t_column;
+        }
+        return $column;
+    }
+
+    public function filterColumnNo($column,array $table_list){
+        //获取查询的表
+        if(!count($table_list)){
+            $table_list = $this->getAllTable();
+        }
+        foreach($table_list as $k =>$v){
+            if(is_int($k)){
+                $tables[$v] = $this->tables_info[$v];
+            } else {
+                $tables[$k] = $this->tables_info[$k];
             }
-            if(!strstr($column,'.')){
-                //该列名无效
-                $column = false;
+        }
+        foreach($tables as $table_name => $value){
+            if(array_key_exists($column,$value)){
+                //该列名有效
+                $column = (isset($table_list[$table_name]) ? $table_list[$table_name] : $table_name).'.'.$column;
+                break;
             }
+        }
+        if(!strstr($column,'.')){
+            return false;
         }
         return $column;
     }
@@ -291,7 +305,7 @@ class Model{
             $this->table();
         }
         if(!isset($this->option['TABLE'])){
-            errorPage('没有表格啦',"你需要先使用table方法或设置Model中的 $table 值来设置查询的表格");
+            errorPage('没有表格啦',"你需要先使用table方法或设置Model中的 table 值来设置查询的表格");
         } else {
             if(strstr($this->option['TABLE'],',')){
                 $table_list = explode(',',$this->option['TABLE']);

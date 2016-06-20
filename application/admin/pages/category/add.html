@@ -9,7 +9,8 @@
     <p class="p_title">添加栏目</p>
     <ul class="ul_table auto_width">
         <li class="table_body">
-            <span>栏目名称：</span><span><input name="category_name" value=""></span>
+            <?php if($data['id']){ ?><input type="hidden" name="id" value="{$data['id']}"/><?php } ?>
+            <span>栏目名称：</span><span><input name="category_name" value="<?php echo isset($data['category_name']) ? $data['category_name'] : '' ;?>"></span>
         </li>
         <li class="table_body">
             <span>父级栏目：</span>
@@ -23,7 +24,10 @@
             </span>
         </li>
         <li class="table_body">
-            <span>栏目路径：</span><span><input name="category_str" value=""></span>
+            <span>栏目路径：</span><span><input name="category_str" value="<?php echo isset($data['category_str']) ? $data['category_str'] : '' ;?>"></span>
+        </li>
+        <li class="table_body">
+            <span>默认模板：</span><span><input name="def_template" value="<?php echo isset($data['def_template']) ? $data['def_template'] : '' ;?>"></span>
         </li>
     </ul>
     <p class="p_title"><input type="submit" value="提交"/></p>

@@ -16,10 +16,15 @@
         <li class="table_body">
             <span>{$item['id']}</span><span>{$item['category_name']}</span>
             <span>{$item['category_sid']}</span><span>{$item['category_str']}</span>
-            <span>{$item['is_show']}</span><span>{$item['def_template']}</span>
+            <span><?php echo $item['is_show'] ? '显示' : '不显示' ; ?></span><span>{$item['def_template']}</span>
             <span>
                 <i class="btn set" data-value="{$item['id']}">修改</i>&nbsp;
+                <?php if($item['is_show']){ ?>
+                <i class="btn no_show" data-value="{$item['id']}">不显示</i>&nbsp;
+                <?php } else { ?>
                 <i class="btn is_show" data-value="{$item['id']}">显示</i>&nbsp;
+                <?php }?>
+
                 <i class="btn delete" data-value="{$item['id']}">删除</i>
             </span>
         </li>
@@ -29,19 +34,18 @@
 {:$initHtml('footer','common')}
 <script>
     $(function(){
-        $('em.set').on('click',function(){
+        $('i.set').on('click',function(){
             var id = $(this).attr('data-value');
             var url = '{:H("set")}' + '&id=' + id;
+            window.location.href = url;
         });
-        $('em.delete').on('click',function(){
+        $('i.delete').on('click',function(){
             var id = $(this).attr('data-value');
             var url = '{:H("delete")}' + '&id=' + id;
-            if(confirm("您确定要删除这条信息吗？")){
-                $.get(url,function(data){
-
+            $.get(url,function(data){
+                        window.location.href = window.location.href;
                     }
-                );
-            }
+            );
         });
     });
 </script>
