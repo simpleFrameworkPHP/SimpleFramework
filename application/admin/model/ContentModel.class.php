@@ -3,28 +3,16 @@
 /**
  * Created by PhpStorm.
  * User: Admin
- * Date: 2016/6/12
- * Time: 10:57
+ * Date: 2016/6/20
+ * Time: 15:01
  */
-class CategoryModel extends Model
+class ContentModel extends Model
 {
 
-    var $var_table = array('category'=>'n_category');
+    var $var_table = array('content'=>'n_content');
 
     public function getListByPage($where = array(), $page = 0, $limit = 10){
         $this->limit($limit, $page);
-        return $this->getDataByWhere($where);
-    }
-
-    public function getFristCategory(){
-        $where['category_sid'] = 0;
-        $where['cate_status'] = 1;
-        return $this->getDataByWhere($where);
-    }
-
-    public function getAllCategory(){
-        $where['category_sid'] = 0;
-        $where['cate_status'] = 1;
         return $this->getDataByWhere($where);
     }
 

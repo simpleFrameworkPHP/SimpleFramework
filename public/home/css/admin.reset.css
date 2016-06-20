@@ -1,0 +1,9 @@
+/*css reset*/
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, em, p, font, img, small, strong, center, dl, dt, dd, ol, ul, li, form, label, table, caption, tbody, tr, th, td, textarea {margin:0;padding:0;border:0;outline:0;font-size:16px;}
+ol, ul {list-style:none}
+a{text-decoration:none;color: #4488DD;}
+a:hover{text-decoration:none;color: #1155AA;}
+.hidden{position: absolute;left: -99999px;}
+.btn{line-height: 30px;padding: 2px 15px;background-color: #3da3f5;color: #FFFFFF;border-radius: 5px;}
+.btn:hover{cursor: pointer;background-color: #1f8ce8;}
+.w300{width: 300px;}

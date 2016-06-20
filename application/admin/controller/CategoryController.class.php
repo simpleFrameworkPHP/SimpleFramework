@@ -70,6 +70,16 @@ class CategoryController extends AdminController
 
     }
 
+    public function set_show(){
+        $where['id'] = intval($_GET['id']);
+        $result = false;
+        if($where['id']){
+            $set['is_show'] = intval($_GET['is_show']) ? 1 : 0 ;
+            $result = M('Category')->where($where)->set($set);
+        }
+        echo $result;
+    }
+
     public function delete(){
         $where['id'] = intval($_GET['id']);
         $data['cate_status'] = 0;

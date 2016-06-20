@@ -39,6 +39,27 @@
             var url = '{:H("set")}' + '&id=' + id;
             window.location.href = url;
         });
+        $('i.is_show').on('click',function(){
+            var _this = $(this);
+            var id = _this.attr('data-value');
+            var url = '{:H("set_show")}' + '&is_show=1&id=' + id;
+            $.get(url,function(data){
+                if (parseInt(data) > 0) {
+                    window.location.href = window.location.href;
+                }
+            });
+
+        });
+        $('i.no_show').on('click',function(){
+            var _this = $(this);
+            var id = _this.attr('data-value');
+            var url = '{:H("set_show")}' + '&is_show=0&id=' + id;
+            $.get(url,function(data){
+                if (parseInt(data) > 0) {
+                    window.location.href = window.location.href;
+                }
+            });
+        });
         $('i.delete').on('click',function(){
             var id = $(this).attr('data-value');
             var url = '{:H("delete")}' + '&id=' + id;

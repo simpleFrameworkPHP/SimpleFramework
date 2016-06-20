@@ -1,0 +1,17 @@
+
+@import url(admin.reset.css);
+
+body,html{height: 100%;width: 100%;}
+.div_all{min-height: 100%;padding: 0px 0px 0px 250px;overflow: hidden;position: relative;left: 0;top: 0;}
+.div_all div{padding-bottom:10000px;margin-bottom:-10000px;}
+.div_menu{height: 100%;width: 100px;background: #4488DD;display: block;margin-left:-250px;float: left;}
+.div_menu ul{padding-top: 50px;}
+.div_menu ul li{padding: 5px 16px;font-size: x-large;font-weight: 600;cursor: pointer;color: #FFFFFF;}
+.div_menu ul li:hover{background-color: #55ccff;color: #353535;}
+.div_menu ul li.active{background-color: #55ccff;color: #353535;}
+.div_sub_menu{background-color: #3da3f5;width: 150px;margin-left:-150px;float: left;position: relative;height: 100%;float: left;}
+.div_sub_menu ul{padding-top: 100px;}
+.div_sub_menu ul li{padding-left: 20px; line-height: 28px;cursor: pointer;color: #FFFFFF;font-weight: 600;border-bottom: solid #FFFFFF 1px;}
+.div_sub_menu ul li:hover{background-color: #55ccff;color: #353535;}
+.div_sub_menu ul li.active{background-color: #55ccff;color: #353535;}
+.div_content{display:block;float: left;height: 100%;width: 100%;}
