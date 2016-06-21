@@ -11,6 +11,8 @@ class ContentController extends AdminController
     public function index(){
         $data = M('Content')->getListByPage();
         $this->assign('data',$data);
+        $con_status = M('Dic')->getDicByType('content_status');
+        $this->assign('con_status',$con_status);
         $this->display();
     }
 
