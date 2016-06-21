@@ -6,7 +6,7 @@
 </div>
 <div class="page_content">
 <form action="{:H('')}" method="post">
-    <p class="p_title">添加栏目</p>
+    <p class="p_title"><?php echo isset($data) ? '修改' : '添加'; ?>栏目</p>
     <ul class="ul_table auto_width">
         <li class="table_body">
             <?php if($data['id']){ ?><input type="hidden" name="id" value="{$data['id']}"/><?php } ?>
