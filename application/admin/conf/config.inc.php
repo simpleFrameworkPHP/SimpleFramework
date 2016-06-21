@@ -18,12 +18,12 @@ return array(
         )
     ),
     'ADMIN_MENU' => array(
-        array('class'=>'index','name'=>'系统','url'=>'admin/Home/index'),
+        array('class'=>'home','name'=>'系统','url'=>'admin/Home/index'),
         array('class'=>'user','name'=>'用户','url'=>'admin/User/selectUser'),
         array('class'=>'content','name'=>'内容','url'=>'admin/Content/index')
     ),
     'ADMIN_SUB_MENU' => array(
-        array('class'=>'index','name'=>'系统介绍','url'=>'admin/Home/index'),
+        array('class'=>'home','name'=>'系统介绍','url'=>'admin/Home/index'),
         array('class'=>'user','name'=>'用户管理','url'=>'admin/User/selectUser'),
         array('class'=>'content','name'=>'内容管理','url'=>'admin/Content/index'),
         array('class'=>'content','name'=>'板块管理','url'=>'admin/Category/index'),

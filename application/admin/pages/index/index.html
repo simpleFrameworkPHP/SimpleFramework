@@ -9,11 +9,14 @@
     <div class="div_menu">
         <ul class="ul_main_menu">
             <?php foreach($admin_menu as $item){ ?>
-            <li class="{$item['class']}" data-value="{$item['url']}">{$item['name']}</li>
+            <li class="{$item['class']}" data-value="{$item['url']}">
+                <span title="{$item['name']}"><span>
+            </li>
             <?php } ?>
         </ul>
     </div>
     <div class="div_sub_menu">
+        <span class="span_sub_title"><?php if(is_array($admin_menu)){ $admin_menu = reset($admin_menu);echo $admin_menu['name']; }?></span>
         <ul class="ul_sub_menu">
             <?php foreach($sub_menu as $item){ ?>
             <li class="{$item['class']}" data-value="{:H($item['url'])}">{$item['name']}</li>
@@ -29,6 +32,8 @@
             var type = $(this).attr('class');
             $(".ul_main_menu li").removeClass('active');
             $(this).addClass('active');
+            var title = $(this).find('span').attr('title');
+            $('.span_sub_title').html(title);
             $('.ul_sub_menu li').addClass('hidden');
             $('.ul_sub_menu .' + type).removeClass('hidden');
         });
