@@ -14,4 +14,8 @@ class IndexController extends AdminController {
         $this->display();
     }
 
+    function home(){
+        echo '欢迎光临';
+    }
+
 } 

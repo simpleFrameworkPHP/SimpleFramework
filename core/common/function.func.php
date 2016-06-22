@@ -37,15 +37,20 @@ function runController($application,$controller){
     if(is_dir(__PATH__.'/application/'.$application.'/common'))
         loadDirFile(__PATH__.'/application/'.$application.'/common');
     $file_path = __PATH__.'/application/'.$application.'/controller/'.$controller.'Controller.class.php';
-    if(!class_exists($controller.'Controller') && file_exists($file_path)){
-        //加载请求模块需要的controller文件
-        $str = require $file_path;// errorPage('又错了，下次认真点！',$application.'/'.$controller.'类文件错误',500);
+    if(file_exists($file_path)){
+        if(!class_exists($controller.'Controller')){
+            //加载请求模块需要的controller文件
+            $str = require $file_path;// errorPage('又错了，下次认真点！',$application.'/'.$controller.'类文件错误',500);
+        } else {
+            errorPage('又错了，下次认真点！',$application.'/'.$controller.'类文件不存在',404);
+            Log::write('CON ERROR',$application.'/'.$controller.'类文件不存在');
+        }
+        $controller .= 'Controller';
+        $result = new $controller();
     } else {
-        errorPage('又错了，下次认真点！',$application.'/'.$controller.'类文件不存在',404);
-        Log::write('CON ERROR',$application.'/'.$controller.'类文件不存在');
+        $result = null;
     }
-    $controller .= 'Controller';
-    $result = new $controller();
+
     return $result;
 }
 //预留--日志打印

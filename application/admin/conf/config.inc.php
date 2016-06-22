@@ -6,6 +6,9 @@
  * Time: 下午1:45
  */
 return array(
+    'SF_DEFAULT_APP'=>'admin',
+    'SF_DEFAULT_CON'=>'Index',
+    'SF_DEFAULT_FUN'=>'home',
     'SF_THEME_DEFAULT'=>'home',
     'SF_DB_CONNECT'=>array(
         0 => array(
@@ -23,7 +26,7 @@ return array(
         array('class'=>'content','name'=>'内容','url'=>'admin/Content/index')
     ),
     'ADMIN_SUB_MENU' => array(
-        array('class'=>'home','name'=>'系统介绍','url'=>'admin/Home/index'),
+        array('class'=>'home','name'=>'系统介绍','url'=>'admin/index/home'),
         array('class'=>'user','name'=>'用户管理','url'=>'admin/User/selectUser'),
         array('class'=>'content','name'=>'内容管理','url'=>'admin/Content/index'),
         array('class'=>'content','name'=>'板块管理','url'=>'admin/Category/index'),

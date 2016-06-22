@@ -97,7 +97,7 @@ function errorPage($msg = '',$info = '',$error_code = 404,$path=''){
             $info = $error['message'] . ' in <b>' . $error['file'] . '</b> on line ' . $error['line'];
             $error_code = 500;
         }
-        if($path == ''){ echo __THEME__;
+        if($path == ''){ var_dump(__THEME__);
             $path[] = __THEME__.'/pages/errorPage.html';
             $path[] = CORE_PATH.'/pages/errorPage.html';
         }
@@ -111,6 +111,8 @@ function errorPage($msg = '',$info = '',$error_code = 404,$path=''){
         if($echo_info){
             echo $info;
         }
+    } else {
+        redirect(H(C('SF_DEFAULT_APP').'/'.C('SF_DEFAULT_CON').'/'.C('SF_DEFAULT_FUN')));
     }
     Log::write('PAGE ERROR',$info);
 }
