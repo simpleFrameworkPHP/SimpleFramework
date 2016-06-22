@@ -7,3 +7,5 @@ a:hover{text-decoration:none;color: #1155AA;}
 .btn{line-height: 30px;padding: 2px 15px;background-color: #3da3f5;color: #FFFFFF;border-radius: 5px;}
 .btn:hover{cursor: pointer;background-color: #1f8ce8;}
 .w300{width: 300px;}
+.red{color: #FF0000;}
+.orange{color: #FFA25F;}

@@ -68,4 +68,23 @@ class ContentController extends AdminController
             $this->display('add');
         }
     }
+
+    public function publish(){
+        //发布流程
+        $where['id'] = intval($_GET['id']);
+        $data['cn_status'] = 99;
+        $result = M('Content')->where($where)->set($data);
+        if($result){
+            $this->index();
+        }
+    }
+
+    public function delete(){
+        $where['id'] = intval($_GET['id']);
+        $data['cn_status'] = 0;
+        $result = M('Content')->where($where)->set($data);
+        if($result){
+            $this->index();
+        }
+    }
 }
