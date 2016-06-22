@@ -39,7 +39,7 @@ class CategoryController extends AdminController
         }
     }
 
-    public function set(){
+    public function edit(){
         if(!empty($_POST)){
             $where['id'] = intval($_POST['id']);
             if($where['id']){

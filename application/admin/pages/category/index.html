@@ -36,7 +36,7 @@
     $(function(){
         $('i.set').on('click',function(){
             var id = $(this).attr('data-value');
-            var url = '{:H("set")}' + '&id=' + id;
+            var url = '{:H("edit")}' + '&id=' + id;
             window.location.href = url;
         });
         $('i.is_show').on('click',function(){

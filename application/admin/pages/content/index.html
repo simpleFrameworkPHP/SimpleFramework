@@ -27,3 +27,20 @@
     </ul>
 </div>
 {:$initHtml('footer','common')}
+<script>
+    $(function(){
+        $('i.set').on('click',function(){
+            var id = $(this).attr('data-value');
+            var url = '{:H("edit")}' + '&id=' + id;
+            window.location.href = url;
+        });
+        $('i.delete').on('click',function(){
+            var id = $(this).attr('data-value');
+            var url = '{:H("delete")}' + '&id=' + id;
+            $.get(url,function(data){
+                        window.location.href = window.location.href;
+                    }
+            );
+        });
+    });
+</script>

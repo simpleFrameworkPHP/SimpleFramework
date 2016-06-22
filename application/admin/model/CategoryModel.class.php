@@ -23,7 +23,6 @@ class CategoryModel extends Model
     }
 
     public function getAllCategory(){
-        $where['category_sid'] = 0;
         $where['cate_status'] = 1;
         return $this->getDataByWhere($where);
     }
