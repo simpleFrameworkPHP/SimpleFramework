@@ -8,7 +8,7 @@
 return array(
     'SF_DEFAULT_APP'=>'admin',
     'SF_DEFAULT_CON'=>'Index',
-    'SF_DEFAULT_FUN'=>'home',
+    'SF_DEFAULT_FUN'=>'index',
     'SF_THEME_DEFAULT'=>'home',
     'SF_DB_CONNECT'=>array(
         0 => array(
