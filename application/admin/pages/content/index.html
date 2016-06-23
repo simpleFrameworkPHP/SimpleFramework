@@ -15,7 +15,7 @@
         <?php foreach($data as $item){ ?>
         <li class="table_body">
             <span>{$item['id']}</span><span>{$item['title']}</span>
-            <span>{$item['category_id']}</span><span>{$item['category_str']}</span>
+            <span>{$category[$item['category_id']]}</span><span>{$item['category_str']}</span>
             <span class="<?php if($item['cn_status'] == 0){ echo 'red'; } else if($item['cn_status'] == 99){ echo 'orange'; }?>">{$con_status[$item['cn_status']]}</span><span>{$item['def_template']}</span>
             <span>
                 <i class="btn set" data-value="{$item['id']}">修改</i>&nbsp;

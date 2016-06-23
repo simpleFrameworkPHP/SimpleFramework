@@ -13,6 +13,12 @@ class ContentController extends AdminController
         $this->assign('data',$data);
         $con_status = M('Dic')->getDicByType('content_status');
         $this->assign('con_status',$con_status);
+        $category_arr = M('Category')->getAllCategory();
+        $category = array();
+        foreach($category_arr as $row){
+            $category[$row['id']] = $row['category_name'];
+        }
+        $this->assign('category',$category);
         $this->display('index');
     }
 
@@ -43,6 +49,7 @@ class ContentController extends AdminController
     }
 
     public function edit(){
+        $where['id'] = intval($_GET['id']);
         if(!empty($_POST)){
             if($_POST['title']){
                 $where['id'] = intval($_POST['id']);
@@ -63,6 +70,8 @@ class ContentController extends AdminController
                 }
             }
         } else {
+            $data = M('Content')->where($where)->find();
+            $this->assign('data',$data);
             $category = M('Category')->getAllCategory();
             $this->assign('category',$category);
             $this->display('add');
