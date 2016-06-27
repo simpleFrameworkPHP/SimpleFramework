@@ -23,25 +23,27 @@ class ContentController extends AdminController
     }
 
     public function add(){
+        $result = $id = 0;
         if(!empty($_POST)){
             if($_POST['title']){
                 $data['title'] = trim($_POST['title']);
                 $data['digest'] = trim($_POST['digest']);
-                $data['content'] = trim($_POST['content']);
                 $data['category_id'] = intval($_POST['category_id']);
                 $data['template_id'] = intval($_POST['template_id']);
                 $data['add_time'] = date('Y-m-d H:i:s');
                 $data['cn_status'] = 1;
                 $result = M('Content')->add($data);
                 if($result){
-                    $this->index();
-                } else {
-                    $category = M('Category')->getAllCategory();
-                    $this->assign('category',$category);
-                    $this->display();
+                    $value['con_id'] = $result;
+                    $value['con_value'] = trim($_POST['content']);
+                    $id = M('ContentValue')->add($value);
+                    if($id){
+                        $this->index();
+                    }
                 }
             }
-        } else {
+        }
+        if(empty($_POST) || !$result || !$id){
             $category = M('Category')->getAllCategory();
             $this->assign('category',$category);
             $this->display('add');
@@ -49,18 +51,19 @@ class ContentController extends AdminController
     }
 
     public function edit(){
-        $where['id'] = intval($_GET['id']);
+        $where['id'] = $wheres['con_id'] = intval($_GET['id']);
         if(!empty($_POST)){
             if($_POST['title']){
-                $where['id'] = intval($_POST['id']);
+                $where['id'] = $wheres['con_id'] = intval($_POST['id']);
                 $data['title'] = trim($_POST['title']);
                 $data['digest'] = trim($_POST['digest']);
-                $data['content'] = trim($_POST['content']);
                 $data['category_id'] = intval($_POST['category_id']);
                 $data['template_id'] = intval($_POST['template_id']);
                 $data['add_time'] = date('Y-m-d H:i:s');
-                $data['cn_status'] = 1;
+                $data['cn_status'] = 2;
                 $result = M('Content')->where($where)->set($data);
+                $datas['con_value'] = trim($_POST['content']);
+                $results = M('ContentValue')->where($wheres)->set($datas);
                 if($result){
                     $this->index();
                 } else {
@@ -71,6 +74,8 @@ class ContentController extends AdminController
             }
         } else {
             $data = M('Content')->where($where)->find();
+            $content = M('ContentValue')->where($wheres)->find();
+            $data['content'] = $content['con_value'];
             $this->assign('data',$data);
             $category = M('Category')->getAllCategory();
             $this->assign('category',$category);

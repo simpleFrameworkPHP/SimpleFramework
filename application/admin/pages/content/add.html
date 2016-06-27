@@ -5,12 +5,12 @@
     </p>
 </div>
 <div class="page_content">
-    <form action="{:H('')}" method="post">
+    <form name="form" action="{:H('')}" method="post">
         <p class="p_title">添加内容</p>
         <ul class="ul_table auto_width">
             <li class="table_body">
+                <span>文章名称：</span><span><input name="title" value="<?php echo isset($data['title']) ? $data['title'] : '' ;?>" size="100"/></span>
                 <?php if($data['id']){ ?><input type="hidden" name="id" value="{$data['id']}"/><?php } ?>
-                <span>文章名称：</span><span><input name="title" value="<?php echo isset($data['title']) ? $data['title'] : '' ;?>"></span>
             </li>
             <li class="table_body">
                 <span>栏目：</span>
@@ -24,7 +24,10 @@
             </span>
             </li>
             <li class="table_body">
-                <span>摘要：<br/></span>
+                <span>
+                    摘要：<br/>
+                    <i class="btn" id="create_digest">快速生成</i>
+                </span>
                 <span>
                     <textarea name="digest"><?php echo isset($data['digest']) ? $data['digest'] : '' ;?></textarea>
             </span>
@@ -38,7 +41,7 @@
                 </span>
             </li>
         </ul>
-        <p class="p_title"><input type="submit" value="提交"/></p>
+        <p class="p_title"><a href="javascript:form.submit();">提交</a></p>
     </form>
 </div>
 <div class="page_footer">
@@ -78,4 +81,17 @@
     };
     var editor = new UE.ui.Editor(editorConfig);
     editor.render("ueditor_content");
+    $(function(){
+        $('#create_digest').on('click',function(){
+            var digest = getDigest($('textarea[name=content]').text());
+            $('textarea[name=digest]').text(digest);
+        });
+        function getDigest(str){
+            var digest = str.replace(/<[^>]+>/g,"");//去掉所有的html标记
+            if(digest.length > 250) {//截取前250个字节
+                digest = digest.substring(0,250);
+            }
+            return digest;
+        }
+    });
 </script>
