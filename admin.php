@@ -16,5 +16,5 @@ if(!isset($_REQUEST['f'])){
     $_REQUEST['f'] = 'index';
 }
 
-define("__PATH__",str_replace('\\','/',getcwd()));
+define("__PATH__",str_replace('\\','/',dirname(__FILE__)));
 include_once(__PATH__.'/core/index.php');

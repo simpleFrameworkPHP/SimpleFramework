@@ -54,8 +54,11 @@ function runController($application,$controller){
     return $result;
 }
 //预留--日志打印
-function sflog($str,$type,$mode){
-
+function logWrite($title, $info, $file_prefix){
+    if(!class_exists('Log')){
+        include '../class/Log.class.php';
+    }
+    Log::write($title,$info,$file_prefix);
 }
 //创建模型方法（数据库处理）
 function M($path='',$link_ID = 0){
