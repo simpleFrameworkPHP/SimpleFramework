@@ -44,6 +44,7 @@ class ContentController extends AdminController
             }
         }
         if(empty($_POST) || !$result || !$id){
+//            $this->assign('content_id','ueditor_content');
             $category = M('Category')->getAllCategory();
             $this->assign('category',$category);
             $this->display('add');

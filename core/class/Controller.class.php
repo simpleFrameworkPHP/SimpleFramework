@@ -81,7 +81,7 @@ class Controller extends View {
         return $content;
     }
 
-    public function initHtml($file,$path = ''){
+    public function initHtml($file,$path = '',$params = array()){
         if($path == ''){
             $path = THEME_PATH . '/html/';
         } else {
@@ -91,6 +91,9 @@ class Controller extends View {
         if(file_exists($path)){
             // 模板阵列变量分解成为独立变量
             extract($this->params, EXTR_OVERWRITE);
+            if(!empty($params)){
+                extract($params, EXTR_OVERWRITE);
+            }
             ob_start();
             include $path;
             $content = ob_get_clean();
