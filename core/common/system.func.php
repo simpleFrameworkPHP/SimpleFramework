@@ -44,18 +44,18 @@ function loadConfigFile($path,$config = array()){
 }
 //获取和设置config参数
 function C($name,$value = ''){
-    global $config;
-    if(empty($config)){
-        $config = loadConfig();
+    global $sf_config;
+    if(empty($sf_config)){
+        $sf_config = loadConfig();
     }
     if($value == ''){
         if($name != ''){
-            $result = $config[$name];
-        } else if($config['SF_DEBUG'] == true) {
-            $result =  $config;
+            $result = $sf_config[$name];
+        } else if($sf_config['SF_DEBUG'] == true) {
+            $result =  $sf_config;
         }
     } else {
-        $config[$name] = $value;
+        $sf_config[$name] = $value;
         $result = $value;
     }
     return $result;

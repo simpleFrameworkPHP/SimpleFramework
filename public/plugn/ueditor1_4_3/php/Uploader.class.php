@@ -336,14 +336,22 @@ class Uploader
      */
     public function getFileInfo()
     {
+//        return array(
+//            "state" => $this->stateInfo,
+//            "url" => $this->fullName,
+//            "title" => $this->fileName,
+//            "original" => $this->oriName,
+//            "type" => $this->fileType,
+//            "size" => $this->fileSize
+//        );
         return array(
-            "state" => $this->stateInfo,
-            "url" => $this->fullName,
-            "title" => $this->fileName,
-            "original" => $this->oriName,
-            "type" => $this->fileType,
-            "size" => $this->fileSize
-        );
+        "state" => $this->stateInfo,
+        "url" => $this->fullName,
+        "title" => $this->oriName,
+        "original" => $this->oriName,
+        "type" => $this->fileType,
+        "size" => $this->fileSize
+    );
     }
 
 }

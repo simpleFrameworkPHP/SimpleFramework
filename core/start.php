@@ -6,7 +6,7 @@
  * Time: 下午5:27
  */
 error_reporting(E_ALL ^ E_NOTICE);
-define('CORE_PATH',__PATH__.'/core');
+defined('CORE_PATH') or define('CORE_PATH',__PATH__.'/core');
 /** 自动加载一次文件的方法
  * @param $path
  * @param $param
@@ -22,7 +22,6 @@ function loadFile_once($path,$param,$type){
         include $path;
     }
 }
-defined('CORE_PATH') or define('CORE_PATH',__PATH__.'/core');
 loadFile_once(CORE_PATH.'/common/define.inc.php','ONE_DAY','CONSTANT');
 loadFile_once(CORE_PATH.'/common/system.func.php','loadConfig','FUNCTION');
 @register_shutdown_function('erroPage');
