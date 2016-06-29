@@ -22,11 +22,13 @@ function loadFile_once($path,$param,$type){
         include $path;
     }
 }
+defined('CORE_PATH') or define('CORE_PATH',__PATH__.'/core');
 loadFile_once(CORE_PATH.'/common/define.inc.php','ONE_DAY','CONSTANT');
 loadFile_once(CORE_PATH.'/common/system.func.php','loadConfig','FUNCTION');
 @register_shutdown_function('erroPage');
-if(C('SF_DEBUG')){
-    //调试模式
+$debug = C('SF_DEBUG');
+if($debug){
+//    调试模式
     ini_set("display_errors",1);
 }
 if(C('SF_TIME_ZONE')){

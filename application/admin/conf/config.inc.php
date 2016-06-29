@@ -30,5 +30,8 @@ return array(
         array('class'=>'user','name'=>'用户管理','url'=>'admin/User/selectUser'),
         array('class'=>'content','name'=>'内容管理','url'=>'admin/Content/index'),
         array('class'=>'content','name'=>'板块管理','url'=>'admin/Category/index'),
+    ),
+    'EDITOR_CONF' => array(
+        'imagePathFormat' => "/data/image/{yyyy}/{mm}/{dd}/{time}{rand:6}"
     )
 );

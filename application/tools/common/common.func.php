@@ -86,4 +86,3 @@ function getBodyHTML($data,$columns,$data_rule,$column_start){
     }
     return $str;
 }
-?>

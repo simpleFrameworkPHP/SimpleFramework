@@ -49,7 +49,9 @@
 </div>
 {:$initHtml('footer','common')}
 <?php
-    $param = array('content_id' => 'ueditor_content');
+    $param = array(
+                 'content_id' => 'ueditor_content',
+                );
 ?>
 {:$initHtml('ueditor','common',$param)}
 <script>

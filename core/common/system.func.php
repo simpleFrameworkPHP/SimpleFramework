@@ -18,14 +18,14 @@ function loadConfig(){
     if(!isset($_REQUEST['a'])){
         $_REQUEST['a'] = $config['SF_DEFAULT_APP'];
     }
+    if(file_exists(__PATH__.'/application/'.$_REQUEST['a'].'/conf')){
+        $config = loadConfigFile(__PATH__.'/application/'.$_REQUEST['a'].'/conf',$config);
+    }
     if(!isset($_REQUEST['c'])){
         $_REQUEST['c'] = $config['SF_DEFAULT_CON'];
     }
     if(!isset($_REQUEST['f'])){
         $_REQUEST['f'] = $config['SF_DEFAULT_FUN'];
-    }
-    if(file_exists(__PATH__.'/application/'.$_REQUEST['a'].'/conf')){
-        $config = loadConfigFile(__PATH__.'/application/'.$_REQUEST['a'].'/conf',$config);
     }
     return $config;
 }
