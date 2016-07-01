@@ -21,15 +21,24 @@ return array(
         )
     ),
     'ADMIN_MENU' => array(
-        array('class'=>'home','name'=>'系统','url'=>'admin/Home/index'),
-        array('class'=>'user','name'=>'用户','url'=>'admin/User/selectUser'),
-        array('class'=>'content','name'=>'内容','url'=>'admin/Content/index')
-    ),
-    'ADMIN_SUB_MENU' => array(
-        array('class'=>'home','name'=>'系统介绍','url'=>'admin/index/home'),
-        array('class'=>'user','name'=>'用户管理','url'=>'admin/User/selectUser'),
-        array('class'=>'content','name'=>'内容管理','url'=>'admin/Content/index'),
-        array('class'=>'content','name'=>'板块管理','url'=>'admin/Category/index'),
+        array(
+            'class'=>'home','name'=>'首页','url'=>'admin/Index/home',
+            'children' => array(
+
+            )
+        ),
+        array(
+            'class'=>'user','name'=>'用户','url'=>'admin/User/selectUser',
+            'children' => array(
+                array('class'=>'user','name'=>'用户管理','url'=>'admin/User/selectUser'),
+            )
+        ),
+        array('class'=>'content','name'=>'内容','url'=>'admin/Content/index',
+            'children' => array(
+                array('class'=>'content','name'=>'内容管理','url'=>'admin/Content/index'),
+                array('class'=>'content','name'=>'板块管理','url'=>'admin/Category/index'),
+            )
+        )
     ),
     'EDITOR_CONF' => array(
         'imagePathFormat' => "/data/image/{yyyy}/{mm}/{dd}/{time}{rand:6}"

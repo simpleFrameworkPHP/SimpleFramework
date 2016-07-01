@@ -9,40 +9,56 @@
     <div class="div_menu">
         <ul class="ul_main_menu">
             <?php foreach($admin_menu as $item){ ?>
-            <li class="{$item['class']}" data-value="{$item['url']}">
-                <span title="{$item['name']}"></span>
+            <li data-value="{:H($item['url'])}">
+                <span class="icon {$item['class']}"></span>
+                <span>{$item['name']}</span>
+                <span class="selected"></span>
             </li>
+            <?php if(!empty($item['children'])){
+             foreach($item['children'] as $ic){ ?>
+            <li class="sub_menu" data-value="{:H($ic['url'])}">
+                <span class="line_icon"></span><span>{$ic['name']}</span>
+            </li>
+            <?php }
+             } ?>
             <?php } ?>
         </ul>
     </div>
-    <div class="div_sub_menu">
-        <span class="span_sub_title"><?php if(is_array($admin_menu)){ $admin_menu = reset($admin_menu);echo $admin_menu['name']; }?></span>
-        <ul class="ul_sub_menu">
-            <?php foreach($sub_menu as $item){ ?>
-            <li class="{$item['class']}" data-value="{:H($item['url'])}">{$item['name']}</li>
-            <?php } ?>
-        </ul>
-    </div>
-    <div class="div_content"><iframe id="main_iframe" src="{:H('admin/Index/home')}" width="100%" height="100%"></iframe></div>
+    <div class="div_content"><iframe id="main_iframe" src="{:H('admin/Category/index')}" width="100%"></iframe></div>
 </div>
 </body>
 <script type="text/javascript" src="__JSROOT__/jquery-2.1.1.js"></script><script>
     $(function(){
         $(".ul_main_menu li").on('click',function(){
-            var type = $(this).attr('class');
-            $(".ul_main_menu li").removeClass('active');
-            $(this).addClass('active');
-            var title = $(this).find('span').attr('title');
-            $('.span_sub_title').html(title);
-            $('.ul_sub_menu li').addClass('hidden');
-            $('.ul_sub_menu .' + type).removeClass('hidden');
-        });
-        $(".ul_sub_menu li").on('click',function(){
-            $(".ul_sub_menu li").removeClass('active');
-            $(this).addClass('active');
-            var url = $(this).attr('data-value');
             var iframe = document.getElementById('main_iframe');
-            iframe.src = url;
+            $(".ul_main_menu li").removeClass('active').removeClass('selected');
+            $(this).addClass('active');
+            if($(this).hasClass('sub_menu')){
+                var prev = $(this).prevAll('li');
+                var i = 0;
+                for(i in prev){
+                    console.log(typeof $(prev[i]));
+                    if(!$(prev[i]).hasClass('sub_menu')){
+                        break;
+                    }
+                }
+                $(prev[i]).addClass('selected');
+                var url = $(this).attr('data-value');
+                iframe.src = url;
+            } else {
+                $('.sub_menu').addClass('hidden');
+                var next = $(this).next();console.log(next);
+                var url = $(this).attr('data-value');
+                if(!next.hasClass('sub_menu')){
+                    iframe.src = url;
+                } else {
+                    do{
+                        next.removeClass('hidden');
+                        next = next.next();
+                    }while(next.hasClass('sub_menu'));
+                }
+            }
+
         });
         $(".ul_main_menu li")[0].click();
         $('#main_iframe').css('height',document.body.clientHeight);

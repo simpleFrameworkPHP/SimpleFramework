@@ -2,32 +2,36 @@
 @import url(admin.reset.css);
 
 body,html{height: 100%;width: 100%;}
-.div_all{min-height: 100%;padding: 0px 0px 0px 210px;overflow: hidden;position: relative;left: 0;top: 0;}
+.div_all{min-height: 100%;padding: 0px 0px 0px 200px;overflow: hidden;position: relative;left: 0;top: 0;}
 .div_all div{padding-bottom:10000px;margin-bottom:-10000px;}
-.div_menu{height: 100%;width: 60px;background: #4488DD;display: block;margin-left:-210px;float: left;}
-.div_menu ul{padding-top: 50px;}
-.div_menu ul li{width:60px;height:46px;cursor: pointer;color: #FFFFFF;padding-top: 14px;}
-.div_menu ul li span{width: 32px;height: 32px;margin: auto;display: block;}
-.div_menu ul li.attach span{background-image: url(../images/attach_w.png)}
-.div_menu ul li.content span{background-image: url(../images/cate_w.png)}
-.div_menu ul li.refresh span{background-image: url(../images/refresh_w.png)}
-.div_menu ul li.home span{background-image: url(../images/home_w.png)}
-.div_menu ul li.user span{background-image: url(../images/user_w.png)}
-.div_menu ul li:hover{background-color: #F2F2F2;color: #4488DD;}
-.div_menu ul li.attach:hover span{background-image: url(../images/attach_b.png)}
-.div_menu ul li.content:hover span{background-image: url(../images/cate_b.png)}
-.div_menu ul li.refresh:hover span{background-image: url(../images/refresh_b.png)}
-.div_menu ul li.home:hover span{background-image: url(../images/home_b.png)}
-.div_menu ul li.user:hover span{background-image: url(../images/user_b.png)}
-.div_menu ul li.active{background-color: #F2F2F2;color: #4488DD;}
-.div_menu ul li.attach.active span{background-image: url(../images/attach_b.png)}
-.div_menu ul li.content.active span{background-image: url(../images/cate_b.png)}
-.div_menu ul li.refresh.active span{background-image: url(../images/refresh_b.png)}
-.div_menu ul li.home.active span{background-image: url(../images/home_b.png)}
-.div_menu ul li.user.active span{background-image: url(../images/user_b.png)}
-.div_sub_menu{background-color: #F2F2F2;width: 150px;margin-left:-150px;float: left;position: relative;height: 100%;float: left;}
-.div_sub_menu>span{font-size: 40px;color: #575757;width: 100%;text-align:center;display: block;padding: 30px 0;}
-.div_sub_menu ul li{padding-left: 20px; line-height: 28px;cursor: pointer;color: #575757;font-weight: 600;border-bottom: solid #E6E6E6 2px;}
-.div_sub_menu ul li:hover{background-color: #FFFFFF;color: #575757;}
-.div_sub_menu ul li.active{background-color: #FFFFFF;color: #575757;}
+.div_menu{height: 100%;width: 200px;background: #4488DD;display: block;margin-left:-200px;float: left;}
+.div_menu>ul{padding-top: 50px;}
+.div_menu>ul>li{width:100%;height:46px;cursor: pointer;color: #FFFFFF;}
+.div_menu>ul>li.active,.div_menu ul li:hover{background-color: #1F5FAF;}
+.div_menu>ul>li>span{float: left;display: block;line-height: 46px;}
+.div_menu>ul li.selected{background-color: #2F6FBF;}
+.div_menu>ul li.selected span.selected,.div_menu>ul>li.active span.selected,.div_menu>ul>li:hover span.selected{margin: 10px auto;width: 0px;height: 0px; border: solid transparent;border-width:13px 9px;border-right-color:#E9F0F9;display: block;float: right;right: 0;}
+.div_menu>ul>li .icon{width: 32px;height: 32px;margin: 5px 12px;}
+.div_menu ul li .attach{background-image: url(../images/attach_w.png)}
+.div_menu ul li .content{background-image: url(../images/cate_w.png)}
+.div_menu ul li .refresh{background-image: url(../images/refresh_w.png)}
+.div_menu ul li .home{background-image: url(../images/home_w.png)}
+.div_menu ul li .user{background-image: url(../images/user_w.png)}
+.div_menu ul li:hover .attach span,.div_menu ul li.active .attach span{background-image: url(../images/attach_b.png)}
+.div_menu ul li:hover .content span,.div_menu ul li.active .content span{background-image: url(../images/cate_b.png)}
+.div_menu ul li:hover .refresh span,.div_menu ul li.active .refresh span{background-image: url(../images/refresh_b.png)}
+.div_menu ul li:hover .home span,.div_menu ul li.active .home span{background-image: url(../images/home_b.png)}
+.div_menu ul li:hover .user span,.div_menu ul li.active .user span{background-image: url(../images/user_b.png)}
+
+/*.sub_menu{display: block;height: 46px;float: left;width: 100%;line-height: 46px;}*/
+.sub_menu{display: block;height: 46px;line-height: 46px;width: 100%;}
+.sub_menu span{float: left;display: block;}
+.sub_menu:nth-child(2n){background-color: #3377CC;}
+.sub_menu:nth-child(2n+1){background-color: #3388DD;}
+.sub_menu .line_icon{display: block;width: 46px;height: 46px;}
+/*.div_sub_menu{background-color: #F2F2F2;width: 150px;margin-left:-150px;float: left;position: relative;height: 100%;float: left;}*/
+/*.div_sub_menu>span{font-size: 40px;color: #575757;width: 100%;text-align:center;display: block;padding: 30px 0;}*/
+/*.div_sub_menu ul li{padding-left: 20px; line-height: 28px;cursor: pointer;color: #575757;font-weight: 600;border-bottom: solid #E6E6E6 2px;}*/
+/*.div_sub_menu ul li:hover{background-color: #FFFFFF;color: #575757;}*/
+/*.div_sub_menu ul li.active{background-color: #FFFFFF;color: #575757;}*/
 .div_content{display:block;float: left;height: 100%;width: 100%;}
