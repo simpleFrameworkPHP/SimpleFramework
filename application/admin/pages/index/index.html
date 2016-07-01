@@ -18,6 +18,7 @@
              foreach($item['children'] as $ic){ ?>
             <li class="sub_menu" data-value="{:H($ic['url'])}">
                 <span class="line_icon"></span><span>{$ic['name']}</span>
+                <span class="selected"></span>
             </li>
             <?php }
              } ?>
@@ -37,7 +38,6 @@
                 var prev = $(this).prevAll('li');
                 var i = 0;
                 for(i in prev){
-                    console.log(typeof $(prev[i]));
                     if(!$(prev[i]).hasClass('sub_menu')){
                         break;
                     }
