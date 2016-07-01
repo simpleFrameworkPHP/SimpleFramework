@@ -13,21 +13,36 @@
     </p>
     <div class="table_body">
         <p class="p_tools">
-            <a class="btn" href="{:H('add')}">添加文章</a>
+            <a class="add_btn" href="{:H('add')}" title="添加文章"></a>
         </p>
         <ul class="ul_table">
             <li class="table_th">
-                <b>ID</b><b>文章名</b><b>栏目名称</b><b>关键字</b><b>状态</b><b>模板</b><b>操作</b>
+                <b class="status_child"></b><b>ID</b><b>文章名</b><b>栏目名称</b><b>关键字</b><b>状态</b><b>模板</b><b>操作</b>
             </li>
             <?php foreach($data as $item){ ?>
             <li class="table_body">
-                <span>{$item['id']}</span><span>{$item['title']}</span>
+                <?php
+                switch($item['cn_status']){
+                    case 0:
+                        $status_b_class = 'b_red';
+                        $status_class = 'red';
+                        break;
+                    case 99:
+                        $status_b_class = 'b_orange';
+                        $status_class = 'orange';
+                        break;
+                    default:
+                        $status_b_class = 'b_gray';
+                        $status_class = 'gray';
+                }
+        ?>
+                <span class="{$status_b_class}"></span><span>{$item['id']}</span><span>{$item['title']}</span>
                 <span>{$category[$item['category_id']]}</span><span>{$item['category_str']}</span>
-                <span class="<?php if($item['cn_status'] == 0){ echo 'red'; } else if($item['cn_status'] == 99){ echo 'orange'; }?>">{$con_status[$item['cn_status']]}</span><span>{$item['def_template']}</span>
+                <span class="{$status_class}">{$con_status[$item['cn_status']]}</span><span>{$item['def_template']}</span>
             <span>
-                <i class="btn set" data-value="{$item['id']}">修改</i>&nbsp;
-                <i class="btn publish" data-value="{$item['id']}">发布</i>&nbsp;
-                <i class="btn delete" data-value="{$item['id']}">删除</i>
+                <i class="edit_btn set" data-value="{$item['id']}" title="修改"></i>&nbsp;
+                <i class="publish_btn publish" data-value="{$item['id']}" title="发布"></i>&nbsp;
+                <i class="delete_btn delete" data-value="{$item['id']}" title="删除"></i>
             </span>
             </li>
             <?php } ?>

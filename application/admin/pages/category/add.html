@@ -1,19 +1,25 @@
 {:$initHtml('header','common')}
 <div class="page_title">
+    <p>
+    <h2>内容管理</h2>
+    </p>
     <p class="admin_title">
-        <span><a>内容</a></span>><span><a>版块管理</a></span>><span><a>添加栏目</a></span>
+        <i class="home_icon"></i><span><a>内容</a></span><span>&nbsp;>&nbsp;</span><a>版块管理</a></span>
     </p>
 </div>
 <div class="page_content">
-<form action="{:H('')}" method="post">
-    <p class="p_title"><?php echo isset($data) ? '修改' : '添加'; ?>栏目</p>
-    <ul class="ul_table auto_width">
-        <li class="table_body">
-            <?php if($data['id']){ ?><input type="hidden" name="id" value="{$data['id']}"/><?php } ?>
-            <span>栏目名称：</span><span><input name="category_name" value="<?php echo isset($data['category_name']) ? $data['category_name'] : '' ;?>"></span>
-        </li>
-        <li class="table_body">
-            <span>父级栏目：</span>
+    <form name="form" action="{:H('')}" method="post">
+        <div class="table_title">
+            <i class="content_icon"></i><span><?php echo isset($data) ? '修改' : '添加'; ?>栏目</span>
+        </div>
+        <div class="table_body">
+            <ul class="ul_table auto_width">
+                <li class="table_body">
+                    <span>栏目名称：</span><span><input name="category_name" value="<?php echo isset($data['category_name']) ? $data['category_name'] : '' ;?>"></span>
+                    <?php if($data['id']){ ?><input type="hidden" name="id" value="{$data['id']}"/><?php } ?>
+                </li>
+                <li class="table_body">
+                    <span>父级栏目：</span>
             <span>
                 <select name="category_sid">
                     <option value="0">--请选择--</option>
@@ -22,16 +28,17 @@
                     <?php } ?>
                 </select>
             </span>
-        </li>
-        <li class="table_body">
-            <span>栏目路径：</span><span><input name="category_str" value="<?php echo isset($data['category_str']) ? $data['category_str'] : '' ;?>"></span>
-        </li>
-        <li class="table_body">
-            <span>默认模板：</span><span><input name="def_template" value="<?php echo isset($data['def_template']) ? $data['def_template'] : '' ;?>"></span>
-        </li>
-    </ul>
-    <p class="p_title"><input type="submit" value="提交"/></p>
-</form>
+                </li>
+                <li class="table_body">
+                    <span>栏目路径：</span><span><input name="category_str" value="<?php echo isset($data['category_str']) ? $data['category_str'] : '' ;?>"></span>
+                </li>
+                <li class="table_body">
+                    <span>默认模板：</span><span><input name="def_template" value="<?php echo isset($data['def_template']) ? $data['def_template'] : '' ;?>"></span>
+                </li>
+            </ul>
+            <p class="p_title"><input type="submit" value="提交"/></p>
+        </div>
+    </form>
 </div>
 <div class="page_footer">
 

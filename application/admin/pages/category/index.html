@@ -9,30 +9,31 @@
 </div>
 <div class="page_content">
     <p class="table_title">
-        <i class="table_icon"></i><span>&nbsp;&nbsp;列表</span>
+        <i class="table_icon"></i><span>&nbsp;列表</span>
     </p>
     <div class="table_body">
         <p class="p_tools">
-            <a class="btn" href="{:H('add')}">添加栏目</a>
+            <a class="add_btn" href="{:H('add')}" title="添加栏目"></a>
         </p>
         <ul class="ul_table">
             <li class="table_th">
-                <b>ID</b><b>栏目名称</b><b>父级栏目ID</b><b>栏目路径</b><b>显示</b><b>默认模板</b><b>操作</b>
+                <b class="status_child"></b><b>ID</b><b>栏目名称</b><b>父级栏目ID</b><b>栏目路径</b><b>显示</b><b>默认模板</b><b>操作</b>
             </li>
             <?php foreach($data as $item){ ?>
             <li class="table_body">
+                <span class="<?php echo $item['is_show'] ? 'b_blue' : 'b_gray' ; ?>"></span>
                 <span>{$item['id']}</span><span>{$item['category_name']}</span>
                 <span>{$item['category_sid']}</span><span>{$item['category_str']}</span>
                 <span><?php echo $item['is_show'] ? '显示' : '不显示' ; ?></span><span>{$item['def_template']}</span>
             <span>
-                <i class="btn set" data-value="{$item['id']}">修改</i>&nbsp;
+                <i class="edit_btn set" data-value="{$item['id']}" title="修改" ></i>&nbsp;
                 <?php if($item['is_show']){ ?>
-                <i class="btn no_show" data-value="{$item['id']}">不显示</i>&nbsp;
+                <i class="nshow_btn no_show" data-value="{$item['id']}" title="不显示"></i>&nbsp;
                 <?php } else { ?>
-                <i class="btn is_show" data-value="{$item['id']}">显示</i>&nbsp;
+                <i class="show_btn is_show" data-value="{$item['id']}" title="显示"></i>&nbsp;
                 <?php }?>
 
-                <i class="btn delete" data-value="{$item['id']}">删除</i>
+                <i class="delete_btn delete" data-value="{$item['id']}" title="删除"></i>
             </span>
             </li>
             <?php } ?>
