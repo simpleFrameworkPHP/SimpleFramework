@@ -16,6 +16,12 @@ class HomeController extends Controller {
             if($user['id']){
                 redirect(H('admin/index/index'));
             } else {
+                $data = M('admin/User')->find();
+                if(empty($data)){
+                    $username = 'admin';
+                    $password = '123456';
+                    M('admin/User')->addUser($username,$password);
+                }
                 echo '用户名或密码错误';
             }
         }
