@@ -10,9 +10,10 @@ class UserModel extends Model {
 
     var $var_table = array('user'=>'n_user');
 
-    public function addUser($user_name,$password){
+    public function addUser($user_name,$password,$nike_name = ''){
         $add['user_name'] = $user_name;
         $add['password'] = $this->getPass($password);
+        $add['nike_name'] = $nike_name;
         $uid = $this->add($add);
         return $uid;
     }
