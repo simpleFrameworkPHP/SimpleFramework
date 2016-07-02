@@ -6,7 +6,7 @@
  * Time: 11:47
  */
 
-class SetController extends Controller
+class SetController extends AdminController
 {
 
     public function index(){

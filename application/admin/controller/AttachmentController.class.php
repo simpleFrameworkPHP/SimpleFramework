@@ -9,6 +9,10 @@
 class AttachmentController extends AdminController
 {
 
+    public function index(){
+
+    }
+
     public function ueditorAdd($info){
         $id = 0;
         if(isset($info['state']) && $info['state'] == 'SUCCESS'){
