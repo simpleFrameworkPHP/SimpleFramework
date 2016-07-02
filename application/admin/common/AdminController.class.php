@@ -14,6 +14,18 @@ class AdminController extends Controller {
         if(!$_SESSION['uid']){
             redirect(H('admin/home/login'));
         }
+        $title_list = C('ADMIN_MENU');
+        $uri = $_REQUEST['a'].'/'.$_REQUEST['c'].'/'.$_REQUEST['f'];
+        $admin_title = array();
+        foreach($title_list as $i){
+            $admin_title[0] = $i;
+            foreach($i['children'] as $ii){
+                if($uri == $ii['url']){
+                    $admin_title[1] = $ii;
+                }
+            }
+        }
+        $this->assign('admin_title',$admin_title);
     }
 
     public function getMenu($model,$target = ''){

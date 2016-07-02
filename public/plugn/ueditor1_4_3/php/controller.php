@@ -10,7 +10,7 @@ $CONFIG = json_decode(preg_replace("/\/\*[\s\S]+?\*\//", "", file_get_contents("
 //==添加业务
 $_REQUEST['a'] = 'admin';
 define("__PATH__",str_replace('\\','/',dirname(dirname(dirname(dirname(dirname(__FILE__)))))));
-define("CORE_PATH".__PATH__.'/core');
+define("CORE_PATH",__PATH__.'/core');
 include_once(__PATH__.'/core/start.php');
 $conf = C('EDITOR_CONF');
 if(!empty($conf)){

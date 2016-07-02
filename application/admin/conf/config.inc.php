@@ -21,26 +21,43 @@ return array(
         )
     ),
     'ADMIN_MENU' => array(
-        array(
+        'home'=>array(
             'class'=>'home','name'=>'首页','url'=>'admin/Index/home',
             'children' => array(
 
             )
         ),
-        array(
-            'class'=>'user','name'=>'用户','url'=>'admin/User/selectUser',
+        'user'=>array(
+            'class'=>'user','name'=>'用户','url'=>'admin/User/index',
             'children' => array(
-                array('class'=>'user','name'=>'用户管理','url'=>'admin/User/selectUser'),
+                'Role'=>array('name'=>'角色管理','url'=>'admin/Role/index'),
+                'User'=>array('name'=>'用户管理','url'=>'admin/User/index'),
             )
         ),
-        array('class'=>'content','name'=>'内容','url'=>'admin/Content/index',
+        'content'=>array(
+            'class'=>'content','name'=>'内容','url'=>'admin/Content/index',
             'children' => array(
-                array('class'=>'content','name'=>'内容管理','url'=>'admin/Content/index'),
-                array('class'=>'content','name'=>'板块管理','url'=>'admin/Category/index'),
+                'Content'=>array('name'=>'内容管理','url'=>'admin/Content/index'),
+                'Special'=>array('name'=>'专题管理','url'=>'admin/Special/index'),
+                'Category'=>array('name'=>'板块管理','url'=>'admin/Category/index'),
+            )
+        ),
+        'set'=>array(
+            'class'=>'set','name'=>'设置','url'=>'admin/Set/index',
+            'children' => array(
+                'Set'=>array('name'=>'属性设置','url'=>'admin/Set/index'),
+                'Attachment'=>array('name'=>'附件管理','url'=>'admin/Attachment/index'),
+                'clearCache'=>array('name'=>'清理缓存','url'=>'admin/Set/clearCache'),
             )
         )
     ),
     'EDITOR_CONF' => array(
         'imagePathFormat' => "/data/image/{yyyy}/{mm}/{dd}/{time}{rand:6}"
-    )
+    ),
+    'SF_CACHE_CONF'=>array(
+        'FILE'=>array(
+            'CACHE_PATH'=>CACHE_PATH.'/data/admin',//文件缓存根目录
+            'TIME'=>ONE_DAY*7,//缓存文件过期默认时长
+        ),
+    ),
 );

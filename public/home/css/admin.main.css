@@ -2,13 +2,13 @@
 @import url(admin.reset.css);
 
 body{padding-top: 50px;background-color: #E9F0F9;}
-.page_title{padding: 5px 10px 40px 10px;}
+.page_title{padding: 5px 20px 40px 15px;}
 .page_title h2{font-size: 32px;margin-bottom: 10px;color: #575757;}
 .page_title span{font-size: 20px;}
 .admin_title{background-color: #F8FAFC;line-height: 40px;font-size: 20px;}
 .admin_title .home_icon{width: 20px;height: 20px;display: block;float: left;background-image: url('../images/home_b_20.png');margin-top: 9px;margin-left: 9px;margin-right: 9px;}
 
-.page_content{padding: 0 10px;}
+.page_content{padding: 0 20px 0 15px;}
 .page_content .table_title{height: 32px;width: 100%;padding:4px 0;background-color: #B6D1F2; }
 .page_content .table_title i{width: 32px;height: 32px;margin-left:4px;margin-right: 5px;display: block;float: left;}
 .page_content .table_title .table_icon{background-image: url('../images/table_32.png');}
@@ -18,7 +18,7 @@ body{padding-top: 50px;background-color: #E9F0F9;}
 .page_content .ul_table{list-style: none; display: table;width: 100%;color: #575757;}
 .page_content form .ul_table{width: auto;margin: auto;min-width: 600px;}
 .page_content form .p_title{text-align: center;}
-.page_content .table_body{padding: 15px 5px;background-color: #FFFFFF;width: auto;min-height: 650px;}
+.page_content .table_body{padding: 15px 10px;background-color: #FFFFFF;width: auto;min-height: 650px;}
 .page_content .ul_table li{display: table-row;}
 .page_content form .ul_table li{border: #DDDDDD solid 1px;vert-align: top;}
 .page_content form .ul_table li span{min-width: 150px;}

@@ -17,11 +17,7 @@ body,html{height: 100%;width: 100%;}
 .div_menu ul li .refresh{background-image: url(../images/refresh_w.png)}
 .div_menu ul li .home{background-image: url(../images/home_w.png)}
 .div_menu ul li .user{background-image: url(../images/user_w.png)}
-.div_menu ul li:hover .attach span,.div_menu ul li.active .attach span{background-image: url(../images/attach_b.png)}
-.div_menu ul li:hover .content span,.div_menu ul li.active .content span{background-image: url(../images/cate_b.png)}
-.div_menu ul li:hover .refresh span,.div_menu ul li.active .refresh span{background-image: url(../images/refresh_b.png)}
-.div_menu ul li:hover .home span,.div_menu ul li.active .home span{background-image: url(../images/home_b.png)}
-.div_menu ul li:hover .user span,.div_menu ul li.active .user span{background-image: url(../images/user_b.png)}
+.div_menu ul li .set{background-image: url(../images/set_w.png)}
 
 /*.sub_menu{display: block;height: 46px;float: left;width: 100%;line-height: 46px;}*/
 .sub_menu{display: block;height: 46px;line-height: 46px;width: 100%;}
