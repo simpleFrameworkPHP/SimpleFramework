@@ -18,6 +18,7 @@ body,html{height: 100%;width: 100%;}
 .div_menu ul li .home{background-image: url(../images/home_w.png)}
 .div_menu ul li .user{background-image: url(../images/user_w.png)}
 .div_menu ul li .set{background-image: url(../images/set_w.png)}
+.div_menu ul li .review{background-image: url(../images/review_w.png)}
 
 /*.sub_menu{display: block;height: 46px;float: left;width: 100%;line-height: 46px;}*/
 .sub_menu{display: block;height: 46px;line-height: 46px;width: 100%;}
