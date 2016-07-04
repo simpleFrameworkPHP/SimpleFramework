@@ -13,7 +13,7 @@
     <p class="admin_title">
         <i class="home_icon"></i><span><a href="<?php echo h('admin/Index/home');?>">首页</a></span>
         <?php foreach($admin_title as $title){ ?>
-        &nbsp;>&nbsp;<span><a href="<?php echo H($title['url']);?>"><?php echo $title['name'];?></a></span>
+        <span>>&nbsp;<a href="<?php echo H($title['url']);?>"><?php echo $title['name'];?></a></span>
         <?php } ?>
     </p>
 </div>

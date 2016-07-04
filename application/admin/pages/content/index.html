@@ -9,7 +9,7 @@
         </p>
         <ul class="ul_table">
             <li class="table_th">
-                <b class="status_child"></b><b>ID</b><b>文章名</b><b>栏目名称</b><b>关键字</b><b>状态</b><b>模板</b><b>操作</b>
+                <b class="status_child"></b><b>ID</b><b>文章名</b><b>栏目名称</b><b>关键字</b><b>状态</b><b>添加时间</b><b>修改时间</b><b>模板</b><b>操作</b>
             </li>
             <?php foreach($data as $item){ ?>
             <li class="table_body">
@@ -34,7 +34,7 @@
         ?>
                 <span class="{$status_b_class}"></span><span>{$item['id']}</span><span>{$item['title']}</span>
                 <span>{$category[$item['category_id']]}</span><span>{$item['category_str']}</span>
-                <span class="{$status_class}">{$con_status[$item['cn_status']]}</span><span>{$item['def_template']}</span>
+                <span class="{$status_class}">{$con_status[$item['cn_status']]}</span><span>{$item['add_time']}</span><span>{$item['edit_time']}</span><span>{$item['def_template']}</span>
             <span>
                 <i class="edit_btn set" data-value="{$item['id']}" title="修改"></i>&nbsp;
                 <i class="publish_btn publish" data-value="{$item['id']}" title="发布"></i>&nbsp;
@@ -65,7 +65,9 @@
             var id = $(this).attr('data-value');
             var url = '{:H("publish")}' + '&id=' + id;
             $.get(url,function(data){
-                        window.location.href = window.location.href;
+                        if(data.error_code && data.error_code == 0){
+                            window.location.href = window.location.href;
+                        }
                     }
             );
         });

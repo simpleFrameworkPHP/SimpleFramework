@@ -21,8 +21,11 @@ class AdminController extends Controller {
             $admin_title[0] = $i;
             foreach($i['children'] as $ii){
                 if($uri == $ii['url']){
-                    $admin_title[1] = $ii;
+                    $admin_title[1] = $ii;break;
                 }
+            }
+            if(isset($admin_title[1])){
+                break;
             }
         }
         $this->assign('admin_title',$admin_title);

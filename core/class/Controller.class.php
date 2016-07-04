@@ -26,7 +26,7 @@ class Controller extends View {
             $this->cache_file_dir = CACHE_PATH.'/pages/'.$app.'/'.$con;
         } else {
             $path = explode('/',$fun);
-            $count_url = count($path);
+//            $count_url = count($path);
 //            $fun = (isset($path[$count_url-1]) && $path[$count_url-1] <> '') ? $path[$count_url-1] :  C('SF_DEFAULT_FUN');
 //            $con = (isset($path[$count_url-2]) && $path[$count_url-2] <> '') ? $path[$count_url-2] :  C('SF_DEFAULT_CON');
 //            $con = strtolower($con);

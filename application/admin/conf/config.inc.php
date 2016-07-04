@@ -42,7 +42,7 @@ return array(
                 'Category'=>array('name'=>'板块管理','url'=>'admin/Category/index'),
             )
         ),
-        'content'=>array(
+        'review'=>array(
             'class'=>'review','name'=>'统计','url'=>'admin/Review/index',
             'children' => array(
                 'content'=>array('name'=>'文章统计','url'=>'admin/Review/content'),
