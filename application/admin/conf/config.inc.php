@@ -40,6 +40,8 @@ return array(
                 'Content'=>array('name'=>'内容管理','url'=>'admin/Content/index'),
                 'Special'=>array('name'=>'专题管理','url'=>'admin/Special/index'),
                 'Category'=>array('name'=>'板块管理','url'=>'admin/Category/index'),
+                'Template'=>array('name'=>'模板管理','url'=>'admin/Template/index'),
+                'Attachment'=>array('name'=>'附件管理','url'=>'admin/Attachment/index'),
             )
         ),
         'review'=>array(
@@ -52,7 +54,6 @@ return array(
             'class'=>'set','name'=>'设置','url'=>'admin/Set/index',
             'children' => array(
                 'Set'=>array('name'=>'属性设置','url'=>'admin/Set/index'),
-                'Attachment'=>array('name'=>'附件管理','url'=>'admin/Attachment/index'),
                 'clearCache'=>array('name'=>'清理缓存','url'=>'admin/Set/clearCache'),
             )
         )
