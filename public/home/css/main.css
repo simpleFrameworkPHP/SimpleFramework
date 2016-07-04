@@ -11,6 +11,8 @@ div.div_menu ul li:hover{cursor: pointer;background-color: #1f8ce8;}
 /*content*/
 div.div_page {width: 1000px;display: block;margin: auto;}
 div.div_page div.div_content{min-height: 400px;}
+h2.title{font-size: 32px;line-height: 40px;margin: 40px 0;}
+
 
 /*footer*/
 div.div_footer {min-height: 200px;margin-bottom: 20px;padding-top: 20px;text-align: center;}
