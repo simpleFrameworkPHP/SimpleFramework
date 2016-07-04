@@ -84,13 +84,44 @@ class ContentController extends AdminController
     }
 
     public function publish(){
-        //发布流程
         $where['id'] = intval($_GET['id']);
+        $content = M('Content')->where($where)->find();
+        $where_value['con_id'] = $where['id'];
+        $content_value = M('ContentValue')->where($where_value)->find();
+        $content['content'] = $content_value['con_value'];
+        $where_cate['id'] = $content['category_id'];
+        $cate = M('Category')->where($where_cate)->find();
+        $content['add_path'] = date('/Y/m/d/',strtotime($content['add_time']));
+        $content['add_path'] .= mb_strcut(md5($content['add_time'].$content['id']).'.html',-15);
+        $document_path = '/' . trim($cate['category_str'] , '/') . $content['add_path'];
+        $path = DATA_PATH . $document_path;
+        $template_file = 'abc';$content['template_id'];
+        $this->assign('cate',$cate);
+        $this->assign('document',$content);
+        $content = $this->initHtml($template_file,'template');
+        // 模板阵列变量分解成为独立变量
+        extract($this->params, EXTR_OVERWRITE);
+        // 页面缓存
+        ob_start();
+        ob_implicit_flush(0);
+        eval('?>'.$content);
+        // 获取并清空缓存
+        $content = ob_get_clean();
+        addDir($path);
+        file_put_contents($path,$content);
         $data['cn_status'] = 99;
+        $data['path'] = $document_path;
         $result = M('Content')->where($where)->set($data);
+        //添加日志
+        $log['type'] = 'create_content';
+        $log['remark'] = $data['path'];
+        M('SystemLog')->add($log);
         if($result){
-            $this->index();
+            $json_str = array('error_code'=>0);
+        } else {
+            $json_str = array('error_code'=>1);
         }
+        echo json_encode($json_str);
     }
 
     public function delete(){

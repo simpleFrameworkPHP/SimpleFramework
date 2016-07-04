@@ -13,7 +13,7 @@ class View {
     function replaceContent($content){
         // 模板阵列变量分解成为独立变量
         extract($this->params);
-        $content = @preg_replace(array('/{\$(\w+[^\{\}]*)}/','/{:(\w+)(\([^\{\}]*\))}/'),array('<?php echo $\1;?>','<?php echo \1\2;?>'),$content);
+        $content = @preg_replace(array('/{(\$\w+[^\{\}]*)}/','/{:(\w+)(\([^\{\}]*\))}/'),array('<?php echo \1;?>','<?php echo \1\2;?>'),$content);
         $content = preg_replace('/{:\$(.+)(\([^\{\}]*\))}/','<?php echo $this->\1\2;?>',$content);
         return $content;
     }

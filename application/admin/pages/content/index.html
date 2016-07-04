@@ -32,7 +32,7 @@
                         $status_class = 'gray';
                 }
         ?>
-                <span class="{$status_b_class}"></span><span>{$item['id']}</span><span>{$item['title']}</span>
+                <span class="{$status_b_class}"></span><span>{$item['id']}</span><span><?php if($item['cn_status'] == 99){ ?><a href="<?php echo DATA_ROOT.$item['path'];?>" target="_blank">{$item['title']}</a><?php } else { echo $item['title']; } ?></span>
                 <span>{$category[$item['category_id']]}</span><span>{$item['category_str']}</span>
                 <span class="{$status_class}">{$con_status[$item['cn_status']]}</span><span>{$item['add_time']}</span><span>{$item['edit_time']}</span><span>{$item['def_template']}</span>
             <span>
