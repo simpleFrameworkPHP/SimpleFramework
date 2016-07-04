@@ -112,7 +112,13 @@ class DictionaryController extends Controller {
             $i_remark = isset($remark[$i_table_name])?$remark[$i_table_name]:array(0=>'');
             $i_table_reamrk = $i_table_reamrk ? $i_table_reamrk : $i_remark[0];
             $sql = 'SHOW FULL COLUMNS FROM '.$i_table_name;
-            $data = $model->select($sql);
+            $cache_str = $model->db_name.'_db_columns/'.$i_table_name . '/';
+            $data = S($cache_str);
+            if(empty($data)){
+                $data = $model->select($sql);
+                S($cache_str,$data,86400);
+            }
+
             $list = array();
             if(is_array($data)){
                 foreach($data as $row){
