@@ -395,10 +395,12 @@ class Model{
                             $value[0] = strtoupper($value[0]);
                             if(in_array($value[0],array('<>','!=','<','>','<=','>=','LIKE'))){
                                 $where_array[] = $v_field .' '.$value[0].' '.$this->replaceValue($value[1]);
-                            } else if(in_array($value[0],array('IN','NOT IN','NOT NULL'))) {
+                            } else if(in_array($value[0],array('IN','NOT IN'))) {
                                 $term = strtoupper($value[0]);
                                 unset($value[0]);
                                 $where_array[] = $v_field.' '.strtoupper($term).' ('.implode(' , ',$this->replaceValue($value)).')';
+                            } else if(in_array($value[0],array('IS NULL','NOT NULL'))){
+                                $where_array[] = $v_field.' '.strtoupper($value[0]);
                             }
                         } else {
                             $where_array[] = $v_field.' = '.$this->replaceValue($value);

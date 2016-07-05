@@ -37,6 +37,8 @@ class ContentController extends AdminController
                     $value['con_id'] = $result;
                     $value['con_value'] = trim($_POST['content']);
                     $id = M('ContentValue')->add($value);
+                    //附件溯源
+                    $this->returnAttach($value['con_value'],$value['con_id'],'document');
                     if($id){
                         $this->index();
                     }
@@ -64,6 +66,8 @@ class ContentController extends AdminController
                 $result = M('Content')->where($where)->set($data);
                 $datas['con_value'] = trim($_POST['content']);
                 $results = M('ContentValue')->where($wheres)->set($datas);
+                //附件溯源
+                $this->returnAttach($datas['con_value'],$wheres['con_id'],'document');
                 if($result){
                     $this->index();
                 } else {
@@ -80,6 +84,24 @@ class ContentController extends AdminController
             $category = M('Category')->getAllCategory();
             $this->assign('category',$category);
             $this->display('add');
+        }
+    }
+
+    public function returnAttach($content,$from_id,$type){
+        expendModel('htmlTree');
+        $dom = str_get_html($content);
+        foreach($dom->find("img") as $find){
+            $attach_list = $find->src;
+        }
+        $where['file_path'] = array('in',$attach_list);
+        $where['from_id'] = array('IS NULL');
+        $ids = M('Attachment')->where($where)->fields(array('id'))->select();
+        if(!empty($ids)){
+            $ids = array_keys(reIndexArray($ids,'id'));
+            $where_set['id'] = array('in',$ids);
+            $set['from_id'] = $from_id;
+            $set['file_from'] = $type;
+            M('Attachment')->where($where_set)->set($set);
         }
     }
 

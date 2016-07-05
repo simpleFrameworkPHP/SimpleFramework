@@ -89,13 +89,6 @@ function getBodyHTML($data,$columns,$data_rule,$column_start){
 function getHtmlData($url){
     return file_get_contents($url);
 }
-function reIndexArray($array,$key){
-    foreach($array as $item){
-        if(isset($item[$key]))
-            $data[$item[$key]] = $item;
-    }
-    return $data;
-}
 
 function initArray($array1,$array2 = array(),$default = 0){
     $list = array();

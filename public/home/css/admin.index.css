@@ -20,7 +20,7 @@ body,html{height: 100%;width: 100%;}
 .div_menu ul li .set{background-image: url(../images/set_w.png)}
 .div_menu ul li .review{background-image: url(../images/review_w.png)}
 
-.sub_menu{display: block;height: 48px;line-height: 48px;width: 100%;background-image: url('../images/line.png');background-repeat:repeat-y;background-attachment:fixed;background-position: 30px 0px;}
+.sub_menu{display: block;height: 48px;line-height: 48px;width: 100%;background: url('../images/line.png') repeat-y 30px 0px fixed ;}
 .div_menu>ul>li.sub_menu>span{float: left;display: block;font-weight: normal;padding-left: 58px;}
 .sub_menu:nth-child(2n){background-color: #3377CC;}
 .sub_menu:nth-child(2n+1){background-color: #3388DD;}

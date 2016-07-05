@@ -347,3 +347,11 @@ function webLongEcho($str){
     echo str_repeat(' ',300);
     @ob_flush();@flush();
 }
+
+function reIndexArray($array,$key){
+    foreach($array as $item){
+        if(isset($item[$key]))
+            $data[$item[$key]] = $item;
+    }
+    return $data;
+}
