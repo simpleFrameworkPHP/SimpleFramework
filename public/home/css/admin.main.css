@@ -9,7 +9,7 @@ body{padding-top: 50px;background-color: #E9F0F9;}
 .admin_title .home_icon{width: 20px;height: 20px;display: block;float: left;background-image: url('../images/home_b_20.png');margin-top: 9px;margin-left: 9px;margin-right: 9px;}
 
 .page_content{padding: 0 20px 0 15px;}
-.page_content .table_title{height: 32px;width: 100%;padding:4px 0;background-color: #B6D1F2; }
+.page_content .table_title{height: 32px;width: 100%;padding:4px 0;background-color: #66BBFF; }
 .page_content .table_title i{width: 32px;height: 32px;margin-left:4px;margin-right: 5px;display: block;float: left;}
 .page_content .table_title .table_icon{background-image: url('../images/table_32.png');}
 .page_content .table_title .content_icon{background-image: url('../images/content_32.png');}
@@ -30,7 +30,7 @@ body{padding-top: 50px;background-color: #E9F0F9;}
 .page_content>.ul_table>li>span{max-width: 250px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
 .page_content .ul_table>li>span:last-child{padding-right: 10px;}
 .page_content form .ul_table>li>span:nth-child(1){text-align: right;}
-.page_content form .ul_table>li>span textarea{resize: none;width: 100%;height: 200px;border: solid #DDDDDD 1px;}
+.page_content form .ul_table>li>span textarea{resize: none;width: 1000px;height: 200px;border: solid #DDDDDD 1px;}
 .page_content form p a{background-color: #FFA25F;font-size: 18px;line-height: 40px;width:180px;color: #FFFFFF;display: block;margin: 15px auto;}
 
 .page_content .ul_table>li>span i{float: left;margin: 4px 6px;cursor: pointer;}
@@ -38,7 +38,7 @@ body{padding-top: 50px;background-color: #E9F0F9;}
 .edit_btn{background-image: url('../images/edit_b_28.png');display: block;width: 28px;height: 28px;}
 .nshow_btn{background-image: url('../images/nshow_g_28.png');display: block;width: 28px;height: 28px;}
 .show_btn{background-image: url('../images/show_b_28.png');display: block;width: 28px;height: 28px;}
-.delete_btn{background-image: url('../images/delete_o_28.png');display: block;width: 28px;height: 28px;}
+.delete_btn{background-image: url('../images/delete_r_28.png');display: block;width: 28px;height: 28px;}
 .add_btn{background-image: url('../images/add_b_28.png');display: block;width: 28px;height: 28px;}
 .publish_btn{background-image: url('../images/publish_b_28.png');display: block;width: 28px;height: 28px;}
 .edit_btn:hover,.nshow_btn:hover,.show_btn:hover,.delete_btn:hover,.add_btn:hover,.publish_btn:hover{background-color: #DDDDDD;}

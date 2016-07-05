@@ -17,19 +17,15 @@
                 switch($item['cn_status']){
                     case 0:
                         $status_b_class = 'b_red';
-                        $status_class = 'red';
                         break;
                     case 99:
                         $status_b_class = 'b_orange';
-                        $status_class = 'orange';
                         break;
                     case 2:
                         $status_b_class = 'b_blue';
-                        $status_class = 'blue';
                         break;
                     default:
                         $status_b_class = 'b_gray';
-                        $status_class = 'gray';
                 }
         ?>
                 <span class="{$status_b_class}"></span><span>{$item['id']}</span><span><?php if($item['cn_status'] == 99){ ?><a href="<?php echo DATA_ROOT.$item['path'];?>" target="_blank">{$item['title']}</a><?php } else { echo $item['title']; } ?></span>
