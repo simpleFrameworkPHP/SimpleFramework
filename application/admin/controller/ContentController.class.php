@@ -105,8 +105,13 @@ class ContentController extends AdminController
         }
     }
 
-    public function publish(){
-        $where['id'] = intval($_GET['id']);
+    /**
+     * 发布流程
+     * 添加文章id是为了后期批量发布和定时发布做准备
+     * @param int $id
+     */
+    public function publish($id = 0){
+        $where['id'] = $id == 0 ? intval($_GET['id']) : $id ;
         $content = M('Content')->where($where)->find();
         $where_value['con_id'] = $where['id'];
         $content_value = M('ContentValue')->where($where_value)->find();
@@ -117,10 +122,11 @@ class ContentController extends AdminController
         $content['add_path'] .= mb_strcut(md5($content['add_time'].$content['id']).'.html',-15);
         $document_path = '/' . trim($cate['category_str'] , '/') . $content['add_path'];
         $path = DATA_PATH . $document_path;
+        $temp_info = M('Template')->where(array('id'=>$content['template_id']))->find();
         $template_file = 'abc';$content['template_id'];
         $this->assign('cate',$cate);
         $this->assign('document',$content);
-        $content = $this->initHtml($template_file,'template');
+        $content = $this->initHtml($temp_info['temp_file'],'template/'.$temp_info['temp_theme']);
         // 模板阵列变量分解成为独立变量
         extract($this->params, EXTR_OVERWRITE);
         // 页面缓存
@@ -135,9 +141,9 @@ class ContentController extends AdminController
         $data['path'] = $document_path;
         $result = M('Content')->where($where)->set($data);
         //添加日志
-        $log['type'] = 'create_content';
-        $log['remark'] = $data['path'];
-        M('SystemLog')->add($log);
+//        $log['type'] = 'create_content';
+//        $log['remark'] = $data['path'];
+//        M('SystemLog')->add($log);
         if($result){
             $json_str = array('error_code'=>0);
         } else {

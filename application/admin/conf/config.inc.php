@@ -40,7 +40,7 @@ return array(
                 'Content'=>array('name'=>'内容管理','url'=>'admin/Content/index'),
                 'Special'=>array('name'=>'专题管理','url'=>'admin/Special/index'),
                 'Category'=>array('name'=>'板块管理','url'=>'admin/Category/index'),
-                'Template'=>array('name'=>'模板管理','url'=>'admin/Template/index'),
+                'Template'=>array('name'=>'模板管理','url'=>'admin/Temp/index'),
                 'Attachment'=>array('name'=>'附件管理','url'=>'admin/Attachment/index'),
             )
         ),

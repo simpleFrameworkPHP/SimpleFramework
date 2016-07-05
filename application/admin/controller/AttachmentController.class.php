@@ -10,7 +10,9 @@ class AttachmentController extends AdminController
 {
 
     public function index(){
-
+        $data = M('Attachment')->select();
+        $this->assign('data',$data);
+        $this->display();
     }
 
     public function ueditorAdd($info){
