@@ -116,7 +116,7 @@ class DictionaryController extends Controller {
             $data = S($cache_str);
             if(empty($data)){
                 $data = $model->select($sql);
-                S($cache_str,$data,86400);
+                S($cache_str,$data,86400 * 7);
             }
 
             $list = array();
