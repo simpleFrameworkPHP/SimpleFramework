@@ -54,6 +54,7 @@ return array(
             'class'=>'set','name'=>'设置','url'=>'admin/Set/index',
             'children' => array(
                 'Set'=>array('name'=>'属性设置','url'=>'admin/Set/index'),
+                'getDB'=>array('name'=>'数据存储','url'=>'admin/Set/getDB'),
                 'clearCache'=>array('name'=>'清理缓存','url'=>'admin/Set/clearCache'),
             )
         )
