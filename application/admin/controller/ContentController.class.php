@@ -91,11 +91,15 @@ class ContentController extends AdminController
         expendModel('htmlTree');
         $dom = str_get_html($content);
         foreach($dom->find("img") as $find){
-            $attach_list = $find->src;
+            $attach_list[] = $find->src;
         }
-        $where['file_path'] = array('in',$attach_list);
-        $where['from_id'] = array('IS NULL');
-        $ids = M('Attachment')->where($where)->fields(array('id'))->select();
+        $ids = array();
+        if(count($attach_list) > 0){
+            $where['file_path'] = array('in',$attach_list);
+            $where['from_id'] = array('IS NULL');
+            $model = M('Attachment');
+            $ids = $model->where($where)->fields('id')->select();
+        }
         if(!empty($ids)){
             $ids = array_keys(reIndexArray($ids,'id'));
             $where_set['id'] = array('in',$ids);
