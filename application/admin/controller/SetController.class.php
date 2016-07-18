@@ -25,6 +25,8 @@ class SetController extends AdminController
             $create_list[$i_table] = end($create_array);
         }
         var_dump($create_list);
+
+        S('note_data/',$create_list);
     }
 
     public function clearCache(){
