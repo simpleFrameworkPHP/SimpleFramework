@@ -45,5 +45,5 @@ body{padding-top: 50px;background-color: #E9F0F9;}
 
 /*分页样式*/
 .cur_page{background-color: #00b7ee;}
-.div_page{padding-top: 5px;}
+.div_page{padding-top: 5px;width: 100%;text-align: center;}
 .page{border: 1px solid #575757;margin: 0 5px;padding: 0 5px;}

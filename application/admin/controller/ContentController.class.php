@@ -10,7 +10,7 @@ class ContentController extends AdminController
 {
     public function index(){
         $where = array();
-        $page = intval($_REQUEST['page']);
+        $page = intval($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
         $data = M('Content')->getListByPage($where,$page,10);
         $page_html = getPage($data['sum_page'],H('admin/Content/index').'&page=',$page);
         $this->assign('page_html',$page_html);

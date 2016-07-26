@@ -11,12 +11,12 @@ class ContentModel extends Model
 
     var $var_table = array('content'=>'n_content');
 
-    public function getListByPage($where = array(), $page = 0, $limit = 10){
+    public function getListByPage($where = array(), $page = 1, $limit = 10){
         if(!empty($where)){
             $this->where($where);
         }
         $sum_row = $this->fields('count(1)',false)->find();
-        $this->fields()->limit($limit, $page);
+        $this->fields()->limit($limit, ($page - 1) * $limit);
         $data['data'] = $this->getDataByWhere($where);
         $data['cur_page'] = $page;
         $data['limit'] = $limit;
