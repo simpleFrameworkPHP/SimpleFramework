@@ -9,8 +9,12 @@
 class ContentController extends AdminController
 {
     public function index(){
-        $data = M('Content')->getListByPage();
-        $this->assign('data',$data);
+        $where = array();
+        $page = intval($_REQUEST['page']);
+        $data = M('Content')->getListByPage($where,$page,10);
+        $page_html = getPage($data['sum_page'],H('admin/Content/index').'&page=',$page);
+        $this->assign('page_html',$page_html);
+        $this->assign('data',$data['data']);
         $con_status = M('Dic')->getDicByType('content_status');
         $this->assign('con_status',$con_status);
         $category_arr = M('Category')->getAllCategory();
