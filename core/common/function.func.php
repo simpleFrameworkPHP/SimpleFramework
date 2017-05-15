@@ -22,11 +22,11 @@ function loadDirFile($path = '.'){
                     $result[] = require $sub_dir;
                 }
             } else {
-               $result[] = include $sub_dir;
-            }
-        }
-    }
-    return $result;
+             $result[] = include $sub_dir;
+         }
+     }
+ }
+ return $result;
 }
 //加载controller
 function runController($application,$controller){
@@ -48,7 +48,18 @@ function runController($application,$controller){
         $controller .= 'Controller';
         $result = new $controller();
     } else {
-        $result = null;
+        $file_path = __PATH__.'/application/'.$application.'/controller/EmptyController.class.php';
+        if(file_exists($file_path)){
+            if(!class_exists('EmptyController')){
+                $str = require $file_path;
+            } else {
+                errorPage('又错了，下次认真点！',$application.'/'.$controller.'类文件不存在',404);
+                Log::write('CON ERROR',$application.'/'.$controller.'类文件不存在');
+            }
+            $result = new EmptyController();
+        } else {
+            $result = null;
+        }
     }
 
     return $result;
@@ -288,7 +299,7 @@ function initH($file){
     } else {
         switch($file){
             case 'swfupload':
-                $path = PL_PATH.'/swfupload/index.php';
+            $path = PL_PATH.'/swfupload/index.php';
         }
     }
 
@@ -335,11 +346,11 @@ function expendModel($model){
 function JSON($data){
     $str = json_encode($data);
     return preg_replace_callback('/\\\\u([0-9a-f]{4})/i',
-            create_function(
-                '$matches',
-                'return mb_convert_encoding(pack("H*", $matches[1]), "UTF-8", "UCS-2BE");'
+        create_function(
+            '$matches',
+            'return mb_convert_encoding(pack("H*", $matches[1]), "UTF-8", "UCS-2BE");'
             ),
-            $str);
+        $str);
 }
 
 function webLongEcho($str){

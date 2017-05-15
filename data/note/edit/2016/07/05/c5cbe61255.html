@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <link rel="stylesheet" href="http://localhost/SimpleFramework/public/home/css/main.css" type="text/css"/>
+</head>
+<body>
+<div class="div_menu">
+    <ul>        <li>管理员</li>
+        <li><a href="http://localhost/SimpleFramework/index.php?a=home&c=index&f=logout">退出</a></li>
+            </ul>
+</div>
+<div class="div_login hidden">
+    <form action="http://localhost/SimpleFramework/index.php?a=home&c=index&f=login" method="POST">
+        <table>
+            <tr><th colspan="2">&nbsp;</th></tr>
+            <tr><th>用户名：</th><td><input name="username"/></td></tr>
+            <tr><th>密&nbsp;&nbsp;码：</th><td><input type="password" name="password"/></td></tr>
+            <tr><th>&nbsp;&nbsp;</th><td><span class="btn submit">登 录</span>&nbsp;&nbsp;<span class="btn" onclick="window.location='http://localhost/SimpleFramework/index.php?a=admin&c=Content&f=register';">注 册</span></td></tr>
+        </table>
+    </form>
+</div>
+<div class="div_page">
+    <div class="div_content"><h2 class="title">1211231</h2>
+<div class="document"><p>2312312312</p></div>
+</div>
+<div class="div_footer">
+    <span class="span_foot_link"><a href="http://www.xihady.com">嘻哈电影</a></span>
+    <hr/>
+    <span class="span_foot_title">©2014 本网站纯属给媳妇娱乐</span>
+</div>
+</div>
+</body>
+<script type="text/javascript" src="http://localhost/SimpleFramework/public/js/jquery-2.1.1.js"></script>
+<script>
+    $(function(){
+        $(".btn_login").on('click',function(){
+            $(".div_login").removeClass('hidden');
+        });
+        $('.submit').on('click',function(){
+            $('form').submit();
+        });
+    });
+</script>
+</html>

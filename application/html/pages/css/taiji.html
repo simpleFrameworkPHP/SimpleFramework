@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .taichi{ position:relative; width:96px; height:192px; background:#fff; border:4px solid #000; border-width:4px 100px 4px 4px; border-radius:50%; }
+        .white-circle{ position:absolute; top:0; left:50%; background:#fff; border-radius:50%; width:96px; height:96px; }
+        .black-circle{ position:absolute; top:50%; left:50%; background:#000; border-radius:50%; width:96px; height:96px; }
+        .white-circle::after{ content:""; position:absolute; top:34px; left:34px; background:#000; border-radius:50%; width:32px; height:32px; }
+        .black-circle::after{ content:""; position:absolute; top:34px; left:34px; background:#fff; border-radius:50%; width:32px; height:32px; }
+    </style>
+</head>
+<body>
+<div class="taichi">
+    <div class="white-circle"></div>
+    <div class="black-circle"></div>
+</div>
+</body>
+</html>

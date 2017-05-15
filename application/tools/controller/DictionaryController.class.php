@@ -10,7 +10,7 @@ class DictionaryController extends Controller {
 
     public function index(){
         if(!isset($_REQUEST['t'])){
-            $_REQUEST['t'] =  'all';
+            $_REQUEST['t'] =  'table';
         }
         $data_list = C('SF_DB_CONNECT');
         if(!isset($_REQUEST['db'])){

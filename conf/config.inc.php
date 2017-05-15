@@ -6,46 +6,39 @@
  * Time: 下午3:34
  */
 return array(
-    'SF_DEFAULT_APP'=>'zhaopin',
-    'SF_DEFAULT_CON'=>'home',
+    'SF_DEFAULT_APP'=>'tools',
+    'SF_DEFAULT_CON'=>'list',
     'SF_DEFAULT_FUN'=>'index',
 //    'SF_REFRESH_PAGES'=>true,  //不读取缓存页面文件
 
 
     'SF_DB_CONNECT'=>array(
-        0 => array(
-            'DB_HOST'=>'127.0.0.1',
-            'DB_NAME'=>'test',
-            'DB_PORT'=>3306,
-            'DB_USER'=>'root',
-            'DB_PASS'=>'',
-            'DB_MODE'=>'mysqli',
-        ),
         1 => array(
-            'DB_HOST'=>'10.11.81.11',
-            'DB_NAME'=>'api',
-            'DB_PORT'=>5001,
-            'DB_USER'=>'api',
-            'DB_PASS'=>'hxZradh98Z',
+//            'DB_HOST'=>'www.jiemo.net',//'218.60.94.27',
+            'DB_HOST'=>'218.60.94.27',
+            'DB_NAME'=>'jiemo',
+            'DB_PORT'=>3306,
+            'DB_USER'=>'jiemo',
+            'DB_PASS'=>'jiemo@qwer',
             'DB_MODE'=>'mysqli',
         ),
-        2 => array(
+//        0 => array(
+//            'DB_HOST'=>'127.0.0.1',
+//            'DB_NAME'=>'test',
+//            'DB_PORT'=>3306,
+//            'DB_USER'=>'root',
+//            'DB_PASS'=>'',
+//            'DB_MODE'=>'mysqli',
+//        ),
+        4 => array(
             'DB_HOST'=>'127.0.0.1',
-            'DB_NAME'=>'opsys',
+            'DB_NAME'=>'note',
             'DB_PORT'=>3306,
             'DB_USER'=>'root',
             'DB_PASS'=>'',
-            'DB_MODE'=>'mysqli',
-        ),
-        3 => array(
-            'DB_HOST'=>'10.11.81.11',
-            'DB_NAME'=>'opsys',
-            'DB_PORT'=>5001,
-            'DB_USER'=>'opsys',
-            'DB_PASS'=>'hxZradh98Z',
             'DB_MODE'=>'mysqli',
         ),
     ),
     //调试阶段
-    'SF_DEBUG'=> true,
+    'SF_DEBUG'=> false,
 );

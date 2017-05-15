@@ -1,0 +1,11 @@
+{:$initHtml('item_header')}
+<form action="" method="post">
+    key：<input name="key" value="{$key}"/>
+    black:<select name="type">
+    <option value="default" <?php if($black == 'default'){ echo 'selected'; }?>>default</option>
+    <option value="black" <?php if($black == 'black'){ echo 'selected'; }?>>black</option>
+</select>
+    <input type="submit" value="获取"/>
+</form>
+日志内容：<?php var_dump($data);?>
+{:$initHtml('item_footer')}

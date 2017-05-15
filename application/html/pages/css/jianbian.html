@@ -1,0 +1,74 @@
+<html>
+<style>
+	ul{
+		list-style: none;
+	}
+	li{
+		clear: both;
+	}
+	li p{
+		float: left;
+	}
+	li p:first-child{
+		width: 700px;
+	}
+	li p:last-child{
+		width:100px;
+		height:100px;
+		border:1px solid black;
+	}
+	#d1{
+		background-image:linear-gradient(to top,red,blue);
+	}
+	#d2{
+		background-image:linear-gradient(to top,red 0%,blue 25%,yellow 60%,green 100%);
+	}
+	#d3{
+		background-image:radial-gradient(50px at left top,red,green);
+	}
+	#d4{
+		background-image:repeating-radial-gradient(25px,red,yellow);
+	}
+</style>
+<body>
+	<h1>CSS3 示例</h1>
+	<ul>
+		<li>
+			<p>#d1{<br/>
+				width:100px;<br/>
+				height:100px;<br/>
+				border:1px solid black;<br/>
+				background-image:linear-gradient(to top,red,blue);<br/>
+			}</p>
+			<p id="d1"></p>
+		</li>
+		<li>
+			<p>#d2{<br/>
+				width:100px;<br/>
+				height:100px;<br/>
+				border:1px solid black;<br/>
+				background-image:linear-gradient(to top,red 0%,blue 25%,yellow 60%,green 100%);<br/>
+			}</p>
+			<p id="d2"></p>
+		</li>
+		<li>
+			<p>#d3{<br/>
+				width:100px;<br/>
+				height:100px;<br/>
+				border:1px solid black;<br/>
+				background-image:radial-gradient(50px at left top,red,green);<br/>
+			}</p>
+			<p id="d3"></p>
+		</li>
+		<li>
+			<p>#d4{<br/>
+				width:100px;<br/>
+				height:100px;<br/>
+				border:1px solid black;<br/>
+				background-image:repeating-radial-gradient(25px,red,yellow);<br/>
+			}</p>
+			<p id="d4"></p>
+		</li>
+	</ul>
+</body>
+</html>

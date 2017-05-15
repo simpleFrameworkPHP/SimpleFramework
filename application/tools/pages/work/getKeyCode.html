@@ -1,0 +1,7 @@
+{:$initHtml('item_header')}
+<form action="{:H('tools/Work/getKeyCode')}" method="post">
+    电话：<input name="mobile" value="{$mobile}"/>
+    <input type="submit" value="提交"/>
+</form>
+验证码：{$code}
+{:$initHtml('item_footer')}
