@@ -12,6 +12,7 @@ return array(
         8 => array('name'=>'offer库','value'=>'offer'),
         9 => array('name'=>'活动','value'=>'active'),
         10 => array('name'=>'offer用户资料','value'=>'offeruser'),
+        11 => array('name'=>'择校订单','value'=>'schoolorder'),
     ),
     "relate_table"=>array(
         //模式=>关联表
@@ -24,6 +25,7 @@ return array(
         'offer'=>array('t_online_offer','t_online_offer_file_new','t_online_offer_notes','t_online_offer_school','t_online_offer_school_name','t_online_graduate_school_professional','t_online_graduate_school','cms_member','t_online_crm'),
         'active'=>array('t_activity','t_activity_detail'),
         'offeruser'=>array('t_online_crm','t_online_offer','t_online_offer_school'),
+        'schoolorder'=>array('t_online_offer','t_online_offer_school','t_online_crm','t_online_assessment_score','t_online_dict','t_college_dic','cms_member','t_online_graduate_school','t_online_graduate_school_professional','t_online_offer_school_aotu'),
     ),
     "relate_sql"=>array(
         //模式=>关联表

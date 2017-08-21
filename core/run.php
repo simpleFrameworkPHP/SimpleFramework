@@ -9,7 +9,8 @@
 
 $controller = runController($_REQUEST['a'],$_REQUEST['c']);
 if(method_exists($controller,$_REQUEST['f'])){
-	$controller->$_REQUEST['f']();
+    $str = strval($_REQUEST['f']);
+	$controller->$str();
 } else {
 	if(method_exists($controller,'_empty')){
 		$controller->_empty();

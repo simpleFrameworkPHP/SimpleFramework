@@ -8,7 +8,7 @@
 
 class Upload {
 
-    public function Upload(){
+    public function __construct(){
         return $this;
     }
 //判断是否登录
