@@ -66,8 +66,17 @@
                 break;
             }
         }
-        
-        return [{no:all_list[i - 1], status:0}, {no:all_list[i], status:1}, {no:all_list[i + 1], status:0}];
+        var before = all_list[i - 1];
+        var keys = Object.keys(all_list);
+        if (typeof before == 'undefined') {
+            before = all_list[keys.pop()];
+        }
+        var end = all_list[i + 1];
+        if (typeof end == 'undefined') {
+            end = all_list[keys.shift()];
+        }
+
+        return [{no:before, status:0}, {no:all_list[i], status:1}, {no:end, status:0}];
     }
     Object.assign(Array.prototype, {
         difference(b) {
