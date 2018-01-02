@@ -32,7 +32,7 @@
         var sumX = 0,sumY = 0;
         var pcount=0;
         for(var i in points){
-            xyResult = points[i];console.log(xyResult);
+            xyResult = points[i];
             if(xyResult.error != 0){continue;}//出错就直接返回;
             pcount++;
             sumX += BMappoint[i].lng;
@@ -49,8 +49,25 @@
         map.centerAndZoom(centerPoint,8);
         map.setCenter(centerPoint);
     }
+    var max_x = 0;
+    var min_x = 180;
+    var max_y = -90;
+    var min_y = 90;
     for(var i in points){
         BMappoint.push(new BMap.Point(points[i].x,points[i].y));
+        if (points[i].x > max_x) {
+            max_x = points[i].x;
+        }
+        if (points[i].x < min_x) {
+            min_x = points[i].x;
+        }
+        if (points[i].y > max_y) {
+            max_y = points[i].y;
+        }
+        if (points[i].y < min_y) {
+            min_y = points[i].y;
+        }
+        console.log(max_x - min_x, max_y - min_y);
         sContent.push("<h4 class='img"+i+"' style='margin:0 0 5px 0;padding:0.2em 0'>图片"+i+"</h4>" +
                 "<img style='float:right;margin:4px' id='imgDemo' width='100px' height='100px' src='"+points[i].path+"'/>" +
                 "</div>");

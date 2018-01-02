@@ -19,6 +19,8 @@ class GPSController extends Controller {
         print_r($content);echo "<hr/>";
 
         $url = "http://api.map.baidu.com/ag/coord/convert?from=0&to=4&x=".$content['content']['point']['x']."&y=".$content['content']['point']['y'];
+        $url = "http://api.map.baidu.com/ag/coord/convert?from=0&to=4&x=1423008883&y=303761300";
+        // $url = "http://api.map.baidu.com/place/search?query=京进&location=139.710962,35.711085&radius=1000&region=东京都&output=html&src=yourCompanyName|yourAppName";
         $content = CURL::get($url);
         $content = json_decode($content,true);
         $content['x'] = base64_decode($content['x']);

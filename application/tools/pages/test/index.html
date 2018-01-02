@@ -1,0 +1,101 @@
+<html>
+<body>
+    <p>当前题号：<input type="text" name="current_no" value="8">&nbsp;<button class="reset">提交</button></p>
+    <p><button class="left">左移</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="right">右移</button></p>
+    <p>显示区域：</p>
+    <p><span class="">1</span><span class="active">2</span><span>3</span></p>
+
+
+
+</body>
+<style type="text/css">
+    span {border: solid #88afff 2px;padding: 5px;font-size: 20px;margin: 5px;}
+    span.active{border: solid #af0000 2px;}
+</style>
+<script type="text/javascript" src="__JSROOT__/jquery-2.1.1.js"></script>
+<script type="text/javascript">
+    var all_list = {$all_list};
+    var cur_list = [];
+    function initList(cur_list){
+        var k = 0;
+        $('span').each(function(index,item){
+            if (cur_list[index].status) {
+                $(item).addClass('active');
+            } else {
+                $(item).removeClass('active');
+            }
+            $(item).html(cur_list[index].no);
+        });
+    }
+    function changeBut(is_left){
+        var cur = getCurrent();
+        cur_list[cur].status = 0;
+        if (is_left) {
+            cur = cur % 3 ? cur : 3;
+            cur = Math.abs((cur - 1) % 3);
+        } else {
+            cur = Math.abs((cur + 1) % 3);
+        }
+        cur_list[cur].status = 1;
+        var current = cur_list[cur].no;
+        var next_list = initCurList(current);
+        var a = cur_list.difference(next_list);
+        var b = next_list.difference(cur_list);
+        for (var i in cur_list) {
+            if (cur_list[i].no == a.no) {
+                cur_list[i]=b;
+            }
+        }
+        // console.log(cur_list);
+        initList(cur_list);
+
+
+    }
+    function getCurrent(){
+        for (var i in cur_list) {
+            if (cur_list[i].status) {
+                return i;
+            }
+        }
+    }
+    function initCurList(current){
+        var i;
+        for (i in all_list) {
+            if (all_list[i] == current) {
+                i = parseInt(i);
+                break;
+            }
+        }
+        
+        return [{no:all_list[i - 1], status:0}, {no:all_list[i], status:1}, {no:all_list[i + 1], status:0}];
+    }
+    Object.assign(Array.prototype, {
+        difference(b) {
+            return this.filter(function(i){
+                for (var j in b){
+                    if (b[j].no == i.no) {
+                        return false;
+                    }
+                }
+                // console.log(i,b.indexOf(i));
+                return true;
+                // return b.indexOf(i) < 0;
+            })[0];
+        }
+    });
+    $(function(){
+        $('.reset').on('click', function(){
+            var current = parseInt($('[name=current_no]').val());
+            cur_list = initCurList(current);
+            initList(cur_list);
+        });
+        $('.left').on('click', function(){
+            changeBut(true);
+        });
+        $('.right').on('click', function(){
+            changeBut(false);
+        });
+        $('.reset').click();
+    });
+</script>
+</html>
